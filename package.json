@@ -1,8 +1,8 @@
 {
-  "name": "portfolio",
+  "name": "online-resume",
   "version": "1.0.0",
-  "description": "My online portfolio",
-  "main": "index.js",
+  "description": "static-heroku-nodejs ====================",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
