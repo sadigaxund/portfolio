@@ -1,0 +1,19 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "description": "My online portfolio",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sadigaxund/portfolio.git"
+  },
+  "author": "Sadig Akhund",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sadigaxund/portfolio/issues"
+  },
+  "homepage": "https://github.com/sadigaxund/portfolio#readme"
+}
