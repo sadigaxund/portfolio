@@ -63,11 +63,15 @@ test("the parts of the line meet exactly, before and after a choice", async ({ p
     page.evaluate(() => {
       const box = (selector: string) => document.querySelector(selector)!.getBoundingClientRect();
       const fork = box("svg.line-fork");
+      // Read the true end of the curve, because Firefox pads a path's bounding box for its stroke.
+      const branch = document.querySelector<SVGPathElement>('[data-branch="-1"]')!;
+      const end = branch.getPointAtLength(branch.getTotalLength());
+      const matrix = branch.getScreenCTM()!;
       return {
         trunkX: box(".line-trunk").x,
         forkX: fork.x + fork.width / 2 - 1,
         tailX: box(".line-tail").x,
-        branchX: box('[data-branch="-1"]').x - 1,
+        branchX: matrix.a * end.x + matrix.e - 1,
         trunkBottom: box(".line-trunk").bottom,
         forkTop: fork.top,
       };

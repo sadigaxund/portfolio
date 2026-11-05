@@ -139,7 +139,8 @@ body {
   margin-left: var(--line-content-start);
   margin-top: calc(var(--line-fork-y) + var(--line-stem) * 2 + 3rem);
   padding-block: 2rem;
-  animation: line-content-in var(--duration-slow) var(--ease-out) 200ms backwards;
+  /* Waits for the line to pass, so the two never overlap on a phone. */
+  animation: line-content-in var(--duration-slow) var(--ease-out) 600ms backwards;
 }
 
 .line-content[data-depth="1"] {

@@ -214,6 +214,7 @@ Each row is a mistake a reasonable agent would repeat. One line, then where to l
 | Stop a process with `pkill -f <string>` | It matches its own shell's command line, so the shell kills itself mid-script. Record the PID and `kill` it. |
 | Trust green tests for how a transition looks | The first spike passed 24 of 24 while its main line was hidden behind the content. Capture frames through the motion and look at them. |
 | Judge motion from the lab alone | `scripts/measure-line.mjs` runs Chromium on a synthetic 60Hz clock. It reported normal frames while the user's Firefox on a 144Hz display ran at half rate. Read the `?debug=line` meter from a real browser. |
+| Measure an SVG path with `getBoundingClientRect` | Firefox pads the box for the stroke, which reported a false 4px gap. Use `getPointAtLength` with `getScreenCTM`. |
 | Undo a planted defect with `cp` | `cp` prompts on this machine, so the restore silently did nothing and the defect stayed. Commit first, then use `git restore`, and rerun the gate. |
 
 ---
