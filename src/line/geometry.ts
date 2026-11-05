@@ -14,43 +14,23 @@ export interface Measure {
   lift: number;
 }
 
-export interface LineState {
-  /** The chosen branch, or null while the fork is open. */
-  chosen: Direction | null;
-  /** Progress of the choice, from 0 (open fork) to 1 (branch is the main line). */
-  progress: number;
+/** How long a branch stub runs below the fork, as a multiple of the stem. */
+export const STUB_RATIO = 1.5;
+
+/** The branch curve, in the fork SVG's own coordinates, where the fork sits at x = spread, y = 0. */
+export function branchPath(spread: number, stem: number, direction: Direction): string {
+  const exitX = spread + direction * spread;
+  const control = stem / 2;
+  const curve = `C ${spread} ${control} ${exitX} ${control} ${exitX} ${stem}`;
+  return `M ${spread} 0 ${curve} L ${exitX} ${stem * STUB_RATIO}`;
 }
 
-export interface BranchFrame {
-  direction: Direction;
-  path: string;
-  /** Fraction of the path that is drawn, from 0 to 1. */
-  drawn: number;
+/** Unchosen branches retract in step with the choice. The chosen one stays drawn. */
+export function retraction(chosen: Direction | null, direction: Direction, progress: number): number {
+  return chosen === null || chosen === direction ? 0 : progress;
 }
 
-export interface LineFrame {
-  trunk: string;
-  branches: BranchFrame[];
-}
-
-function branchPath(m: Measure, direction: Direction, end: number): string {
-  const exitX = m.centerX + direction * m.spread;
-  const curveEnd = m.forkY + m.stem;
-  const control = m.forkY + m.stem / 2;
-  const curve = `C ${m.centerX} ${control} ${exitX} ${control} ${exitX} ${curveEnd}`;
-  return `M ${m.centerX} ${m.forkY} ${curve} L ${exitX} ${end}`;
-}
-
-/** Computes one frame of the line. A pure function of the measure and the state. */
-export function lineFrame(m: Measure, state: LineState): LineFrame {
-  const stubEnd = m.forkY + m.stem + m.stem / 2;
-  // The chosen branch must reach the page bottom after the world lifts.
-  const fullEnd = m.height + m.lift;
-  const branches = DIRECTIONS.map((direction) => {
-    const isChosen = state.chosen === direction;
-    const end = isChosen ? stubEnd + (fullEnd - stubEnd) * state.progress : stubEnd;
-    const drawn = state.chosen === null || isChosen ? 1 : 1 - state.progress;
-    return { direction, path: branchPath(m, direction, end), drawn };
-  });
-  return { trunk: `M ${m.centerX} 0 L ${m.centerX} ${m.forkY}`, branches };
+/** Fork labels clear out in the first third of a choice. */
+export function labelOpacity(chosen: Direction | null, progress: number): number {
+  return chosen === null ? 1 : Math.max(0, 1 - progress * 3);
 }

@@ -1,10 +1,13 @@
 :root {
-  --line-fork-y: 62vh;
-  --line-spread: min(30vw, 22rem);
+  /* Whole pixels keep the straight parts of the line crisp at rest. */
+  --line-center: round(50%, 1px);
+  --line-fork-y: round(62vh, 1px);
+  --line-spread: round(min(30vw, 22rem), 1px);
   --line-stem: 6rem;
   --line-inset: 12vh;
   --line-lift: calc(var(--line-fork-y) - var(--line-inset));
   --line-width: 2px;
+  --line-stub: calc(var(--line-stem) * 1.5);
   /* Where the main line rests after a choice, measured from the page center. */
   --line-rest: 0px;
   --line-content-start: calc(50% + 2rem);
@@ -17,7 +20,7 @@
 @media (max-width: 40rem) {
   :root {
     --line-inset: calc(var(--line-stem) * -1);
-    --line-rest: calc(1.5rem - 50vw);
+    --line-rest: round(1.5rem - 50vw, 1px);
     --line-content-start: 3rem;
     --line-content-width: calc(100% - 4rem);
     --line-content-top: 4rem;
@@ -55,30 +58,61 @@ body {
   height: var(--line-lift);
 }
 
-/* The camera: both the drawn line and its labels move through this one transform. */
+/* The camera: the line and its labels all move through this one composited transform. */
 .line-world {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
+  will-change: transform;
   transform: translate(
     calc((var(--line-rest) - var(--line-dir) * var(--line-spread)) * var(--line-p)),
     calc(var(--line-lift) * -1 * var(--line-p))
   );
 }
 
+.line-trunk,
+.line-tail {
+  position: absolute;
+  width: var(--line-width);
+  background: var(--color-primary);
+}
+
+.line-trunk {
+  top: 0;
+  left: calc(var(--line-center) - var(--line-width) / 2);
+  height: var(--line-fork-y);
+}
+
+/* The long line is a plain element scaled from the top, so it never repaints. */
+.line-tail {
+  top: calc(var(--line-fork-y) + var(--line-stub));
+  left: calc(var(--line-center) + var(--line-dir) * var(--line-spread) - var(--line-width) / 2);
+  height: calc(100% + var(--line-lift) - var(--line-fork-y) - var(--line-stub));
+  transform-origin: top;
+  transform: scaleY(var(--line-p));
+  will-change: transform;
+}
+
+/* Only the curves at the fork are SVG, which keeps the redrawn area small. */
+.line-fork {
+  position: absolute;
+  top: var(--line-fork-y);
+  left: calc(var(--line-center) - var(--line-spread));
+  width: calc(var(--line-spread) * 2);
+  height: var(--line-stub);
+  overflow: visible;
+}
+
 .line-path {
   fill: none;
   stroke: var(--color-primary);
   stroke-width: var(--line-width);
-  stroke-linecap: round;
+  stroke-dasharray: 1 1;
 }
 
 .line-option {
   position: absolute;
-  top: calc(var(--line-fork-y) + var(--line-stem) * 1.5);
-  left: calc(50% + var(--option-dir) * var(--line-spread));
+  top: calc(var(--line-fork-y) + var(--line-stub));
+  left: calc(var(--line-center) + var(--option-dir) * var(--line-spread));
   transform: translateX(-50%);
   background: var(--color-bg);
   pointer-events: auto;
@@ -89,11 +123,6 @@ body {
 .line-back a {
   display: block;
   padding: 0.75rem;
-}
-
-.line-labels {
-  position: absolute;
-  inset: 0;
 }
 
 /* Back keeps one fixed spot on every page. */

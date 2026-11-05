@@ -8,6 +8,7 @@ interface StartDetail {
   seconds: number;
   chosen: -1 | 0 | 1 | null;
   measure: Measure;
+  progress: () => number;
 }
 
 interface Run {
@@ -100,7 +101,7 @@ function geometryFor(detail: StartDetail): Geometry {
 function sample(time: number) {
   if (!run?.active) return;
   run.times.push(time);
-  run.progress.push(Number(run.stage.style.getPropertyValue("--line-p")));
+  run.progress.push(run.detail.progress());
   requestAnimationFrame(sample);
 }
 

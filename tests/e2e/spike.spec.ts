@@ -7,16 +7,25 @@ const progress = (page: Page) =>
 
 const whenReady = (page: Page) => page.waitForSelector(".line-stage[data-ready]");
 
-test("the line survives a route change and keeps animating through it", async ({ page }) => {
+// --line-p holds the destination from the first frame, so a run must also be settled.
+const settledAt = async (page: Page, value: number) => {
+  await page.waitForSelector('.line-stage[data-settled="true"]');
+  await expect.poll(() => progress(page)).toBe(value);
+};
+
+test("the line survives a route change and keeps moving, with nothing written per frame", async ({ page }) => {
   await page.goto("/spike");
   await whenReady(page);
   await page.evaluate(() => {
-    const win = window as unknown as { svg: Element; samples: number[][] };
-    win.svg = document.querySelector("svg.line-world")!;
+    const win = window as unknown as { fork: Element; samples: number[][]; writes: number };
+    const stage = document.querySelector(".line-stage")!;
+    win.fork = document.querySelector("svg.line-fork")!;
     win.samples = [];
+    win.writes = 0;
+    new MutationObserver((list) => (win.writes += list.length)).observe(stage, { attributes: true, subtree: true });
     const tick = () => {
-      const stage = document.querySelector(".line-stage")!;
-      win.samples.push([performance.now(), Number(getComputedStyle(stage).getPropertyValue("--line-p"))]);
+      const world = document.querySelector(".line-world")!;
+      win.samples.push([performance.now(), new DOMMatrix(getComputedStyle(world).transform).m42]);
       requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
@@ -25,17 +34,19 @@ test("the line survives a route change and keeps animating through it", async ({
   await page.getByRole("link", { name: "Projects" }).click();
   await expect(page).toHaveURL(/\/spike\/projects$/);
   await expect(page.locator("h1")).toHaveText("Projects");
-  await expect.poll(() => progress(page)).toBe(1);
+  await settledAt(page, 1);
 
   const result = await page.evaluate(() => {
-    const win = window as unknown as { svg: Element; samples: number[][] };
-    const moving = win.samples.filter(([, p]) => p > 0 && p < 1);
+    const win = window as unknown as { fork: Element; samples: number[][]; writes: number };
+    const lifted = Math.min(...win.samples.map(([, y]) => y));
+    const moving = win.samples.filter(([, y]) => y < 0 && y > lifted);
     const gaps = moving.slice(1).map(([t], i) => t - moving[i][0]);
     return {
-      sameElement: win.svg === document.querySelector("svg.line-world"),
+      sameElement: win.fork === document.querySelector("svg.line-fork"),
       frames: moving.length,
       worstGap: Math.max(...gaps),
-      monotonic: moving.every(([, p], i) => i === 0 || p >= moving[i - 1][1]),
+      monotonic: moving.every(([, y], i) => i === 0 || y <= moving[i - 1][1]),
+      writes: win.writes,
     };
   });
   console.log("transition", JSON.stringify(result));
@@ -43,32 +54,56 @@ test("the line survives a route change and keeps animating through it", async ({
   expect(result.monotonic).toBe(true);
   expect(result.frames).toBeGreaterThan(20);
   expect(result.worstGap).toBeLessThan(200);
+  // A per-frame engine would write about 50 times per property here.
+  expect(result.writes).toBeLessThan(40);
 });
 
-test("the chosen branch reaches the page bottom and the others retract", async ({ page }) => {
+test("the parts of the line meet exactly, before and after a choice", async ({ page }) => {
+  const edges = () =>
+    page.evaluate(() => {
+      const box = (selector: string) => document.querySelector(selector)!.getBoundingClientRect();
+      const fork = box("svg.line-fork");
+      return {
+        trunkX: box(".line-trunk").x,
+        forkX: fork.x + fork.width / 2 - 1,
+        tailX: box(".line-tail").x,
+        branchX: box('[data-branch="-1"]').x - 1,
+        trunkBottom: box(".line-trunk").bottom,
+        forkTop: fork.top,
+      };
+    });
+  await page.goto("/spike");
+  await whenReady(page);
+  let at = await edges();
+  expect(at.trunkX).toBeCloseTo(at.forkX, 0);
+  expect(at.trunkBottom).toBeCloseTo(at.forkTop, 0);
+  await page.getByRole("link", { name: "Personal" }).click();
+  await settledAt(page, 1);
+  await page.waitForTimeout(100);
+  at = await edges();
+  expect(at.tailX).toBeCloseTo(at.branchX, 0);
+});
+
+test("the chosen line reaches the page bottom, stays visible, and the others retract", async ({ page }) => {
   await page.goto("/spike");
   await whenReady(page);
   await page.getByRole("link", { name: "Personal" }).click();
-  await expect.poll(() => progress(page)).toBe(1);
+  await settledAt(page, 1);
+  await page.waitForTimeout(100);
   const box = await page.evaluate(() => {
-    const chosen = document.querySelector<SVGPathElement>('[data-branch="-1"]')!;
+    const tail = document.querySelector(".line-tail")!.getBoundingClientRect();
     const other = document.querySelector<SVGPathElement>('[data-branch="1"]')!;
     return {
-      bottom: chosen.getBoundingClientRect().bottom + window.scrollY,
+      bottom: tail.bottom + window.scrollY,
       page: document.documentElement.scrollHeight,
-      otherDash: other.getAttribute("stroke-dasharray"),
+      otherRetract: getComputedStyle(other).strokeDashoffset,
+      // The main line stays visible next to the content, so nothing paints over it.
+      covered: document.elementsFromPoint(tail.x + 1, innerHeight - 20).some((el) => el.closest("main")),
     };
   });
   expect(box.bottom).toBeGreaterThanOrEqual(box.page - 1);
-  // The main line stays visible next to the content, so nothing paints over it.
-  const covered = await page.evaluate(() => {
-    const chosen = document.querySelector<SVGPathElement>('[data-branch="-1"]')!;
-    // A left branch's box starts at its straight part, and ends at the curve.
-    const x = chosen.getBoundingClientRect().left + 1;
-    return document.elementsFromPoint(x, innerHeight - 20).some((el) => el.closest("main"));
-  });
-  expect(covered).toBe(false);
-  expect(box.otherDash).toBe("0 1");
+  expect(box.covered).toBe(false);
+  expect(parseFloat(box.otherRetract)).toBe(1);
   await expect(page.getByRole("link", { name: "Projects" })).toBeHidden();
 });
 
@@ -83,17 +118,17 @@ test("back retraces the path, and an interrupted choice settles", async ({ page 
   await page.goto("/spike");
   await whenReady(page);
   await page.getByRole("link", { name: "Professional" }).click();
-  await expect.poll(() => progress(page)).toBe(1);
+  await settledAt(page, 1);
   await page.goBack();
   await expect(page.locator("h1")).toHaveText("Start");
-  await expect.poll(() => progress(page)).toBe(0);
+  await settledAt(page, 0);
   await expect(page.getByRole("link", { name: "Personal" })).toBeVisible();
 
   await page.getByRole("link", { name: "Personal" }).click();
   await page.waitForTimeout(120);
   await page.goBack();
   await expect(page.locator("h1")).toHaveText("Start");
-  await expect.poll(() => progress(page)).toBe(0);
+  await settledAt(page, 0);
   await expect(page.getByRole("link", { name: "Projects" })).toBeVisible();
 });
 
