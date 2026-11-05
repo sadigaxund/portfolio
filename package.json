@@ -18,6 +18,7 @@
     "@astrojs/react": "^7.1.0",
     "@tailwindcss/vite": "^4.3.4",
     "astro": "^7.4.1",
+    "motion": "14.9.1",
     "my-you-eye": "^2026.9.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

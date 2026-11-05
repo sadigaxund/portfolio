@@ -1,0 +1,130 @@
+:root {
+  --line-fork-y: 62vh;
+  --line-spread: min(30vw, 22rem);
+  --line-stem: 6rem;
+  --line-inset: 12vh;
+  --line-lift: calc(var(--line-fork-y) - var(--line-inset));
+  --line-width: 2px;
+  /* Where the main line rests after a choice, measured from the page center. */
+  --line-rest: 0px;
+  --line-content-start: calc(50% + 2rem);
+  --line-content-width: min(34rem, 50% - 3rem);
+  --line-content-top: calc(var(--line-inset) + var(--line-stem) + 1rem);
+  --line-back-left: 1rem;
+}
+
+/* On a phone the line rests in a left gutter, and the fork lifts out of view. */
+@media (max-width: 40rem) {
+  :root {
+    --line-inset: calc(var(--line-stem) * -1);
+    --line-rest: calc(1.5rem - 50vw);
+    --line-content-start: 3rem;
+    --line-content-width: calc(100% - 4rem);
+    --line-content-top: 4rem;
+    --line-back-left: 2.25rem;
+  }
+}
+
+/* flow-root stops the content's top margin collapsing through body and moving the stage. */
+body {
+  position: relative;
+  display: flow-root;
+  min-height: 100vh;
+}
+
+/* Clips the camera's sideways travel, so the page never scrolls horizontally. */
+.line-stage {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  pointer-events: none;
+}
+
+.line-probe {
+  position: absolute;
+  visibility: hidden;
+  width: var(--line-spread);
+  height: var(--line-fork-y);
+}
+
+.line-probe-stem {
+  height: var(--line-stem);
+}
+
+.line-probe-lift {
+  height: var(--line-lift);
+}
+
+/* The camera: both the drawn line and its labels move through this one transform. */
+.line-world {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transform: translate(
+    calc((var(--line-rest) - var(--line-dir) * var(--line-spread)) * var(--line-p)),
+    calc(var(--line-lift) * -1 * var(--line-p))
+  );
+}
+
+.line-path {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: var(--line-width);
+  stroke-linecap: round;
+}
+
+.line-option {
+  position: absolute;
+  top: calc(var(--line-fork-y) + var(--line-stem) * 1.5);
+  left: calc(50% + var(--option-dir) * var(--line-spread));
+  transform: translateX(-50%);
+  background: var(--color-bg);
+  pointer-events: auto;
+}
+
+/* Tap targets stay at least 2.75rem tall. */
+.line-option a,
+.line-back a {
+  display: block;
+  padding: 0.75rem;
+}
+
+.line-labels {
+  position: absolute;
+  inset: 0;
+}
+
+/* Back keeps one fixed spot on every page. */
+.line-back {
+  position: absolute;
+  top: 0.25rem;
+  left: var(--line-back-left);
+  pointer-events: auto;
+}
+
+.line-content {
+  position: relative;
+  width: var(--line-content-width);
+  margin-left: var(--line-content-start);
+  margin-top: calc(var(--line-fork-y) + var(--line-stem) * 2 + 3rem);
+  padding-block: 2rem;
+  animation: line-content-in var(--duration-slow) var(--ease-out) 200ms backwards;
+}
+
+.line-content[data-depth="1"] {
+  margin-top: var(--line-content-top);
+}
+
+@keyframes line-content-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .line-content {
+    animation: none;
+  }
+}

@@ -1,0 +1,45 @@
+---
+import { ClientRouter } from "astro:transitions";
+import "../styles/global.css";
+import "../styles/line.css";
+import LineStage from "../line/LineStage";
+
+interface Props {
+  title: string;
+  depth: 0 | 1;
+}
+
+const { title, depth } = Astro.props;
+const options = [
+  { direction: -1 as const, label: "Personal", href: "/spike/personal" },
+  { direction: 0 as const, label: "Professional", href: "/spike/professional" },
+  { direction: 1 as const, label: "Projects", href: "/spike/projects" },
+];
+---
+
+<!doctype html>
+<html lang="en" transition:animate="none">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{title}</title>
+    <ClientRouter />
+  </head>
+  <body>
+    <LineStage
+      client:load
+      transition:persist="line"
+      transition:persist-props
+      rootHref="/spike"
+      options={options}
+      initialPath={Astro.url.pathname}
+    />
+    <main class="line-content" data-depth={depth}>
+      <h1>{title}</h1>
+      <p>PLACEHOLDER</p>
+      <div style="height: 120vh"></div>
+      <p>PLACEHOLDER end of page</p>
+    </main>
+  </body>
+</html>

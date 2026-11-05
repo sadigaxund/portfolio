@@ -211,6 +211,8 @@ Each row is a mistake a reasonable agent would repeat. One line, then where to l
 | Assert only that an element has a background or a focus outline | Browser defaults pass both. A smoke test stayed green with the stylesheet removed. Compare against the computed token, as `tests/e2e/smoke.spec.ts` does. |
 | Run `astro preview` from a script without `--ignore-lock` | With no TTY it starts as a daemon and exits, and Playwright reports `Process from config.webServer exited early`. See `playwright.config.ts`. |
 | Read CI with `gh run list --limit 1` and no `--workflow` | Dependabot's jobs appear in the same list. A watcher attached to one and reported success while the real run was never read. Pass `--workflow validate.yml`, and check the head SHA. |
+| Stop a process with `pkill -f <string>` | It matches its own shell's command line, so the shell kills itself mid-script. Record the PID and `kill` it. |
+| Trust green tests for how a transition looks | The first spike passed 24 of 24 while its main line was hidden behind the content. Capture frames through the motion and look at them. |
 | Undo a planted defect with `cp` | `cp` prompts on this machine, so the restore silently did nothing and the defect stayed. Commit first, then use `git restore`, and rerun the gate. |
 
 ---
