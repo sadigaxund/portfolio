@@ -208,6 +208,9 @@ Each row is a mistake a reasonable agent would repeat. One line, then where to l
 
 | Do not | Why, and where |
 |---|---|
+| Assert only that an element has a background or a focus outline | Browser defaults pass both. A smoke test stayed green with the stylesheet removed. Compare against the computed token, as `tests/e2e/smoke.spec.ts` does. |
+| Run `astro preview` from a script without `--ignore-lock` | With no TTY it starts as a daemon and exits, and Playwright reports `Process from config.webServer exited early`. See `playwright.config.ts`. |
+| Undo a planted defect with `cp` | `cp` prompts on this machine, so the restore silently did nothing and the defect stayed. Commit first, then use `git restore`, and rerun the gate. |
 
 ---
 

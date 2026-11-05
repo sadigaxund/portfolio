@@ -24,6 +24,11 @@ export function listFiles(folders, skip = () => false) {
       if (error.code !== "ENOENT") throw error;
     }
   }
+  // A guard that scans nothing must go red, because its "ok" would mean nothing.
+  if (found.length === 0) {
+    console.error(`guard: no source files found under ${folders.join(", ")}`);
+    process.exit(1);
+  }
   return found.sort();
 }
 
