@@ -150,3 +150,49 @@
   height: 200vh;
   will-change: transform;
 }
+
+/* After a move, stops sprout from the line in order: the branch first, then its label. */
+[data-line-moved] .stop {
+  /* The list can run past the screen, so the wait stops growing after the eighth stop. */
+  --stop-at: calc(var(--line-reveal-at) + min(var(--stop-index), 8) * 130ms);
+}
+
+[data-line-moved] .stop-branch {
+  animation: stop-sprout-end 220ms var(--ease-out) var(--stop-at) backwards;
+}
+
+[data-line-moved] .stop a {
+  animation: line-content-in 200ms var(--ease-out) calc(var(--stop-at) + 120ms) backwards;
+}
+
+/* The clip runs past the box, because a stop's ending extends beyond it. */
+@keyframes stop-sprout-end {
+  from {
+    clip-path: inset(-2rem 100% -3rem 0);
+  }
+  to {
+    clip-path: inset(-2rem -3rem -3rem 0);
+  }
+}
+
+@keyframes stop-sprout-start {
+  from {
+    clip-path: inset(-2rem 0 -3rem 100%);
+  }
+  to {
+    clip-path: inset(-2rem 0 -3rem -3rem);
+  }
+}
+
+@media (min-width: 40.01rem) {
+  [data-line-moved] .stop[data-side="start"] .stop-branch {
+    animation-name: stop-sprout-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-line-moved] .stop-branch,
+  [data-line-moved] .stop a {
+    animation: none;
+  }
+}

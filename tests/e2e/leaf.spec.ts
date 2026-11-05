@@ -236,3 +236,67 @@ for (const [name, from, go] of [
     await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(0);
   });
 }
+
+const stopDelays = (page: Page) =>
+  page.evaluate(() =>
+    [...document.querySelectorAll(".stop-branch")].map((branch) =>
+      branch.getAnimations().map((animation) => Number(animation.effect!.getTiming().delay)),
+    ),
+  );
+
+test("after a move the stops sprout in order, once the camera has settled", async ({ page }) => {
+  await page.goto("/");
+  await whenReady(page);
+  await page.getByRole("link", { name: "Personal" }).click();
+  await expect(page.locator("h1")).toHaveText("Personal");
+  const delays = (await stopDelays(page)).map((list) => list[0]);
+  expect(delays.length).toBeGreaterThan(1);
+  expect(delays[0]).toBeGreaterThanOrEqual(900);
+  expect(delays.every((delay, i) => i === 0 || delay > delays[i - 1])).toBe(true);
+  // The line reaches the settled state only after its tip has finished travelling.
+  await page.waitForSelector('.line-stage[data-settled="true"]');
+  await expect(page.getByRole("link", { name: "Instagram" })).toBeVisible();
+});
+
+test("a direct load and a return from a leaf show stops at once", async ({ page }) => {
+  await page.goto("/personal");
+  await whenReady(page);
+  expect((await stopDelays(page)).flat()).toEqual([]);
+  await page.getByRole("link", { name: "Instagram" }).click();
+  await expect(page.locator("h1")).toHaveText("Instagram");
+  await seamIdle(page);
+  await page.getByRole("link", { name: "Back" }).click();
+  await expect(page.locator("h1")).toHaveText("Personal");
+  expect((await stopDelays(page)).flat()).toEqual([]);
+});
+
+test("the line grows smoothly, and each stop sprouts only after its tip has passed", async ({ page }) => {
+  await page.goto("/");
+  await whenReady(page);
+  await page.evaluate(() => {
+    const win = window as unknown as { rows: { tip: number; base: number; early: boolean }[] };
+    win.rows = [];
+    document.addEventListener("line:transition-start", () => {
+      const started = performance.now();
+      const tick = () => {
+        const tail = document.querySelector(".line-tail")!.getBoundingClientRect();
+        const early = [...document.querySelectorAll(".stop-branch")].some((branch) => {
+          const progress = branch.getAnimations()[0]?.effect?.getComputedTiming().progress ?? 0;
+          return progress > 0 && branch.getBoundingClientRect().top > tail.bottom;
+        });
+        win.rows.push({ tip: tail.bottom, base: tail.top, early });
+        if (performance.now() - started < 1700) requestAnimationFrame(tick);
+      };
+      tick();
+    });
+  });
+  await page.getByRole("link", { name: "Personal" }).click();
+  await page.waitForSelector('.line-stage[data-settled="true"]');
+  await page.waitForTimeout(800);
+  const rows = await page.evaluate(() => (window as unknown as { rows: { tip: number; base: number; early: boolean }[] }).rows);
+  const lengths = rows.map((row) => row.tip - row.base);
+  const steps = lengths.slice(1).map((length, i) => length - lengths[i]);
+  expect(Math.max(...lengths)).toBeGreaterThan(300);
+  expect(Math.max(...steps)).toBeLessThan(120);
+  expect(rows.some((row) => row.early)).toBe(false);
+});

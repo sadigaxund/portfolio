@@ -11,6 +11,9 @@ const EASES = {
 
 const FORWARD_MS = 900;
 const REVERSE_MS = 500;
+/** The tip of a chosen line keeps travelling after the camera settles, so stops can sprout as it passes. */
+const TAIL_FORWARD_MS = 1500;
+const TAIL_FORWARD_EASE = "cubic-bezier(0.55, 0, 0.85, 0.6)";
 const LABEL_SHARE = 0.35;
 
 /** Reads ?ease= once at mount, so curves can be compared side by side. */
@@ -57,7 +60,11 @@ function animateParts(parts: Parts, move: Move): Animation[] {
   };
   const running = [
     parts.world.animate({ transform: [move.worldFrom, getComputedStyle(parts.world).transform] }, timing),
-    parts.tail.animate({ transform: [move.tailFrom, getComputedStyle(parts.tail).transform] }, timing),
+    parts.tail.animate(
+      // Named scales, because a browser cannot blend a matrix that scales to zero. It jumps instead.
+      { transform: [move.tailFrom, `scaleY(${to})`] },
+      to === 1 ? { duration: TAIL_FORWARD_MS, easing: TAIL_FORWARD_EASE } : timing,
+    ),
     parts.back.animate({ opacity: [from, to] }, timing),
   ];
   for (const { direction, path, label } of parts.branches) {
@@ -140,7 +147,7 @@ export function mountLine(
   const run = (to: number, duration: number, done: () => void) => {
     const from = currentProgress();
     const worldFrom = getComputedStyle(world).transform;
-    const tailFrom = getComputedStyle(tail).transform;
+    const tailFrom = `scaleY(${new DOMMatrix(getComputedStyle(tail).transform).d})`;
     stopRunning();
     applyState(to);
     stage.dataset.settled = "false";
@@ -169,7 +176,7 @@ export function mountLine(
     const camera = running[0];
     currentProgress = () => from + (to - from) * (camera.effect?.getComputedTiming().progress ?? 1);
     announce(stage, "line:transition-start", { from, to, seconds: duration / 1000, chosen, measure: measure(), progress: currentProgress });
-    camera.finished.then(finish).catch(() => undefined);
+    Promise.all(running.map((part) => part.finished)).then(finish).catch(() => undefined);
   };
 
   const open = () => {
@@ -211,7 +218,7 @@ export function mountLine(
   // Tells the incoming page whether to hold its content back for the moving line.
   const onSwap = (event: Event) => {
     const incoming = (event as Event & { newDocument?: Document }).newDocument;
-    if (moved && incoming) incoming.documentElement.dataset.lineMoved = "true";
+    if (moved && incoming) incoming.documentElement.dataset.lineMoved = target === null ? "back" : "forward";
   };
 
   drawPaths();

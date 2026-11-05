@@ -47,6 +47,7 @@ const leaf = isLeaf(node);
                   data-stop-url={child.url}
                   data-side={index % 2 === 0 ? "end" : "start"}
                   data-kind={isLeaf(child) ? "leaf" : "section"}
+                  style={`--stop-index: ${index}`}
                 >
                   <span class="stop-branch" aria-hidden="true" />
                   <Link href={child.url}>{child.label}</Link>

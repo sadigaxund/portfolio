@@ -216,6 +216,7 @@ Each row is a mistake a reasonable agent would repeat. One line, then where to l
 | Judge motion from the lab alone | `scripts/measure-line.mjs` runs Chromium on a synthetic 60Hz clock. It reported normal frames while the user's Firefox on a 144Hz display ran at half rate. Read the `?debug=line` meter from a real browser. |
 | Measure an SVG path with `getBoundingClientRect` | Firefox pads the box for the stroke, which reported a false 4px gap. Use `getPointAtLength` with `getScreenCTM`. |
 | Chain a gate as `npm run validate \| tail && next` | The chain reads `tail`'s exit code, so a failed gate still ran Playwright against a stale build. Send the output to a file and read `$?`. |
+| Animate a scale through to zero with computed matrices | A browser cannot blend a zero-scale matrix, so the long line jumped to full length in one frame, and suites and still frames both missed it. Name the `scaleY` values and sample positions over time, as `tests/e2e/leaf.spec.ts` does. |
 | Undo a planted defect with `cp` | `cp` prompts on this machine, so the restore silently did nothing and the defect stayed. Commit first, then use `git restore`, and rerun the gate. |
 
 ---

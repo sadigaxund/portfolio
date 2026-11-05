@@ -219,9 +219,21 @@ body {
   position: relative;
 }
 
-/* Waits for the line to pass, so the two never overlap on a phone. */
-[data-line-moved] main {
-  animation: line-content-in var(--duration-slow) var(--ease-out) 600ms backwards;
+/* Content waits until the line has settled. These match the moves in controller.ts and continuation.ts. */
+[data-line-moved="back"] {
+  --line-reveal-at: 500ms;
+}
+
+[data-line-moved="forward"] {
+  --line-reveal-at: 900ms;
+}
+
+[data-line-moved="continued"] {
+  --line-reveal-at: 1080ms;
+}
+
+[data-line-moved] .line-content {
+  animation: line-content-in var(--duration-slow) var(--ease-out) var(--line-reveal-at) backwards;
 }
 
 @keyframes line-content-in {
@@ -231,7 +243,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-line-moved] main {
+  [data-line-moved] .line-content {
     animation: none;
   }
 }

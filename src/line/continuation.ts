@@ -103,11 +103,19 @@ export function mountContinuation(stage: HTMLElement): () => void {
     }
   };
 
+  // The incoming stops draw once this layer has cleared.
+  const onBeforeSwap = (event: Event) => {
+    const incoming = (event as Event & { newDocument?: Document }).newDocument;
+    if (offset && incoming) incoming.documentElement.dataset.lineMoved = "continued";
+  };
+
   document.addEventListener("astro:before-preparation", onPrepare);
+  document.addEventListener("astro:before-swap", onBeforeSwap);
   document.addEventListener("astro:after-swap", onSwapped);
   return () => {
     stop();
     document.removeEventListener("astro:before-preparation", onPrepare);
+    document.removeEventListener("astro:before-swap", onBeforeSwap);
     document.removeEventListener("astro:after-swap", onSwapped);
   };
 }
