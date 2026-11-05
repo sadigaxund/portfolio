@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { Link } from "my-you-eye";
 import type { Direction } from "../tree/tree";
 import { BRANCHES, nodeAt, ROOT } from "../tree/walk";
+import { mountContinuation } from "./continuation";
 import { mountLine } from "./controller";
 import { DIRECTIONS } from "./geometry";
 import { mountIntent } from "./intent";
@@ -22,10 +23,12 @@ export default function LineStage({ initialPath }: LineStageProps) {
     const stopLine = mountLine(stageRef.current, probeRef.current, initialChosen);
     const stopIntent = mountIntent();
     const stopSeam = mountSeam(stageRef.current);
+    const stopContinuation = mountContinuation(stageRef.current);
     return () => {
       stopLine();
       stopIntent();
       stopSeam();
+      stopContinuation();
     };
   }, [initialChosen]);
 
@@ -63,6 +66,16 @@ export default function LineStage({ initialPath }: LineStageProps) {
             </div>
           ))}
         </nav>
+      </div>
+      <div data-continue className="line-continue" aria-hidden="true">
+        <div className="line-continue-world">
+          <div className="line-continue-upper" />
+          <div className="line-continue-rest" />
+          <svg className="line-continue-curve">
+            <path pathLength={1} className="line-path" />
+          </svg>
+          <div className="line-continue-ahead" />
+        </div>
       </div>
       <div data-seam className="line-seam line-seam-start" aria-hidden="true" />
       <div data-seam className="line-seam line-seam-end" aria-hidden="true" />

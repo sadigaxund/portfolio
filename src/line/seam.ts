@@ -1,5 +1,6 @@
 import { isLeafPath } from "../tree/walk";
 import { chooseEase } from "./controller";
+import { holdScroll } from "./scrollHold";
 
 const COVER_FADE_MS = 180;
 const CLOSE_MS = 500;
@@ -64,6 +65,7 @@ export function mountSeam(stage: HTMLElement): () => void {
 
     if (!active) place(fromLeaf ? parted : () => CLEAR);
     active = true;
+    holdScroll("seam", true);
     const shut = move(() => SHUT, fromLeaf ? CLOSE_MS : COVER_FADE_MS);
     (event as RouterEvent).loader = async () => {
       await shut;
@@ -76,6 +78,7 @@ export function mountSeam(stage: HTMLElement): () => void {
     const finished = await (toLeaf ? move(parted, OPEN_MS) : move(() => CLEAR, UNCOVER_FADE_MS));
     if (!finished) return;
     active = false;
+    holdScroll("seam", false);
     for (const panel of panels) panel.style.visibility = "hidden";
   };
 
@@ -83,6 +86,7 @@ export function mountSeam(stage: HTMLElement): () => void {
   document.addEventListener("astro:after-swap", onSwapped);
   return () => {
     for (const animation of running) animation.cancel();
+    holdScroll("seam", false);
     document.removeEventListener("astro:before-preparation", onPrepare);
     document.removeEventListener("astro:after-swap", onSwapped);
   };

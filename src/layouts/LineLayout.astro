@@ -3,6 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import { Link } from "my-you-eye";
 import "../styles/global.css";
 import "../styles/line.css";
+import "../styles/stops.css";
 import LineStage from "../line/LineStage";
 import { isLeaf, type TreeNode } from "../tree/walk";
 
@@ -33,20 +34,26 @@ const leaf = isLeaf(node);
           <p>PLACEHOLDER</p>
         </main>
       ) : (
-        <main class="line-content" data-at-root={atRoot}>
-          <h1>{node.label}</h1>
-          <p>PLACEHOLDER</p>
+        <main class="line-section">
+          <div class="line-content" data-at-root={atRoot}>
+            <h1>{node.label}</h1>
+            <p>PLACEHOLDER</p>
+          </div>
           {!atRoot && (
-            <ul>
-              {node.children.map((child) => (
-                <li>
+            <ol class="stops">
+              {node.children.map((child, index) => (
+                <li
+                  class="stop"
+                  data-stop-url={child.url}
+                  data-side={index % 2 === 0 ? "end" : "start"}
+                  data-kind={isLeaf(child) ? "leaf" : "section"}
+                >
+                  <span class="stop-branch" aria-hidden="true" />
                   <Link href={child.url}>{child.label}</Link>
                 </li>
               ))}
-            </ul>
+            </ol>
           )}
-          {!atRoot && <div style="height: 120vh" />}
-          {!atRoot && <p>PLACEHOLDER end of page</p>}
         </main>
       )
     }

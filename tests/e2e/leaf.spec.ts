@@ -14,7 +14,7 @@ const seamIdle = (page: Page) =>
     .toBe(true);
 
 test("a leaf owns the whole screen, with no line and Back still in reach", async ({ page }) => {
-  await page.goto("/personal/hobbies");
+  await page.goto("/personal/instagram");
   await whenReady(page);
   const view = await page.evaluate(() => {
     const main = document.querySelector("main")!.getBoundingClientRect();
@@ -58,8 +58,8 @@ test("the seam shuts before the swap, then parts to both edges", async ({ page }
       tick();
     });
   });
-  await page.getByRole("link", { name: "Hobbies" }).click();
-  await expect(page.locator("h1")).toHaveText("Hobbies");
+  await page.getByRole("link", { name: "Instagram" }).click();
+  await expect(page.locator("h1")).toHaveText("Instagram");
   await seamIdle(page);
   const { atSwap, path } = await page.evaluate(() => {
     const win = window as unknown as { atSwap: string; path: number[] };
@@ -89,7 +89,7 @@ test("both sides of the seam meet exactly on the resting line", async ({ page })
 });
 
 test("Back shuts the seam and returns to the line, one level at a time", async ({ page }) => {
-  await page.goto("/personal/hobbies");
+  await page.goto("/personal/instagram");
   await whenReady(page);
   await page.getByRole("link", { name: "Back" }).click();
   await expect(page).toHaveURL(/\/personal$/);
@@ -106,7 +106,7 @@ test("a leaf interrupted by browser back still settles on the line", async ({ pa
   await whenReady(page);
   await page.getByRole("link", { name: "Personal" }).click();
   await page.waitForSelector('.line-stage[data-settled="true"]');
-  await page.getByRole("link", { name: "Hobbies" }).click();
+  await page.getByRole("link", { name: "Instagram" }).click();
   await page.waitForTimeout(80);
   await page.goBack();
   await seamIdle(page);
@@ -125,8 +125,8 @@ test("reduced motion enters a leaf with no seam", async ({ page }) => {
       win.shown = getComputedStyle(document.querySelector(".line-seam-end")!).visibility !== "hidden";
     });
   });
-  await page.getByRole("link", { name: "Hobbies" }).click();
-  await expect(page.locator("h1")).toHaveText("Hobbies");
+  await page.getByRole("link", { name: "Instagram" }).click();
+  await expect(page.locator("h1")).toHaveText("Instagram");
   expect(await page.evaluate(() => (window as unknown as { shown: boolean }).shown)).toBe(false);
 });
 
@@ -134,10 +134,105 @@ test.describe("without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
   test("a leaf is a real page with no line, and Back is a real link", async ({ page }) => {
     await page.goto("/personal");
-    await page.getByRole("link", { name: "Hobbies" }).click();
-    await expect(page.locator("h1")).toHaveText("Hobbies");
+    await page.getByRole("link", { name: "Instagram" }).click();
+    await expect(page.locator("h1")).toHaveText("Instagram");
     await expect(page.locator(".line-tail")).toBeHidden();
     await page.getByRole("link", { name: "Back" }).click();
     await expect(page.locator("h1")).toHaveText("Personal");
   });
 });
+
+test("a level can mix leaves and subsections, at any depth", async ({ page }) => {
+  await page.goto("/personal");
+  await whenReady(page);
+  await expect(page.locator('[data-stop-url="/personal/hobbies"]')).toHaveAttribute("data-kind", "section");
+  await expect(page.locator('[data-stop-url="/personal/instagram"]')).toHaveAttribute("data-kind", "leaf");
+  await page.getByRole("link", { name: "Hobbies" }).click();
+  await expect(page.locator("h1")).toHaveText("Hobbies");
+  await page.getByRole("link", { name: "PLACEHOLDER group" }).click();
+  await expect(page).toHaveURL(/\/personal\/hobbies\/placeholder-group$/);
+  await page.getByRole("link", { name: "PLACEHOLDER deep leaf" }).click();
+  await expect(page.locator("h1")).toHaveText("PLACEHOLDER deep leaf");
+  await expect(page.locator(".line-world")).toBeHidden();
+  await seamIdle(page);
+  for (const label of ["PLACEHOLDER group", "Hobbies", "Personal"]) {
+    await page.getByRole("link", { name: "Back" }).click();
+    await expect(page.locator("h1")).toHaveText(label);
+  }
+});
+
+test("the stops sit on the line, on both sides on desktop and one side on a phone", async ({ page }) => {
+  await page.goto("/professional");
+  await whenReady(page);
+  const { line, branches } = await page.evaluate(() => ({
+    line: document.querySelector(".line-tail")!.getBoundingClientRect().left,
+    branches: [...document.querySelectorAll(".stop-branch")].map((branch) => {
+      const box = branch.getBoundingClientRect();
+      return { left: box.left, right: box.right };
+    }),
+  }));
+  const wide = page.viewportSize()!.width > 640;
+  expect(branches[0].left).toBeCloseTo(line, 0);
+  if (wide) expect(branches[1].right).toBeCloseTo(line + 2, 0);
+  else expect(branches[1].left).toBeCloseTo(line, 0);
+});
+
+test("the line carries into a subsection behind a covering layer, then clears", async ({ page }) => {
+  await page.goto("/personal");
+  await whenReady(page);
+  await page.evaluate(() => {
+    const win = window as unknown as { atSwap: string; lifts: number[] };
+    const layer = document.querySelector(".line-continue")!;
+    const world = document.querySelector(".line-continue-world")!;
+    win.lifts = [];
+    document.addEventListener("astro:before-swap", () => (win.atSwap = getComputedStyle(layer).opacity));
+    document.addEventListener("astro:after-swap", () => {
+      const tick = () => {
+        win.lifts.push(new DOMMatrix(getComputedStyle(world).transform).m42);
+        if (getComputedStyle(layer).visibility !== "hidden") requestAnimationFrame(tick);
+      };
+      tick();
+    });
+  });
+  await page.getByRole("link", { name: "Hobbies" }).click();
+  await expect(page.locator("h1")).toHaveText("Hobbies");
+  await expect(page.locator(".line-continue")).toBeHidden();
+  const { atSwap, lifts } = await page.evaluate(() => {
+    const win = window as unknown as { atSwap: string; lifts: number[] };
+    return { atSwap: win.atSwap, lifts: win.lifts };
+  });
+  expect(atSwap).toBe("1");
+  expect(lifts.length).toBeGreaterThan(10);
+  const moving = lifts.slice(0, -2);
+  expect(moving.every((y, i) => i === 0 || y <= moving[i - 1])).toBe(true);
+  expect(Math.min(...moving)).toBeLessThan(-50);
+  await expect(page.locator(".line-tail")).toBeVisible();
+});
+
+for (const [name, from, go] of [
+  ["the fork", "/", "Professional"],
+  ["a subsection", "/personal", "Hobbies"],
+  ["a leaf", "/personal", "Instagram"],
+] as const) {
+  test(`a scroll cannot run ahead while the line moves into ${name}`, async ({ page }) => {
+    await page.goto(from);
+    await whenReady(page);
+    await page.mouse.move(100, 100);
+    await page.getByRole("link", { name: go }).click();
+    await page.waitForTimeout(120);
+    await page.addStyleTag({ content: "main { min-height: 300vh !important; }" });
+    await page.mouse.wheel(0, 400);
+    await page.waitForTimeout(100);
+    expect(await page.evaluate(() => scrollY)).toBe(0);
+    await page.waitForFunction(
+      () =>
+        document.querySelector<HTMLElement>(".line-stage")!.dataset.settled === "true" &&
+        [...document.querySelectorAll<HTMLElement>("[data-seam], [data-continue]")].every(
+          (part) => getComputedStyle(part).visibility === "hidden",
+        ),
+    );
+    await page.addStyleTag({ content: "main { min-height: 300vh !important; }" });
+    await page.mouse.wheel(0, 400);
+    await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(0);
+  });
+}

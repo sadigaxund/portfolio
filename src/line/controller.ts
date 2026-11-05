@@ -1,6 +1,7 @@
 import type { Direction } from "../tree/tree";
 import { nodeAt, ROOT } from "../tree/walk";
 import { branchPath, DIRECTIONS, labelOpacity, retraction, type Measure } from "./geometry";
+import { holdScroll } from "./scrollHold";
 
 const EASES = {
   sine: "cubic-bezier(0.37, 0, 0.63, 1)",
@@ -67,6 +68,10 @@ function animateParts(parts: Parts, move: Move): Animation[] {
   return running;
 }
 
+function announce(stage: HTMLElement, name: string, detail: object): void {
+  stage.dispatchEvent(new CustomEvent(name, { bubbles: true, detail }));
+}
+
 function measureStage(stage: HTMLElement, probe: HTMLElement): Measure {
   const box = probe.getBoundingClientRect();
   const stem = probe.firstElementChild?.getBoundingClientRect().height ?? 0;
@@ -127,9 +132,6 @@ export function mountLine(
     back.style.visibility = moving || progress > 0 ? "visible" : "hidden";
   };
 
-  const announce = (name: string, detail: object) =>
-    stage.dispatchEvent(new CustomEvent(name, { bubbles: true, detail }));
-
   const stopRunning = () => {
     for (const animation of running) animation.cancel();
     running = [];
@@ -142,6 +144,7 @@ export function mountLine(
     stopRunning();
     applyState(to);
     stage.dataset.settled = "false";
+    holdScroll("line", true);
     applyVisibility(to, true);
 
     const finish = () => {
@@ -149,14 +152,15 @@ export function mountLine(
       currentProgress = () => settled;
       applyVisibility(to, false);
       stage.dataset.settled = "true";
-      announce("line:transition-end", { reduced: running.length === 0 });
+      holdScroll("line", false);
+      announce(stage, "line:transition-end", { reduced: running.length === 0 });
       done();
     };
 
     if (prefersReducedMotion()) {
       settled = to;
       currentProgress = () => settled;
-      announce("line:transition-start", { from, to, seconds: 0, chosen, measure: measure(), progress: () => to });
+      announce(stage, "line:transition-start", { from, to, seconds: 0, chosen, measure: measure(), progress: () => to });
       finish();
       return;
     }
@@ -164,7 +168,7 @@ export function mountLine(
     running = animateParts(parts, { chosen, from, to, duration, ease, worldFrom, tailFrom });
     const camera = running[0];
     currentProgress = () => from + (to - from) * (camera.effect?.getComputedTiming().progress ?? 1);
-    announce("line:transition-start", { from, to, seconds: duration / 1000, chosen, measure: measure(), progress: currentProgress });
+    announce(stage, "line:transition-start", { from, to, seconds: duration / 1000, chosen, measure: measure(), progress: currentProgress });
     camera.finished.then(finish).catch(() => undefined);
   };
 
@@ -221,6 +225,7 @@ export function mountLine(
   document.addEventListener("astro:before-swap", onSwap);
   return () => {
     stopRunning();
+    holdScroll("line", false);
     resize.disconnect();
     document.removeEventListener("astro:before-preparation", onNavigate);
     document.removeEventListener("astro:before-swap", onSwap);

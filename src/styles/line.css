@@ -215,8 +215,12 @@ body {
   margin-top: var(--line-content-top);
 }
 
+.line-section {
+  position: relative;
+}
+
 /* Waits for the line to pass, so the two never overlap on a phone. */
-[data-line-moved] .line-content {
+[data-line-moved] main {
   animation: line-content-in var(--duration-slow) var(--ease-out) 600ms backwards;
 }
 
@@ -227,7 +231,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-line-moved] .line-content {
+  [data-line-moved] main {
     animation: none;
   }
 }

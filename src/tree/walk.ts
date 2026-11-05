@@ -1,4 +1,4 @@
-import { TREE, type BranchSpec, type Direction } from "./tree";
+import { TREE, type Direction, type NodeSpec } from "./tree";
 
 export interface TreeNode {
   url: string;
@@ -9,30 +9,29 @@ export interface TreeNode {
   direction: Direction | null;
 }
 
-function buildBranch(spec: BranchSpec, direction: Direction, root: TreeNode): TreeNode {
-  const url = `/${spec.slug}`;
-  const branch: TreeNode = { url, label: spec.label, parent: root, children: [], direction };
-  branch.children = spec.leaves.map((leaf) => ({
-    url: `${url}/${leaf.slug}`,
-    label: leaf.label,
-    parent: branch,
-    children: [],
-    direction,
-  }));
-  return branch;
+function buildNode(spec: NodeSpec, parent: TreeNode, direction: Direction): TreeNode {
+  const prefix = parent.url === "/" ? "" : parent.url;
+  const node: TreeNode = { url: `${prefix}/${spec.slug}`, label: spec.label, parent, children: [], direction };
+  node.children = (spec.children ?? []).map((child) => buildNode(child, node, direction));
+  return node;
+}
+
+function withDescendants(node: TreeNode): TreeNode[] {
+  return [node, ...node.children.flatMap(withDescendants)];
 }
 
 export const ROOT: TreeNode = { url: "/", label: TREE.label, parent: null, children: [], direction: null };
 
 /** The fork's branches, ordered left to right. */
-export const BRANCHES: readonly (TreeNode & { direction: Direction })[] = [
-  buildBranch(TREE.left, -1, ROOT),
-  buildBranch(TREE.straight, 0, ROOT),
-  buildBranch(TREE.right, 1, ROOT),
-] as (TreeNode & { direction: Direction })[];
-ROOT.children = [...BRANCHES];
+export const BRANCHES = [
+  { ...buildNode(TREE.left, ROOT, -1), direction: -1 as const },
+  { ...buildNode(TREE.straight, ROOT, 0), direction: 0 as const },
+  { ...buildNode(TREE.right, ROOT, 1), direction: 1 as const },
+];
+ROOT.children = BRANCHES;
+for (const branch of BRANCHES) for (const child of branch.children) child.parent = branch;
 
-export const ALL_NODES: readonly TreeNode[] = [ROOT, ...BRANCHES.flatMap((branch) => [branch, ...branch.children])];
+export const ALL_NODES: readonly TreeNode[] = withDescendants(ROOT);
 
 const BY_URL = new Map(ALL_NODES.map((node) => [node.url, node]));
 

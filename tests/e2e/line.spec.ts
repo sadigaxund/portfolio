@@ -106,7 +106,9 @@ test("the chosen line reaches the page bottom, stays visible, and the others ret
       page: document.documentElement.scrollHeight,
       otherRetract: getComputedStyle(other).strokeDashoffset,
       // The main line stays visible next to the content, so nothing paints over it.
-      covered: document.elementsFromPoint(tail.x + 1, innerHeight - 20).some((el) => el.closest("main")),
+      covered: document
+        .elementsFromPoint(tail.x + 1, innerHeight - 20)
+        .some((el) => el.closest("main") && getComputedStyle(el).backgroundColor !== "rgba(0, 0, 0, 0)"),
     };
   });
   expect(box.bottom).toBeGreaterThanOrEqual(box.page - 1);
