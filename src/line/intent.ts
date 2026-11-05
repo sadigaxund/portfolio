@@ -32,7 +32,7 @@ function atStraightBranch(): boolean {
  */
 export function mountIntent(): () => void {
   let wheelTotal = 0;
-  let wheelAt = 0;
+  let wheelAt = Number.NEGATIVE_INFINITY;
   let startedAtTop = false;
   let touchY: number | null = null;
   let leaving = false;
