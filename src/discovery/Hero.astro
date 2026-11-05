@@ -1,0 +1,25 @@
+---
+import { Link } from "my-you-eye";
+import { PROFILE } from "./profile";
+
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+---
+
+<header class="hero">
+  <h1 class="role-name">{name}</h1>
+  <p class="role-title">{PROFILE.role}</p>
+  <p class="role-summary">{PROFILE.summary}</p>
+  <ul class="hero-links">
+    {
+      PROFILE.links.map((link) => (
+        <li>
+          <Link href={link.href}>{link.label}</Link>
+        </li>
+      ))
+    }
+  </ul>
+</header>

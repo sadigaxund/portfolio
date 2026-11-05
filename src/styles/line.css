@@ -7,6 +7,7 @@
   --line-inset: 12vh;
   --line-lift: calc(var(--line-fork-y) - var(--line-inset));
   --line-width: 2px;
+  --line-trunk-top: 16rem;
   --line-stub: calc(var(--line-stem) * 1.5);
   /* Where the main line rests after a choice, measured from the page center. */
   --line-rest: 0px;
@@ -81,10 +82,11 @@ body {
   background: var(--color-primary);
 }
 
+/* The line begins below the landing hero, and the lift carries that start off screen. */
 .line-trunk {
-  top: 0;
+  top: min(var(--line-trunk-top), var(--line-fork-y) - 2rem);
   left: calc(var(--line-center) - var(--line-width) / 2);
-  height: var(--line-fork-y);
+  bottom: calc(100% - var(--line-fork-y));
 }
 
 /* The long line is a plain element scaled from the top, so it never repaints. */
@@ -207,13 +209,10 @@ body {
   position: relative;
   width: var(--line-content-width);
   margin-left: var(--line-content-start);
-  margin-top: calc(var(--line-fork-y) + var(--line-stem) * 2 + 3rem);
+  margin-top: var(--line-content-top);
   padding-block: 2rem;
 }
 
-.line-content:not([data-at-root="true"]) {
-  margin-top: var(--line-content-top);
-}
 
 .line-section {
   position: relative;

@@ -4,6 +4,9 @@ import { Link } from "my-you-eye";
 import "../styles/global.css";
 import "../styles/line.css";
 import "../styles/stops.css";
+import "../styles/roles.css";
+import "../styles/comps.css";
+import Hero from "../discovery/Hero.astro";
 import LineStage from "../line/LineStage";
 import { isLeaf, type TreeNode } from "../tree/walk";
 
@@ -24,21 +27,54 @@ const leaf = isLeaf(node);
     <meta name="robots" content="noindex" />
     <title>{node.label}</title>
     <ClientRouter />
+    <script is:inline>
+      // Comparison only: ?comp= picks a look, and it stays on through route changes.
+      (function () {
+        const wanted = new URLSearchParams(location.search).get("comp");
+        let comp = wanted;
+        try {
+          if (wanted) sessionStorage.setItem("comp", wanted);
+          comp = wanted || sessionStorage.getItem("comp");
+        } catch {
+          // Blocked storage only means the choice lasts for this page.
+        }
+        if (!comp) return;
+        document.documentElement.dataset.comp = comp;
+        if (window.compReady) return;
+        window.compReady = true;
+        const href = "https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500&family=Source+Sans+3:wght@400;500;600&family=Hanken+Grotesk:wght@400;500;600&display=swap";
+        const addFonts = function (doc) {
+          const link = doc.createElement("link");
+          link.rel = "stylesheet";
+          link.href = href;
+          doc.head.append(link);
+        };
+        addFonts(document);
+        document.addEventListener("astro:before-swap", function (event) {
+          event.newDocument.documentElement.dataset.comp = comp;
+          addFonts(event.newDocument);
+        });
+      })();
+    </script>
   </head>
   <body>
     <LineStage client:load transition:persist="line" transition:persist-props initialPath={node.url} />
     {
       leaf ? (
         <main class="leaf-surface">
-          <h1>{node.label}</h1>
-          <p>PLACEHOLDER</p>
+          <h1 class="role-heading">{node.label}</h1>
+          <p class="role-summary">PLACEHOLDER</p>
         </main>
       ) : (
-        <main class="line-section">
-          <div class="line-content" data-at-root={atRoot}>
-            <h1>{node.label}</h1>
-            <p>PLACEHOLDER</p>
-          </div>
+        <main class={atRoot ? "line-section line-landing" : "line-section"}>
+          {atRoot ? (
+            <Hero name={node.label} />
+          ) : (
+            <div class="line-content">
+              <h1 class="role-heading">{node.label}</h1>
+              <p class="role-summary">PLACEHOLDER</p>
+            </div>
+          )}
           {!atRoot && (
             <ol class="stops">
               {node.children.map((child, index) => (

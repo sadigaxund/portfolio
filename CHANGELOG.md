@@ -6,7 +6,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Added
 
-- The landing page is a line with a fork, and every path and leaf has its own page and URL, with placeholder content.
+- The landing page shows the name, role, summary, and contact links above a line with a fork, and every path and leaf has its own page and URL, with placeholder content.
 - Opening a leaf splits the line into two that part to the screen edges, and the leaf takes the whole screen. Back closes it again.
 - Each section lists its children as stops that sprout from the line in order after it arrives, and a level can mix leaves and subsections at any depth.
 - Choosing a subsection slides its branch to the center, where it becomes the main line.

@@ -17,7 +17,7 @@ export interface TreeSpec {
 
 /** Every node of the site. A node's URL is its parent's URL plus its slug. */
 export const TREE: TreeSpec = {
-  label: "Start",
+  label: "PLACEHOLDER name",
   left: {
     slug: "personal",
     label: "Personal",

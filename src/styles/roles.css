@@ -1,0 +1,86 @@
+/* The closed set of text roles. A comp changes their values, and pages only name the role. */
+:root {
+  --role-name-size: clamp(2.25rem, 1.8rem + 2vw, 3.5rem);
+  --role-name-weight: 600;
+  --role-name-tracking: -0.02em;
+  --role-heading-size: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+  --role-heading-weight: 600;
+  --font-display: var(--font-sans);
+}
+
+.role-name,
+.role-heading {
+  font-family: var(--font-display);
+  font-weight: var(--role-name-weight);
+  letter-spacing: var(--role-name-tracking);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.role-name {
+  font-size: var(--role-name-size);
+}
+
+.role-heading {
+  font-size: var(--role-heading-size);
+  font-weight: var(--role-heading-weight);
+}
+
+.role-title {
+  margin-top: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.role-summary {
+  max-width: 34rem;
+  margin-top: 0.75rem;
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+
+/* The landing hero sits above where the line begins, or beside it when a comp starts the line at the top. */
+.line-landing {
+  position: relative;
+  min-height: calc(var(--line-fork-y) + var(--line-stub) + 5rem);
+  /* This box spans the fork, whose labels must stay clickable through it. */
+  pointer-events: none;
+}
+
+.hero {
+  width: min(var(--hero-width), 100% - 3rem);
+  margin-inline: var(--hero-margin-inline);
+  padding-top: var(--hero-top);
+  text-align: var(--hero-align);
+  pointer-events: auto;
+}
+
+.hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: var(--hero-links-justify);
+  gap: 0.25rem 1.25rem;
+  margin-top: 1rem;
+  list-style: none;
+}
+
+.hero-links a {
+  display: inline-block;
+  padding-block: 0.625rem;
+}
+
+/* On a phone every comp stacks: the hero first, then the line below it. */
+@media (max-width: 40rem) {
+  :root {
+    --line-trunk-top: 17rem !important;
+    --hero-width: 100% !important;
+    --hero-margin-inline: 1.5rem !important;
+    --hero-top: 2rem !important;
+    --hero-align: left !important;
+    --hero-links-justify: flex-start !important;
+  }
+
+  .hero {
+    width: calc(100% - 3rem);
+  }
+}
