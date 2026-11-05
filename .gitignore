@@ -16,3 +16,7 @@ private/
 
 # Private project plan. See AGENTS.md section 2.
 PLAN.md
+
+# Playwright output
+test-results/
+playwright-report/

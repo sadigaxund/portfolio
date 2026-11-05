@@ -1,0 +1,37 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "version": "2026.11.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "lint": "eslint .",
+    "guard:shape": "node scripts/shape-guard.mjs",
+    "guard:design": "node scripts/design-guard.mjs",
+    "validate": "npm run check && npm run lint && npm run guard:shape && npm run guard:design && npm run build",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@astrojs/react": "^7.1.0",
+    "@tailwindcss/vite": "^4.3.4",
+    "astro": "^7.4.1",
+    "my-you-eye": "^2026.9.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tailwindcss": "^4.3.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.64.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^10.14.0",
+    "eslint-plugin-astro": "^3.2.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.1"
+  }
+}
