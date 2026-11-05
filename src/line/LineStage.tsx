@@ -6,6 +6,7 @@ import { mountContinuation } from "./continuation";
 import { mountLine } from "./controller";
 import { DIRECTIONS } from "./geometry";
 import { mountIntent } from "./intent";
+import { mountRepeatGuard } from "./repeatGuard";
 import { mountSeam } from "./seam";
 
 export interface LineStageProps {
@@ -24,11 +25,13 @@ export default function LineStage({ initialPath }: LineStageProps) {
     const stopIntent = mountIntent();
     const stopSeam = mountSeam(stageRef.current);
     const stopContinuation = mountContinuation(stageRef.current);
+    const stopRepeatGuard = mountRepeatGuard();
     return () => {
       stopLine();
       stopIntent();
       stopSeam();
       stopContinuation();
+      stopRepeatGuard();
     };
   }, [initialChosen]);
 

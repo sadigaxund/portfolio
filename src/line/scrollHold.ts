@@ -11,6 +11,11 @@ const stopKey = (event: KeyboardEvent) => {
   if (SCROLL_KEYS.has(event.key)) event.preventDefault();
 };
 
+/** True while any transition is running. */
+export function scrollHeld(): boolean {
+  return holders.size > 0;
+}
+
 /**
  * Holds the page still while a transition runs, so a scroll cannot race ahead of the reveal.
  * Input is stopped instead of hiding overflow, because removing the scrollbar would shift the line.

@@ -75,6 +75,14 @@ function animateParts(parts: Parts, move: Move): Animation[] {
   return running;
 }
 
+// A hidden link leaves the tab order, so keyboard users only reach what they can see.
+function showReachable(parts: Parts, chosen: Direction | null, progress: number, moving: boolean): void {
+  for (const { label } of parts.branches) {
+    if (label) label.style.visibility = moving || labelOpacity(chosen, progress) > 0 ? "visible" : "hidden";
+  }
+  parts.back.style.visibility = moving || progress > 0 ? "visible" : "hidden";
+}
+
 function announce(stage: HTMLElement, name: string, detail: object): void {
   stage.dispatchEvent(new CustomEvent(name, { bubbles: true, detail }));
 }
@@ -112,6 +120,7 @@ export function mountLine(
   let running: Animation[] = [];
   let currentProgress: () => number = () => settled;
   let moved = false;
+  let backHref = "";
 
   const measure = () => measureStage(stage, probe);
 
@@ -131,13 +140,7 @@ export function mountLine(
     back.style.opacity = String(progress);
   };
 
-  // A hidden link leaves the tab order, so keyboard users only reach what they can see.
-  const applyVisibility = (progress: number, moving: boolean) => {
-    for (const { label } of branches) {
-      if (label) label.style.visibility = moving || labelOpacity(chosen, progress) > 0 ? "visible" : "hidden";
-    }
-    back.style.visibility = moving || progress > 0 ? "visible" : "hidden";
-  };
+  const applyVisibility = (progress: number, moving: boolean) => showReachable(parts, chosen, progress, moving);
 
   const stopRunning = () => {
     for (const animation of running) animation.cancel();
@@ -195,7 +198,7 @@ export function mountLine(
   const goTo = (path: string) => {
     const node = nodeAt(path);
     target = node?.direction ?? null;
-    back.querySelector("a")?.setAttribute("href", (node?.parent ?? ROOT).url);
+    backHref = (node?.parent ?? ROOT).url;
     const goal = target === null ? 0 : 1;
     // Moving between pages on one branch leaves the line where it is.
     moved = currentProgress() !== goal || (goal === 1 && chosen !== target);
@@ -217,6 +220,8 @@ export function mountLine(
 
   // Tells the incoming page whether to hold its content back for the moving line.
   const onSwap = (event: Event) => {
+    // Back keeps its destination until the new page is in, so a double click cannot skip a level.
+    back.querySelector("a")?.setAttribute("href", backHref);
     const incoming = (event as Event & { newDocument?: Document }).newDocument;
     if (moved && incoming) incoming.documentElement.dataset.lineMoved = target === null ? "back" : "forward";
   };

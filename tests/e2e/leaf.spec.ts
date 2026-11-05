@@ -300,3 +300,61 @@ test("the line grows smoothly, and each stop sprouts only after its tip has pass
   expect(Math.max(...steps)).toBeLessThan(120);
   expect(rows.some((row) => row.early)).toBe(false);
 });
+
+test("spamming Back cannot stall the seam or skip a level", async ({ page }) => {
+  await page.goto("/personal/instagram");
+  await whenReady(page);
+  const result = await page.evaluate(
+    () =>
+      new Promise<{ positions: number[]; swappedTo: string; swappedAfter: number }>((resolve) => {
+        const end = document.querySelector(".line-seam-end")!;
+        const link = document.querySelector<HTMLAnchorElement>("[data-back] a")!;
+        const positions: number[] = [];
+        const started = performance.now();
+        let sampling = true;
+        const sample = () => {
+          positions.push(new DOMMatrix(getComputedStyle(end).transform).m41);
+          if (sampling) requestAnimationFrame(sample);
+        };
+        document.addEventListener(
+          "astro:after-swap",
+          () => {
+            sampling = false;
+            resolve({ positions, swappedTo: location.pathname, swappedAfter: performance.now() - started });
+          },
+          { once: true },
+        );
+        link.click();
+        requestAnimationFrame(sample);
+        const spam = setInterval(() => link.click(), 40);
+        setTimeout(() => clearInterval(spam), 400);
+      }),
+  );
+  console.log("spam", result.swappedTo, Math.round(result.swappedAfter));
+  expect(result.swappedTo).toBe("/personal");
+  expect(result.swappedAfter).toBeLessThan(900);
+  const closing = result.positions.filter((x) => x > 0);
+  expect(closing.every((x, i) => i === 0 || x <= closing[i - 1] + 1)).toBe(true);
+});
+
+test("spamming a stop or a fork label runs its transition once", async ({ page }) => {
+  await page.goto("/");
+  await whenReady(page);
+  const started = await page.evaluate(
+    () =>
+      new Promise<number>((resolve) => {
+        let count = 0;
+        document.addEventListener("line:transition-start", () => (count += 1));
+        const link = document.querySelector<HTMLAnchorElement>('[data-option="-1"] a')!;
+        link.click();
+        const spam = setInterval(() => link.click(), 40);
+        setTimeout(() => {
+          clearInterval(spam);
+          resolve(count);
+        }, 400);
+      }),
+  );
+  expect(started).toBe(1);
+  await page.waitForSelector('.line-stage[data-settled="true"]');
+  await expect(page).toHaveURL(/\/personal$/);
+});
