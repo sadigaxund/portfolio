@@ -8,15 +8,15 @@ export interface ForkOption {
 }
 
 const EASES = {
-  current: [0.16, 1, 0.3, 1],
-  cubic: [0.65, 0, 0.35, 1],
   sine: [0.37, 0, 0.63, 1],
+  cubic: [0.65, 0, 0.35, 1],
+  fast: [0.16, 1, 0.3, 1],
 } as const;
 
 /** Reads ?ease= once at mount, so curves can be compared side by side. */
 function chooseEase(): readonly [number, number, number, number] {
   const name = new URLSearchParams(location.search).get("ease");
-  return name === "cubic" || name === "sine" ? EASES[name] : EASES.current;
+  return name === "cubic" || name === "fast" ? EASES[name] : EASES.sine;
 }
 const FORWARD_SECONDS = 0.9;
 const REVERSE_SECONDS = 0.5;
