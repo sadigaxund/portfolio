@@ -7,7 +7,17 @@ export interface ForkOption {
   href: string;
 }
 
-const EASE_OUT = [0.16, 1, 0.3, 1] as const;
+const EASES = {
+  current: [0.16, 1, 0.3, 1],
+  cubic: [0.65, 0, 0.35, 1],
+  sine: [0.37, 0, 0.63, 1],
+} as const;
+
+/** Reads ?ease= once at mount, so curves can be compared side by side. */
+function chooseEase(): readonly [number, number, number, number] {
+  const name = new URLSearchParams(location.search).get("ease");
+  return name === "cubic" || name === "sine" ? EASES[name] : EASES.current;
+}
 const FORWARD_SECONDS = 0.9;
 const REVERSE_SECONDS = 0.5;
 
@@ -31,6 +41,7 @@ export function mountLine(
   options: ForkOption[],
   initialChosen: Direction | null,
 ): () => void {
+  const ease = chooseEase();
   const state: LineState = { chosen: initialChosen, progress: initialChosen === null ? 0 : 1 };
   let target: Direction | null = initialChosen;
   let measure: Measure;
@@ -90,7 +101,7 @@ export function mountLine(
     }
     const controls = animate(state.progress, to, {
       duration: seconds,
-      ease: EASE_OUT,
+      ease: [...ease],
       onUpdate: (value) => {
         state.progress = value;
         render();
