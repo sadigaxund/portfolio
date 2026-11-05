@@ -276,6 +276,29 @@ test("the stage starts at the page top, and labels have large tap targets", asyn
   expect(label!.y + label!.height).toBeLessThanOrEqual(page.viewportSize()!.height);
 });
 
+test("fork labels stay on screen, apart, and centered on their branches", async ({ page }) => {
+  await page.goto("/");
+  await whenReady(page);
+  const labels = await page.evaluate(() =>
+    [...document.querySelectorAll("[data-option] a")].map((link) => {
+      const range = document.createRange();
+      range.selectNodeContents(link);
+      const box = range.getBoundingClientRect();
+      const option = link.parentElement!;
+      const branch = document.querySelector<SVGPathElement>(`[data-branch="${option.dataset.option}"]`)!;
+      const end = branch.getPointAtLength(branch.getTotalLength());
+      return { left: box.left, right: box.right, lines: range.getClientRects().length, branchX: branch.getScreenCTM()!.a * end.x + branch.getScreenCTM()!.e };
+    }),
+  );
+  labels.forEach((label, index) => {
+    expect(label.left).toBeGreaterThanOrEqual(0);
+    expect(label.right).toBeLessThanOrEqual(page.viewportSize()!.width);
+    expect(label.lines).toBeLessThanOrEqual(2);
+    expect(Math.abs((label.left + label.right) / 2 - label.branchX)).toBeLessThan(2);
+    if (index > 0) expect(label.left).toBeGreaterThan(labels[index - 1].right);
+  });
+});
+
 test("no sideways page scroll in any state", async ({ page }) => {
   for (const path of ["/", "/personal", "/projects-blog/blog"]) {
     await page.goto(path);

@@ -114,6 +114,11 @@ body {
   top: calc(var(--line-fork-y) + var(--line-stub));
   left: calc(var(--line-center) + var(--option-dir) * var(--line-spread));
   transform: translateX(-50%);
+  /* Sized by its text up to the gap between branches, so labels never run together. */
+  width: max-content;
+  max-width: var(--line-spread);
+  text-align: center;
+  text-wrap: balance;
   background: var(--color-bg);
   pointer-events: auto;
 }
@@ -123,6 +128,12 @@ body {
 .line-back a {
   display: block;
   padding: 0.75rem;
+}
+
+@media (max-width: 40rem) {
+  .line-option a {
+    padding-inline: 0.25rem;
+  }
 }
 
 /* Back keeps one fixed spot on every page. */
