@@ -5,6 +5,7 @@ import { BRANCHES, nodeAt, ROOT } from "../tree/walk";
 import { mountLine } from "./controller";
 import { DIRECTIONS } from "./geometry";
 import { mountIntent } from "./intent";
+import { mountSeam } from "./seam";
 
 export interface LineStageProps {
   initialPath: string;
@@ -20,9 +21,11 @@ export default function LineStage({ initialPath }: LineStageProps) {
     if (!stageRef.current || !probeRef.current) return;
     const stopLine = mountLine(stageRef.current, probeRef.current, initialChosen);
     const stopIntent = mountIntent();
+    const stopSeam = mountSeam(stageRef.current);
     return () => {
       stopLine();
       stopIntent();
+      stopSeam();
     };
   }, [initialChosen]);
 
@@ -61,6 +64,8 @@ export default function LineStage({ initialPath }: LineStageProps) {
           ))}
         </nav>
       </div>
+      <div data-seam className="line-seam line-seam-start" aria-hidden="true" />
+      <div data-seam className="line-seam line-seam-end" aria-hidden="true" />
       <div
         data-back
         className="line-back"

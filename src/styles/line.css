@@ -28,6 +28,11 @@
   }
 }
 
+/* An always-present scrollbar keeps the line's center from shifting between short and long pages. */
+html {
+  overflow-y: scroll;
+}
+
 /* flow-root stops the content's top margin collapsing through body and moving the stage. */
 body {
   position: relative;
@@ -136,12 +141,66 @@ body {
   }
 }
 
-/* Back keeps one fixed spot on every page. */
+/* Back keeps one fixed spot on every page, above a leaf and above the seam. */
 .line-back {
-  position: absolute;
+  position: fixed;
+  z-index: 2;
   top: 0.25rem;
   left: var(--line-back-left);
+  border-radius: var(--radius-ui);
+  background: var(--color-bg);
   pointer-events: auto;
+}
+
+/* A leaf owns the screen, so the line stays out of it entirely. */
+[data-view="leaf"] .line-world {
+  visibility: hidden;
+}
+
+.leaf-surface {
+  position: relative;
+  min-height: 100vh;
+  /* Lines the text up with the text of Back. */
+  padding: 4rem calc(var(--line-back-left) + 0.75rem) 2rem;
+  background: var(--color-bg);
+}
+
+/* The two sides of the opening line. Both meet exactly on the line's resting position. */
+.line-seam {
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  visibility: hidden;
+  background: var(--color-bg);
+  will-change: transform, opacity;
+}
+
+.line-seam::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--line-width);
+  background: var(--color-primary);
+}
+
+.line-seam-start {
+  left: 0;
+  right: calc(100% - var(--line-center) - var(--line-rest) - var(--line-width) / 2);
+}
+
+.line-seam-start::after {
+  right: 0;
+}
+
+.line-seam-end {
+  left: calc(var(--line-center) + var(--line-rest) - var(--line-width) / 2);
+  right: 0;
+}
+
+.line-seam-end::after {
+  left: 0;
 }
 
 .line-content {

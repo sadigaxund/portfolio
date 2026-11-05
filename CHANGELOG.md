@@ -7,4 +7,5 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 ### Added
 
 - The landing page is a line with a fork, and every path and leaf has its own page and URL, with placeholder content.
+- Opening a leaf splits the line into two that part to the screen edges, and the leaf takes the whole screen. Back closes it again.
 - At the fork, arrow keys pick a path, and scrolling or swiping past the page bottom continues to Professional.

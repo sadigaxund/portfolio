@@ -40,3 +40,13 @@ const BY_URL = new Map(ALL_NODES.map((node) => [node.url, node]));
 export function nodeAt(path: string): TreeNode | undefined {
   return BY_URL.get(path.length > 1 ? path.replace(/\/$/, "") : path);
 }
+
+/** A leaf is a node past the root with nothing below it. It owns the whole screen. */
+export function isLeaf(node: TreeNode): boolean {
+  return node.parent !== null && node.children.length === 0;
+}
+
+export function isLeafPath(path: string): boolean {
+  const node = nodeAt(path);
+  return node !== undefined && isLeaf(node);
+}

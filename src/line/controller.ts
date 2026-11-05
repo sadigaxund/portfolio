@@ -13,7 +13,7 @@ const REVERSE_MS = 500;
 const LABEL_SHARE = 0.35;
 
 /** Reads ?ease= once at mount, so curves can be compared side by side. */
-function chooseEase(): string {
+export function chooseEase(): string {
   const name = new URLSearchParams(location.search).get("ease");
   return name === "cubic" || name === "fast" ? EASES[name] : EASES.sine;
 }

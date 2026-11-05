@@ -4,7 +4,7 @@ import { Link } from "my-you-eye";
 import "../styles/global.css";
 import "../styles/line.css";
 import LineStage from "../line/LineStage";
-import type { TreeNode } from "../tree/walk";
+import { isLeaf, type TreeNode } from "../tree/walk";
 
 interface Props {
   node: TreeNode;
@@ -12,10 +12,11 @@ interface Props {
 
 const { node } = Astro.props;
 const atRoot = node.parent === null;
+const leaf = isLeaf(node);
 ---
 
 <!doctype html>
-<html lang="en" transition:animate="none">
+<html lang="en" transition:animate="none" data-view={leaf ? "leaf" : "line"}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -25,23 +26,30 @@ const atRoot = node.parent === null;
   </head>
   <body>
     <LineStage client:load transition:persist="line" transition:persist-props initialPath={node.url} />
-    <main class="line-content" data-at-root={atRoot}>
-      <h1>{node.label}</h1>
-      <p>PLACEHOLDER</p>
-      {
-        !atRoot && node.children.length > 0 && (
-          <ul>
-            {node.children.map((child) => (
-              <li>
-                <Link href={child.url}>{child.label}</Link>
-              </li>
-            ))}
-          </ul>
-        )
-      }
-      {!atRoot && <div style="height: 120vh" />}
-      {!atRoot && <p>PLACEHOLDER end of page</p>}
-    </main>
+    {
+      leaf ? (
+        <main class="leaf-surface">
+          <h1>{node.label}</h1>
+          <p>PLACEHOLDER</p>
+        </main>
+      ) : (
+        <main class="line-content" data-at-root={atRoot}>
+          <h1>{node.label}</h1>
+          <p>PLACEHOLDER</p>
+          {!atRoot && (
+            <ul>
+              {node.children.map((child) => (
+                <li>
+                  <Link href={child.url}>{child.label}</Link>
+                </li>
+              ))}
+            </ul>
+          )}
+          {!atRoot && <div style="height: 120vh" />}
+          {!atRoot && <p>PLACEHOLDER end of page</p>}
+        </main>
+      )
+    }
   </body>
 </html>
 
