@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "guard:shape": "node scripts/shape-guard.mjs",
     "guard:design": "node scripts/design-guard.mjs",
-    "validate": "npm run check && npm run lint && npm run guard:shape && npm run guard:design && npm run build",
+    "guard:tree": "node scripts/tree-guard.mjs",
+    "validate": "npm run check && npm run lint && npm run guard:shape && npm run guard:design && npm run guard:tree && npm run build",
     "test:e2e": "playwright test"
   },
   "dependencies": {

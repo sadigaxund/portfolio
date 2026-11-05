@@ -1,0 +1,198 @@
+/* A stop is one child of a section, on a short branch off the main line. */
+:root {
+  --stop-reach: min(12vw, 8rem);
+  --stop-drop: 1.5rem;
+  --line-x: calc(var(--line-center) + var(--line-rest));
+}
+
+.stops {
+  padding-bottom: 6rem;
+  list-style: none;
+}
+
+.stop {
+  display: flex;
+  align-items: flex-start;
+  min-height: 5rem;
+  margin-left: calc(var(--line-x) - var(--line-width) / 2);
+}
+
+.stop a {
+  min-width: 0;
+  padding: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.stop-branch {
+  position: relative;
+  flex: none;
+  width: var(--stop-reach);
+  height: var(--stop-drop);
+  border-bottom: var(--line-width) solid var(--color-primary);
+  border-left: var(--line-width) solid var(--color-primary);
+  border-bottom-left-radius: var(--stop-drop);
+}
+
+/* A leaf ends in a dot. */
+.stop[data-kind="leaf"] .stop-branch::after {
+  content: "";
+  position: absolute;
+  right: -0.25rem;
+  bottom: -0.3rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+/* A subsection's branch bends on down, like the fork's branches, because the line continues into it. */
+.stop[data-kind="section"] .stop-branch::after {
+  content: "";
+  position: absolute;
+  left: 100%;
+  bottom: calc(var(--stop-drop) * -1);
+  width: var(--stop-drop);
+  height: var(--stop-drop);
+  border-top: var(--line-width) solid var(--color-primary);
+  border-right: var(--line-width) solid var(--color-primary);
+  border-top-right-radius: var(--stop-drop);
+}
+
+.stop[data-kind="section"] a {
+  margin-left: var(--stop-drop);
+}
+
+@media (min-width: 40.01rem) {
+  .stop[data-side="start"] {
+    flex-direction: row-reverse;
+    margin-left: 0;
+    margin-right: calc(100% - var(--line-x) - var(--line-width) / 2);
+    text-align: right;
+  }
+
+  .stop[data-side="start"] .stop-branch {
+    border-left: 0;
+    border-right: var(--line-width) solid var(--color-primary);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: var(--stop-drop);
+  }
+
+  .stop[data-side="start"][data-kind="leaf"] .stop-branch::after {
+    right: auto;
+    left: -0.25rem;
+  }
+
+  .stop[data-side="start"][data-kind="section"] .stop-branch::after {
+    left: auto;
+    right: 100%;
+    border-right: 0;
+    border-left: var(--line-width) solid var(--color-primary);
+    border-top-right-radius: 0;
+    border-top-left-radius: var(--stop-drop);
+  }
+
+  .stop[data-side="start"][data-kind="section"] a {
+    margin-left: 0;
+    margin-right: var(--stop-drop);
+  }
+}
+
+/* The layer that carries the line into a subsection. */
+.line-continue {
+  position: fixed;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  visibility: hidden;
+  background: var(--color-bg);
+}
+
+.line-continue-world {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.line-continue-upper,
+.line-continue-rest,
+.line-continue-ahead {
+  position: absolute;
+  width: var(--line-width);
+  background: var(--color-primary);
+  transform-origin: top;
+}
+
+.line-continue-upper {
+  top: 0;
+  left: calc(var(--continue-from) - var(--line-width) / 2);
+  height: var(--continue-y);
+}
+
+.line-continue-rest {
+  top: var(--continue-y);
+  left: calc(var(--continue-from) - var(--line-width) / 2);
+  height: calc(100vh - var(--continue-y));
+  will-change: transform;
+}
+
+.line-continue-curve {
+  position: absolute;
+  top: var(--continue-y);
+  left: calc(var(--continue-from) - var(--continue-spread));
+  width: calc(var(--continue-spread) * 2);
+  height: var(--continue-stub);
+  overflow: visible;
+}
+
+.line-continue-ahead {
+  top: calc(var(--continue-y) + var(--continue-stub));
+  left: calc(var(--continue-to) - var(--line-width) / 2);
+  height: 200vh;
+  will-change: transform;
+}
+
+/* After a move, stops sprout from the line in order: the branch first, then its label. */
+[data-line-moved] .stop {
+  /* The list can run past the screen, so the wait stops growing after the eighth stop. */
+  --stop-at: calc(var(--line-reveal-at) + min(var(--stop-index), 8) * 130ms);
+}
+
+[data-line-moved] .stop-branch {
+  animation: stop-sprout-end 220ms var(--ease-out) var(--stop-at) backwards;
+}
+
+[data-line-moved] .stop a {
+  animation: line-content-in 200ms var(--ease-out) calc(var(--stop-at) + 120ms) backwards;
+}
+
+/* The clip runs past the box, because a stop's ending extends beyond it. */
+@keyframes stop-sprout-end {
+  from {
+    clip-path: inset(-2rem 100% -3rem 0);
+  }
+  to {
+    clip-path: inset(-2rem -3rem -3rem 0);
+  }
+}
+
+@keyframes stop-sprout-start {
+  from {
+    clip-path: inset(-2rem 0 -3rem 100%);
+  }
+  to {
+    clip-path: inset(-2rem 0 -3rem -3rem);
+  }
+}
+
+@media (min-width: 40.01rem) {
+  [data-line-moved] .stop[data-side="start"] .stop-branch {
+    animation-name: stop-sprout-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-line-moved] .stop-branch,
+  [data-line-moved] .stop a {
+    animation: none;
+  }
+}

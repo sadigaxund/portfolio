@@ -1,0 +1,249 @@
+:root {
+  /* Whole pixels keep the straight parts of the line crisp at rest. */
+  --line-center: round(50%, 1px);
+  --line-fork-y: round(62vh, 1px);
+  --line-spread: round(min(30vw, 22rem), 1px);
+  --line-stem: 6rem;
+  --line-inset: 12vh;
+  --line-lift: calc(var(--line-fork-y) - var(--line-inset));
+  --line-width: 2px;
+  --line-stub: calc(var(--line-stem) * 1.5);
+  /* Where the main line rests after a choice, measured from the page center. */
+  --line-rest: 0px;
+  --line-content-start: calc(50% + 2rem);
+  --line-content-width: min(34rem, 50% - 3rem);
+  --line-content-top: calc(var(--line-inset) + var(--line-stem) + 1rem);
+  --line-back-left: 1rem;
+}
+
+/* On a phone the line rests in a left gutter, and the fork lifts out of view. */
+@media (max-width: 40rem) {
+  :root {
+    --line-inset: calc(var(--line-stem) * -1);
+    --line-rest: round(1.5rem - 50vw, 1px);
+    --line-content-start: 3rem;
+    --line-content-width: calc(100% - 4rem);
+    --line-content-top: 4rem;
+    --line-back-left: 2.25rem;
+  }
+}
+
+/* An always-present scrollbar keeps the line's center from shifting between short and long pages. */
+html {
+  overflow-y: scroll;
+}
+
+/* flow-root stops the content's top margin collapsing through body and moving the stage. */
+body {
+  position: relative;
+  display: flow-root;
+  min-height: 100vh;
+}
+
+/* Clips the camera's sideways travel, so the page never scrolls horizontally. */
+.line-stage {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  pointer-events: none;
+}
+
+.line-probe {
+  position: absolute;
+  visibility: hidden;
+  width: var(--line-spread);
+  height: var(--line-fork-y);
+}
+
+.line-probe-stem {
+  height: var(--line-stem);
+}
+
+.line-probe-lift {
+  height: var(--line-lift);
+}
+
+/* The camera: the line and its labels all move through this one composited transform. */
+.line-world {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  transform: translate(
+    calc((var(--line-rest) - var(--line-dir) * var(--line-spread)) * var(--line-p)),
+    calc(var(--line-lift) * -1 * var(--line-p))
+  );
+}
+
+.line-trunk,
+.line-tail {
+  position: absolute;
+  width: var(--line-width);
+  background: var(--color-primary);
+}
+
+.line-trunk {
+  top: 0;
+  left: calc(var(--line-center) - var(--line-width) / 2);
+  height: var(--line-fork-y);
+}
+
+/* The long line is a plain element scaled from the top, so it never repaints. */
+.line-tail {
+  top: calc(var(--line-fork-y) + var(--line-stub));
+  left: calc(var(--line-center) + var(--line-dir) * var(--line-spread) - var(--line-width) / 2);
+  height: calc(100% + var(--line-lift) - var(--line-fork-y) - var(--line-stub));
+  transform-origin: top;
+  transform: scaleY(var(--line-p));
+  will-change: transform;
+}
+
+/* Only the curves at the fork are SVG, which keeps the redrawn area small. */
+.line-fork {
+  position: absolute;
+  top: var(--line-fork-y);
+  left: calc(var(--line-center) - var(--line-spread));
+  width: calc(var(--line-spread) * 2);
+  height: var(--line-stub);
+  overflow: visible;
+}
+
+.line-path {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: var(--line-width);
+  stroke-dasharray: 1 1;
+}
+
+.line-option {
+  position: absolute;
+  top: calc(var(--line-fork-y) + var(--line-stub));
+  left: calc(var(--line-center) + var(--option-dir) * var(--line-spread));
+  transform: translateX(-50%);
+  /* Sized by its text up to the gap between branches, so labels never run together. */
+  width: max-content;
+  max-width: var(--line-spread);
+  text-align: center;
+  text-wrap: balance;
+  background: var(--color-bg);
+  pointer-events: auto;
+}
+
+/* Tap targets stay at least 2.75rem tall. */
+.line-option a,
+.line-back a {
+  display: block;
+  padding: 0.75rem;
+}
+
+@media (max-width: 40rem) {
+  .line-option a {
+    padding-inline: 0.25rem;
+  }
+}
+
+/* Back keeps one fixed spot on every page, above a leaf and above the seam. */
+.line-back {
+  position: fixed;
+  z-index: 2;
+  top: 0.25rem;
+  left: var(--line-back-left);
+  border-radius: var(--radius-ui);
+  background: var(--color-bg);
+  pointer-events: auto;
+}
+
+/* A leaf owns the screen, so the line stays out of it entirely. */
+[data-view="leaf"] .line-world {
+  visibility: hidden;
+}
+
+.leaf-surface {
+  position: relative;
+  min-height: 100vh;
+  /* Lines the text up with the text of Back. */
+  padding: 4rem calc(var(--line-back-left) + 0.75rem) 2rem;
+  background: var(--color-bg);
+}
+
+/* The two sides of the opening line. Both meet exactly on the line's resting position. */
+.line-seam {
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  visibility: hidden;
+  background: var(--color-bg);
+  will-change: transform, opacity;
+}
+
+.line-seam::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--line-width);
+  background: var(--color-primary);
+}
+
+.line-seam-start {
+  left: 0;
+  right: calc(100% - var(--line-center) - var(--line-rest) - var(--line-width) / 2);
+}
+
+.line-seam-start::after {
+  right: 0;
+}
+
+.line-seam-end {
+  left: calc(var(--line-center) + var(--line-rest) - var(--line-width) / 2);
+  right: 0;
+}
+
+.line-seam-end::after {
+  left: 0;
+}
+
+.line-content {
+  position: relative;
+  width: var(--line-content-width);
+  margin-left: var(--line-content-start);
+  margin-top: calc(var(--line-fork-y) + var(--line-stem) * 2 + 3rem);
+  padding-block: 2rem;
+}
+
+.line-content:not([data-at-root="true"]) {
+  margin-top: var(--line-content-top);
+}
+
+.line-section {
+  position: relative;
+}
+
+/* Content waits until the line has settled. These match the moves in controller.ts and continuation.ts. */
+[data-line-moved="back"] {
+  --line-reveal-at: 500ms;
+}
+
+[data-line-moved="forward"] {
+  --line-reveal-at: 900ms;
+}
+
+[data-line-moved="continued"] {
+  --line-reveal-at: 1080ms;
+}
+
+[data-line-moved] .line-content {
+  animation: line-content-in var(--duration-slow) var(--ease-out) var(--line-reveal-at) backwards;
+}
+
+@keyframes line-content-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-line-moved] .line-content {
+    animation: none;
+  }
+}

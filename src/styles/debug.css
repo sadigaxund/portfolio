@@ -1,0 +1,32 @@
+[data-line-debug] {
+  position: fixed;
+  right: var(--spacing-tight);
+  bottom: var(--spacing-tight);
+  z-index: var(--z-overlay);
+  max-width: min(24rem, 100vw - 1rem);
+  padding: var(--spacing-tight);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-ui);
+  background: var(--color-surface-opaque);
+  color: var(--color-fg);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: var(--leading-snug);
+  pointer-events: auto;
+}
+
+[data-line-debug] pre {
+  margin: 0 0 var(--spacing-tight);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+[data-line-debug] button {
+  padding: var(--spacing-tight);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-ui-sm);
+  background: var(--color-surface);
+  color: var(--color-fg);
+  font: inherit;
+  cursor: pointer;
+}

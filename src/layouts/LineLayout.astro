@@ -1,0 +1,73 @@
+---
+import { ClientRouter } from "astro:transitions";
+import { Link } from "my-you-eye";
+import "../styles/global.css";
+import "../styles/line.css";
+import "../styles/stops.css";
+import LineStage from "../line/LineStage";
+import { isLeaf, type TreeNode } from "../tree/walk";
+
+interface Props {
+  node: TreeNode;
+}
+
+const { node } = Astro.props;
+const atRoot = node.parent === null;
+const leaf = isLeaf(node);
+---
+
+<!doctype html>
+<html lang="en" transition:animate="none" data-view={leaf ? "leaf" : "line"}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{node.label}</title>
+    <ClientRouter />
+  </head>
+  <body>
+    <LineStage client:load transition:persist="line" transition:persist-props initialPath={node.url} />
+    {
+      leaf ? (
+        <main class="leaf-surface">
+          <h1>{node.label}</h1>
+          <p>PLACEHOLDER</p>
+        </main>
+      ) : (
+        <main class="line-section">
+          <div class="line-content" data-at-root={atRoot}>
+            <h1>{node.label}</h1>
+            <p>PLACEHOLDER</p>
+          </div>
+          {!atRoot && (
+            <ol class="stops">
+              {node.children.map((child, index) => (
+                <li
+                  class="stop"
+                  data-stop-url={child.url}
+                  data-side={index % 2 === 0 ? "end" : "start"}
+                  data-kind={isLeaf(child) ? "leaf" : "section"}
+                  style={`--stop-index: ${index}`}
+                >
+                  <span class="stop-branch" aria-hidden="true" />
+                  <Link href={child.url}>{child.label}</Link>
+                </li>
+              ))}
+            </ol>
+          )}
+        </main>
+      )
+    }
+  </body>
+</html>
+
+<script>
+  // ?debug=line turns on the frame meter, and sessionStorage keeps it on across pages.
+  const wanted = new URLSearchParams(location.search).get("debug") === "line";
+  try {
+    if (wanted) sessionStorage.setItem("line-debug", "1");
+    if (wanted || sessionStorage.getItem("line-debug") === "1") void import("../line/debug");
+  } catch {
+    if (wanted) void import("../line/debug");
+  }
+</script>
