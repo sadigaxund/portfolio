@@ -77,3 +77,28 @@ test("keyboard focus shows a focus style", async ({ page }) => {
   await expect(button).toBeFocused();
   expect(await read()).not.toBe("none");
 });
+
+test("the landing hero answers first, and stays clear of the line", async ({ page }) => {
+  {
+    await page.goto("/");
+    await page.waitForSelector(".line-stage[data-ready]");
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    for (const label of ["Email", "GitHub", "LinkedIn"]) {
+      await expect(page.getByRole("link", { name: label })).toBeInViewport();
+    }
+    const clash = await page.evaluate(() => {
+      const hero = document.querySelector(".hero")!.getBoundingClientRect();
+      const trunk = document.querySelector(".line-trunk")!.getBoundingClientRect();
+      const texts = [...document.querySelectorAll(".hero h1, .hero p, .hero li")].map((el) => {
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        return range.getBoundingClientRect();
+      });
+      return {
+        crosses: texts.some((box) => box.left < trunk.right && box.right > trunk.left && box.top < trunk.bottom && box.bottom > trunk.top),
+        offscreen: hero.left < 0 || hero.right > document.documentElement.clientWidth,
+      };
+    });
+    expect(clash).toEqual({ crosses: false, offscreen: false });
+  }
+});

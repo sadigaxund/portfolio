@@ -64,6 +64,7 @@ const click = (page) => page.getByRole("link", { name: "Projects" }).click();
 const synthetic = (page) =>
   page.evaluate(`(() => {
     const event = new Event("astro:before-preparation");
+    event.from = new URL(location.href);
     event.to = new URL("/projects-blog", location.href);
     document.dispatchEvent(event);
   })()`);

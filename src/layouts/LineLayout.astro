@@ -3,7 +3,12 @@ import { ClientRouter } from "astro:transitions";
 import { Link } from "my-you-eye";
 import "../styles/global.css";
 import "../styles/line.css";
+import "@fontsource-variable/instrument-sans";
+import "../styles/seam.css";
 import "../styles/stops.css";
+import "../styles/tokens.css";
+import "../styles/roles.css";
+import Hero from "../discovery/Hero.astro";
 import LineStage from "../line/LineStage";
 import { isLeaf, type TreeNode } from "../tree/walk";
 
@@ -30,15 +35,19 @@ const leaf = isLeaf(node);
     {
       leaf ? (
         <main class="leaf-surface">
-          <h1>{node.label}</h1>
-          <p>PLACEHOLDER</p>
+          <h1 class="role-heading">{node.label}</h1>
+          <p class="role-summary">PLACEHOLDER</p>
         </main>
       ) : (
-        <main class="line-section">
-          <div class="line-content" data-at-root={atRoot}>
-            <h1>{node.label}</h1>
-            <p>PLACEHOLDER</p>
-          </div>
+        <main class={atRoot ? "line-section line-landing" : "line-section"}>
+          {atRoot ? (
+            <Hero name={node.label} />
+          ) : (
+            <div class="line-content">
+              <h1 class="role-heading">{node.label}</h1>
+              <p class="role-summary">PLACEHOLDER</p>
+            </div>
+          )}
           {!atRoot && (
             <ol class="stops">
               {node.children.map((child, index) => (

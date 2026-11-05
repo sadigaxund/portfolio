@@ -7,6 +7,8 @@
   --line-inset: 12vh;
   --line-lift: calc(var(--line-fork-y) - var(--line-inset));
   --line-width: 2px;
+  --section-head: 8.5rem;
+  --line-trunk-top: 16rem;
   --line-stub: calc(var(--line-stem) * 1.5);
   /* Where the main line rests after a choice, measured from the page center. */
   --line-rest: 0px;
@@ -63,14 +65,30 @@ body {
   height: var(--line-lift);
 }
 
+.line-probe-reach {
+  height: var(--stop-reach);
+}
+
+.line-probe-drop {
+  height: var(--stop-drop);
+}
+
+.line-probe-first {
+  height: calc(var(--line-content-top) + var(--section-head));
+}
+
+.line-probe-gap {
+  height: var(--stop-gap);
+}
+
 /* The camera: the line and its labels all move through this one composited transform. */
 .line-world {
   position: absolute;
   inset: 0;
   will-change: transform;
   transform: translate(
-    calc((var(--line-rest) - var(--line-dir) * var(--line-spread)) * var(--line-p)),
-    calc(var(--line-lift) * -1 * var(--line-p))
+    calc((var(--line-rest) - var(--line-dir) * var(--line-spread)) * var(--line-p) + var(--line-cam-x, 0px)),
+    calc(var(--line-lift) * -1 * var(--line-p) + var(--line-cam-y, 0px))
   );
 }
 
@@ -81,10 +99,11 @@ body {
   background: var(--color-primary);
 }
 
+/* The line begins below the landing hero, and the lift carries that start off screen. */
 .line-trunk {
-  top: 0;
+  top: min(var(--line-trunk-top), var(--line-fork-y) - 2rem);
   left: calc(var(--line-center) - var(--line-width) / 2);
-  height: var(--line-fork-y);
+  bottom: calc(100% - var(--line-fork-y));
 }
 
 /* The long line is a plain element scaled from the top, so it never repaints. */
@@ -165,85 +184,44 @@ body {
   background: var(--color-bg);
 }
 
-/* The two sides of the opening line. Both meet exactly on the line's resting position. */
-.line-seam {
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  bottom: 0;
-  visibility: hidden;
-  background: var(--color-bg);
-  will-change: transform, opacity;
-}
-
-.line-seam::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: var(--line-width);
-  background: var(--color-primary);
-}
-
-.line-seam-start {
-  left: 0;
-  right: calc(100% - var(--line-center) - var(--line-rest) - var(--line-width) / 2);
-}
-
-.line-seam-start::after {
-  right: 0;
-}
-
-.line-seam-end {
-  left: calc(var(--line-center) + var(--line-rest) - var(--line-width) / 2);
-  right: 0;
-}
-
-.line-seam-end::after {
-  left: 0;
-}
-
 .line-content {
   position: relative;
   width: var(--line-content-width);
   margin-left: var(--line-content-start);
-  margin-top: calc(var(--line-fork-y) + var(--line-stem) * 2 + 3rem);
+  margin-top: var(--line-content-top);
+  height: var(--section-head);
   padding-block: 2rem;
 }
 
-.line-content:not([data-at-root="true"]) {
-  margin-top: var(--line-content-top);
-}
 
 .line-section {
   position: relative;
 }
 
-/* Content waits until the line has settled. These match the moves in controller.ts and continuation.ts. */
-[data-line-moved="back"] {
-  --line-reveal-at: 500ms;
+/* An incoming page stays hidden until the line has arrived and reveals it. */
+[data-line-reveal] main {
+  visibility: hidden;
 }
 
-[data-line-moved="forward"] {
-  --line-reveal-at: 900ms;
+/* Each level below the first runs and curves in the same world as the fork. */
+.line-levels {
+  position: absolute;
+  inset: 0;
 }
 
-[data-line-moved="continued"] {
-  --line-reveal-at: 1080ms;
+.line-run {
+  position: absolute;
+  width: var(--line-width);
+  background: var(--color-primary);
+  transform-origin: top;
+  will-change: transform;
 }
 
-[data-line-moved] .line-content {
-  animation: line-content-in var(--duration-slow) var(--ease-out) var(--line-reveal-at) backwards;
+.line-level-curve {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: visible;
 }
 
-@keyframes line-content-in {
-  from {
-    opacity: 0;
-  }
-}
 
-@media (prefers-reduced-motion: reduce) {
-  [data-line-moved] .line-content {
-    animation: none;
-  }
-}

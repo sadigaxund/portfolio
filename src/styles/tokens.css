@@ -1,0 +1,42 @@
+/* The site's base look. It stays plain on purpose, and polish replaces these values freely. */
+:root {
+  --font-sans: "Instrument Sans Variable", sans-serif;
+  --color-bg: #fbfbf9;
+  --color-fg: #16161a;
+  --color-muted: #55555c;
+  --color-primary: #16161a;
+  --color-border: #d9d9d4;
+  --line-trunk-top: 16rem;
+  --hero-width: 40rem;
+  --hero-margin-inline: auto;
+  --hero-top: 3.5rem;
+  --hero-align: center;
+  --hero-links-justify: center;
+}
+
+html {
+  font-family: var(--font-sans);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+}
+
+::selection {
+  background: var(--color-primary);
+  color: var(--color-bg);
+}
+
+/* Links share the text color here, so an underline is what marks them. */
+.hero-links a,
+.line-option a,
+.line-back a,
+.stop a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.hero .role-summary {
+  margin-inline: auto;
+}

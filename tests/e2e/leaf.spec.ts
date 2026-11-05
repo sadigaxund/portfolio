@@ -177,36 +177,90 @@ test("the stops sit on the line, on both sides on desktop and one side on a phon
   else expect(branches[1].left).toBeCloseTo(line, 0);
 });
 
-test("the line carries into a subsection behind a covering layer, then clears", async ({ page }) => {
+const sampleWalk = (page: Page) =>
+  page.evaluate(() => {
+    const win = window as unknown as { rows: { y: number; tail: number; main: string; hero: string }[] };
+    win.rows = [];
+    const started = performance.now();
+    const tick = () => {
+      const tail = document.querySelector(".line-tail")!.getBoundingClientRect();
+      const hero = document.querySelector(".hero");
+      win.rows.push({
+        y: new DOMMatrix(getComputedStyle(document.querySelector(".line-world")!).transform).m42,
+        tail: tail.height,
+        main: getComputedStyle(document.querySelector("main")!).visibility,
+        hero: hero ? getComputedStyle(hero).opacity : "none",
+      });
+      if (performance.now() - started < 2400) requestAnimationFrame(tick);
+    };
+    tick();
+  });
+
+const walkRows = (page: Page) =>
+  page.evaluate(() => (window as unknown as { rows: { y: number; tail: number; main: string; hero: string }[] }).rows);
+
+test("entering a subsection pans the whole line in one world, with the root line kept", async ({ page }) => {
   await page.goto("/personal");
   await whenReady(page);
-  await page.evaluate(() => {
-    const win = window as unknown as { atSwap: string; lifts: number[] };
-    const layer = document.querySelector(".line-continue")!;
-    const world = document.querySelector(".line-continue-world")!;
-    win.lifts = [];
-    document.addEventListener("astro:before-swap", () => (win.atSwap = getComputedStyle(layer).opacity));
-    document.addEventListener("astro:after-swap", () => {
-      const tick = () => {
-        win.lifts.push(new DOMMatrix(getComputedStyle(world).transform).m42);
-        if (getComputedStyle(layer).visibility !== "hidden") requestAnimationFrame(tick);
-      };
-      tick();
-    });
-  });
+  await sampleWalk(page);
   await page.getByRole("link", { name: "Hobbies" }).click();
   await expect(page.locator("h1")).toHaveText("Hobbies");
-  await expect(page.locator(".line-continue")).toBeHidden();
-  const { atSwap, lifts } = await page.evaluate(() => {
-    const win = window as unknown as { atSwap: string; lifts: number[] };
-    return { atSwap: win.atSwap, lifts: win.lifts };
-  });
-  expect(atSwap).toBe("1");
-  expect(lifts.length).toBeGreaterThan(10);
-  const moving = lifts.slice(0, -2);
-  expect(moving.every((y, i) => i === 0 || y <= moving[i - 1])).toBe(true);
-  expect(Math.min(...moving)).toBeLessThan(-50);
-  await expect(page.locator(".line-tail")).toBeVisible();
+  await page.waitForSelector('.line-stage[data-settled="true"]');
+  await page.waitForTimeout(300);
+  const rows = await walkRows(page);
+  const lifted = rows.map((row) => row.y);
+  expect(lifted.every((y, i) => i === 0 || y <= lifted[i - 1] + 1)).toBe(true);
+  expect(Math.min(...lifted)).toBeLessThan(lifted[0] - 50);
+  // The root line shortens to the chosen stop, and it never disappears.
+  expect(Math.min(...rows.map((row) => row.tail))).toBeGreaterThan(20);
+  // The new content waits for the camera.
+  const firstMove = rows.findIndex((row) => row.y < lifted[0] - 1);
+  const shown = rows.findLastIndex((row) => row.main !== "visible");
+  expect(shown).toBeGreaterThan(firstMove);
+  await expect(page.locator(".line-run")).toHaveCount(1);
+});
+
+test("going back up a level pans back too, and the stop returns where it left", async ({ page }) => {
+  await page.goto("/personal/hobbies");
+  await whenReady(page);
+  await sampleWalk(page);
+  await page.getByRole("link", { name: "Back" }).click();
+  await expect(page.locator("h1")).toHaveText("Personal");
+  await page.waitForSelector('.line-stage[data-settled="true"]');
+  await page.waitForTimeout(300);
+  const lifted = (await walkRows(page)).map((row) => row.y);
+  expect(lifted.every((y, i) => i === 0 || y >= lifted[i - 1] - 1)).toBe(true);
+  expect(Math.max(...lifted)).toBeGreaterThan(lifted[0] + 50);
+  await expect(page.locator(".line-run")).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Hobbies" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Instagram" })).toBeVisible();
+});
+
+test("a deep link draws the walked line at any depth, with no animation", async ({ page }) => {
+  await page.goto("/personal/hobbies/placeholder-group");
+  await whenReady(page);
+  await expect(page.locator(".line-run")).toHaveCount(2);
+  const { runX, center } = await page.evaluate(() => ({
+    runX: [...document.querySelectorAll(".line-run")].at(-1)!.getBoundingClientRect().left,
+    center: document.querySelector("main .stop-branch")!.getBoundingClientRect().left,
+  }));
+  expect(Math.abs(runX - center)).toBeLessThan(2);
+});
+
+test("going back to the landing page shows the hero only after the fork has returned", async ({ page }) => {
+  await page.goto("/professional");
+  await whenReady(page);
+  await sampleWalk(page);
+  await page.getByRole("link", { name: "Back" }).click();
+  await expect(page.locator(".hero")).toBeVisible();
+  await page.waitForSelector('.line-stage[data-settled="true"]');
+  await page.waitForTimeout(100);
+  const rows = await walkRows(page);
+  const home = rows.findIndex((row) => row.y >= -1);
+  const visibleEarly = rows.slice(0, home).some((row) => row.hero !== "none" && row.main === "visible" && Number(row.hero) > 0);
+  expect(home).toBeGreaterThan(0);
+  expect(visibleEarly).toBe(false);
+  await expect(page.getByRole("link", { name: "Personal" })).toBeVisible();
 });
 
 for (const [name, from, go] of [
@@ -248,12 +302,13 @@ test("after a move the stops sprout in order, once the camera has settled", asyn
   await page.goto("/");
   await whenReady(page);
   await page.getByRole("link", { name: "Personal" }).click();
-  await expect(page.locator("h1")).toHaveText("Personal");
+  await page.waitForFunction(() => {
+    const branch = document.querySelector(".stop-branch");
+    return branch !== null && branch.getAnimations().length > 0 && !document.documentElement.dataset.lineReveal;
+  });
   const delays = (await stopDelays(page)).map((list) => list[0]);
   expect(delays.length).toBeGreaterThan(1);
-  expect(delays[0]).toBeGreaterThanOrEqual(900);
   expect(delays.every((delay, i) => i === 0 || delay > delays[i - 1])).toBe(true);
-  // The line reaches the settled state only after its tip has finished travelling.
   await page.waitForSelector('.line-stage[data-settled="true"]');
   await expect(page.getByRole("link", { name: "Instagram" })).toBeVisible();
 });

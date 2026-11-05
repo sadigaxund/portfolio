@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@astrojs/react": "^7.1.0",
+    "@fontsource-variable/instrument-sans": "^5.3.0",
     "@tailwindcss/vite": "^4.3.4",
     "astro": "^7.4.1",
     "my-you-eye": "^2026.9.1",

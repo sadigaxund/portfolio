@@ -1,9 +1,9 @@
 ---
 import LineLayout from "../layouts/LineLayout.astro";
-import { ALL_NODES, nodeAt } from "../tree/walk";
+import { ALL_NODES, nodeAt, routeParam } from "../tree/walk";
 
 export function getStaticPaths() {
-  return ALL_NODES.map((node) => ({ params: { path: node.url === "/" ? undefined : node.url.slice(1) } }));
+  return ALL_NODES.map((node) => ({ params: { path: routeParam(node) } }));
 }
 
 const node = nodeAt(Astro.url.pathname);

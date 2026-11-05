@@ -9,8 +9,13 @@ export interface TreeNode {
   direction: Direction | null;
 }
 
+/** The path the site is served under, empty at a domain root. */
+const BASE = (import.meta.env?.BASE_URL ?? "/").replace(/\/$/, "");
+
+const trimSlash = (path: string) => (path.length > 1 ? path.replace(/\/$/, "") : path);
+
 function buildNode(spec: NodeSpec, parent: TreeNode, direction: Direction): TreeNode {
-  const prefix = parent.url === "/" ? "" : parent.url;
+  const prefix = trimSlash(parent.url).replace(/^\/$/, "");
   const node: TreeNode = { url: `${prefix}/${spec.slug}`, label: spec.label, parent, children: [], direction };
   node.children = (spec.children ?? []).map((child) => buildNode(child, node, direction));
   return node;
@@ -20,7 +25,7 @@ function withDescendants(node: TreeNode): TreeNode[] {
   return [node, ...node.children.flatMap(withDescendants)];
 }
 
-export const ROOT: TreeNode = { url: "/", label: TREE.label, parent: null, children: [], direction: null };
+export const ROOT: TreeNode = { url: `${BASE}/`, label: TREE.label, parent: null, children: [], direction: null };
 
 /** The fork's branches, ordered left to right. */
 export const BRANCHES = [
@@ -33,11 +38,16 @@ for (const branch of BRANCHES) for (const child of branch.children) child.parent
 
 export const ALL_NODES: readonly TreeNode[] = withDescendants(ROOT);
 
-const BY_URL = new Map(ALL_NODES.map((node) => [node.url, node]));
+const BY_URL = new Map(ALL_NODES.map((node) => [trimSlash(node.url), node]));
 
 /** Finds the node for a pathname, ignoring a trailing slash. */
 export function nodeAt(path: string): TreeNode | undefined {
-  return BY_URL.get(path.length > 1 ? path.replace(/\/$/, "") : path);
+  return BY_URL.get(trimSlash(path));
+}
+
+/** The route parameter that builds a node's page, relative to the base path. */
+export function routeParam(node: TreeNode): string | undefined {
+  return node === ROOT ? undefined : node.url.slice(BASE.length + 1);
 }
 
 /** A leaf is a node past the root with nothing below it. It owns the whole screen. */

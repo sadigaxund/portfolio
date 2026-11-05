@@ -130,14 +130,15 @@ test("back retraces the path, and an interrupted choice settles", async ({ page 
   await page.getByRole("link", { name: "Professional" }).click();
   await settledAt(page, 1);
   await page.goBack();
-  await expect(page.locator("h1")).toHaveText("Start");
+  await expect(page.locator("h1")).toHaveText("PLACEHOLDER name");
   await settledAt(page, 0);
   await expect(page.getByRole("link", { name: "Personal" })).toBeVisible();
 
   await page.getByRole("link", { name: "Personal" }).click();
+  await expect(page).toHaveURL(/\/personal$/);
   await page.waitForTimeout(120);
   await page.goBack();
-  await expect(page.locator("h1")).toHaveText("Start");
+  await expect(page.locator("h1")).toHaveText("PLACEHOLDER name");
   await settledAt(page, 0);
   await expect(page.getByRole("link", { name: "Projects and blog" })).toBeVisible();
 });
@@ -163,7 +164,7 @@ test("a leaf deep link rests on its branch, and Back climbs one level at a time"
   await expect(page.getByRole("link", { name: "Personal" })).toBeVisible();
 });
 
-test("moving along one branch leaves the line still", async ({ page }) => {
+test("opening a leaf and returning leaves the line still", async ({ page }) => {
   await page.goto("/personal");
   await whenReady(page);
   await page.evaluate(() => {
@@ -171,13 +172,11 @@ test("moving along one branch leaves the line still", async ({ page }) => {
     win.started = 0;
     document.addEventListener("line:transition-start", () => (win.started += 1));
   });
-  await page.getByRole("link", { name: "Hobbies" }).click();
-  await expect(page.locator("h1")).toHaveText("Hobbies");
+  await page.getByRole("link", { name: "Instagram" }).click();
+  await expect(page.locator("h1")).toHaveText("Instagram");
   await page.goBack();
   await expect(page.locator("h1")).toHaveText("Personal");
   expect(await page.evaluate(() => (window as unknown as { started: number }).started)).toBe(0);
-  // The content has no line to wait for, so it appears at once.
-  expect(await page.evaluate(() => getComputedStyle(document.querySelector("main")!).animationName)).toBe("none");
 });
 
 test("changing branch through history passes the fork and lands on the new branch", async ({ page }) => {
@@ -319,7 +318,7 @@ test.describe("without JavaScript", () => {
     await page.getByRole("link", { name: "Personal" }).click();
     await expect(page.locator("h1")).toHaveText("Personal");
     await page.getByRole("link", { name: "Back" }).click();
-    await expect(page.locator("h1")).toHaveText("Start");
+    await expect(page.locator("h1")).toHaveText("PLACEHOLDER name");
   });
 });
 
