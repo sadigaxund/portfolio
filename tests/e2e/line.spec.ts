@@ -322,3 +322,69 @@ test.describe("without JavaScript", () => {
     await expect(page.locator("h1")).toHaveText("Start");
   });
 });
+
+test.describe("scrolling back along the straight path", () => {
+  const waitSettled = (page: Page) => page.waitForSelector('.line-stage[data-settled="true"]');
+
+  test("wheel up from the top of Professional returns to the landing page", async ({ page }) => {
+    await page.goto("/professional");
+    await whenReady(page);
+    await page.mouse.move(100, 100);
+    await page.mouse.wheel(0, -150);
+    await expect(page).toHaveURL(/\/$/);
+    await settledAt(page, 0);
+  });
+
+  test("a fast scroll up through a long page stops at the top", async ({ page }) => {
+    await page.goto("/professional");
+    await whenReady(page);
+    await page.addStyleTag({ content: "main { min-height: 300vh !important; }" });
+    await page.evaluate(() => scrollTo(0, 200));
+    await page.mouse.move(100, 100);
+    await page.waitForTimeout(300);
+    for (let i = 0; i < 6; i += 1) {
+      await page.mouse.wheel(0, -120);
+      await page.waitForTimeout(30);
+    }
+    await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
+    await expect(page).toHaveURL(/\/professional$/);
+    await page.waitForTimeout(300);
+    await page.mouse.wheel(0, -150);
+    await expect(page).toHaveURL(/\/$/);
+  });
+
+  test("the up arrow returns from the top, and only from the top", async ({ page }) => {
+    await page.goto("/professional");
+    await whenReady(page);
+    await page.addStyleTag({ content: "main { min-height: 300vh !important; }" });
+    await page.evaluate(() => scrollTo(0, 200));
+    await page.keyboard.press("ArrowUp");
+    await page.waitForTimeout(100);
+    await expect(page).toHaveURL(/\/professional$/);
+    await page.evaluate(() => scrollTo(0, 0));
+    await page.keyboard.press("ArrowUp");
+    await expect(page).toHaveURL(/\/$/);
+  });
+
+  test("the paths reached by a choice do not scroll back", async ({ page }) => {
+    await page.goto("/personal");
+    await whenReady(page);
+    await page.mouse.move(100, 100);
+    await page.mouse.wheel(0, -300);
+    await page.keyboard.press("ArrowUp");
+    await page.waitForTimeout(200);
+    await expect(page).toHaveURL(/\/personal$/);
+  });
+
+  test("a wheel during the return cannot send the line forward again", async ({ page }) => {
+    await page.goto("/professional");
+    await whenReady(page);
+    await page.mouse.move(100, 100);
+    await page.mouse.wheel(0, -150);
+    await expect(page).toHaveURL(/\/$/);
+    await page.mouse.wheel(0, 300);
+    await waitSettled(page);
+    await page.waitForTimeout(200);
+    await expect(page).toHaveURL(/\/$/);
+  });
+});
