@@ -1,5 +1,4 @@
-/** Direction of a branch at a fork: left, straight on, or right. */
-export type Direction = -1 | 0 | 1;
+import type { Direction } from "../tree/tree";
 
 export const DIRECTIONS: readonly Direction[] = [-1, 0, 1];
 

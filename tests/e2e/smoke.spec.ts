@@ -40,13 +40,13 @@ function primaryToken(page: Page): Promise<string> {
 }
 
 test("loads without console errors or failed requests", async ({ page }) => {
-  const problems = await openWatched(page, "/");
+  const problems = await openWatched(page, "/smoke");
   await page.waitForLoadState("networkidle");
   expect(problems).toEqual([]);
 });
 
 test("button is visible and styled by the library", async ({ page }) => {
-  await openWatched(page, "/");
+  await openWatched(page, "/smoke");
   const button = page.getByRole("button", { name: "PLACEHOLDER" });
   await expect(button).toBeVisible();
   const colors = await colorsOf(page);
@@ -56,16 +56,16 @@ test("button is visible and styled by the library", async ({ page }) => {
 });
 
 test("button colors differ between light and dark", async ({ page }) => {
-  await openWatched(page, "/");
+  await openWatched(page, "/smoke");
   const light = await colorsOf(page);
-  await openWatched(page, "/?theme=dark");
+  await openWatched(page, "/smoke?theme=dark");
   await expect(page.locator("html")).toHaveClass(/dark/);
   const dark = await colorsOf(page);
   expect(dark).not.toEqual(light);
 });
 
 test("keyboard focus shows a focus style", async ({ page }) => {
-  await openWatched(page, "/");
+  await openWatched(page, "/smoke");
   const button = page.getByRole("button", { name: "PLACEHOLDER" });
   const read = () =>
     button.evaluate((el) => {

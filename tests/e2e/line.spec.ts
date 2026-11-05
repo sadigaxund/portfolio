@@ -1,9 +1,13 @@
 import { expect, test, type Page } from "@playwright/test";
+import { ALL_NODES } from "../../src/tree/walk";
 
 const progress = (page: Page) =>
   page.evaluate(() =>
     Number(getComputedStyle(document.querySelector(".line-stage")!).getPropertyValue("--line-p")),
   );
+
+const chosen = (page: Page) =>
+  page.evaluate(() => document.querySelector<HTMLElement>(".line-stage")!.dataset.chosen);
 
 const whenReady = (page: Page) => page.waitForSelector(".line-stage[data-ready]");
 
@@ -14,7 +18,7 @@ const settledAt = async (page: Page, value: number) => {
 };
 
 test("the line survives a route change and keeps moving, with nothing written per frame", async ({ page }) => {
-  await page.goto("/spike");
+  await page.goto("/");
   await whenReady(page);
   await page.evaluate(() => {
     const win = window as unknown as { fork: Element; samples: number[][]; writes: number };
@@ -31,9 +35,9 @@ test("the line survives a route change and keeps moving, with nothing written pe
     requestAnimationFrame(tick);
   });
 
-  await page.getByRole("link", { name: "Projects" }).click();
-  await expect(page).toHaveURL(/\/spike\/projects$/);
-  await expect(page.locator("h1")).toHaveText("Projects");
+  await page.getByRole("link", { name: "Projects and blog" }).click();
+  await expect(page).toHaveURL(/\/projects-blog$/);
+  await expect(page.locator("h1")).toHaveText("Projects and blog");
   await settledAt(page, 1);
 
   const result = await page.evaluate(() => {
@@ -76,7 +80,7 @@ test("the parts of the line meet exactly, before and after a choice", async ({ p
         forkTop: fork.top,
       };
     });
-  await page.goto("/spike");
+  await page.goto("/");
   await whenReady(page);
   let at = await edges();
   expect(at.trunkX).toBeCloseTo(at.forkX, 0);
@@ -89,7 +93,7 @@ test("the parts of the line meet exactly, before and after a choice", async ({ p
 });
 
 test("the chosen line reaches the page bottom, stays visible, and the others retract", async ({ page }) => {
-  await page.goto("/spike");
+  await page.goto("/");
   await whenReady(page);
   await page.getByRole("link", { name: "Personal" }).click();
   await settledAt(page, 1);
@@ -108,18 +112,18 @@ test("the chosen line reaches the page bottom, stays visible, and the others ret
   expect(box.bottom).toBeGreaterThanOrEqual(box.page - 1);
   expect(box.covered).toBe(false);
   expect(parseFloat(box.otherRetract)).toBe(1);
-  await expect(page.getByRole("link", { name: "Projects" })).toBeHidden();
+  await expect(page.getByRole("link", { name: "Projects and blog" })).toBeHidden();
 });
 
 test("a deep link draws the walked line with no animation", async ({ page }) => {
-  await page.goto("/spike/personal");
+  await page.goto("/personal");
   await whenReady(page);
   expect(await progress(page)).toBe(1);
   await expect(page.getByRole("link", { name: "Back" })).toBeVisible();
 });
 
 test("back retraces the path, and an interrupted choice settles", async ({ page }) => {
-  await page.goto("/spike");
+  await page.goto("/");
   await whenReady(page);
   await page.getByRole("link", { name: "Professional" }).click();
   await settledAt(page, 1);
@@ -133,20 +137,137 @@ test("back retraces the path, and an interrupted choice settles", async ({ page 
   await page.goBack();
   await expect(page.locator("h1")).toHaveText("Start");
   await settledAt(page, 0);
-  await expect(page.getByRole("link", { name: "Projects" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Projects and blog" })).toBeVisible();
+});
+
+test("every tree node has its own page", async ({ page }) => {
+  for (const node of ALL_NODES) {
+    const response = await page.goto(node.url);
+    expect(response?.status(), node.url).toBe(200);
+    await expect(page.locator("h1")).toHaveText(node.label);
+  }
+});
+
+test("a leaf deep link rests on its branch, and Back climbs one level at a time", async ({ page }) => {
+  await page.goto("/personal/hobbies");
+  await whenReady(page);
+  expect(await progress(page)).toBe(1);
+  expect(await chosen(page)).toBe("-1");
+  await page.getByRole("link", { name: "Back" }).click();
+  await expect(page).toHaveURL(/\/personal$/);
+  await page.getByRole("link", { name: "Back" }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await settledAt(page, 0);
+  await expect(page.getByRole("link", { name: "Personal" })).toBeVisible();
+});
+
+test("moving along one branch leaves the line still", async ({ page }) => {
+  await page.goto("/personal");
+  await whenReady(page);
+  await page.evaluate(() => {
+    const win = window as unknown as { started: number };
+    win.started = 0;
+    document.addEventListener("line:transition-start", () => (win.started += 1));
+  });
+  await page.getByRole("link", { name: "Hobbies" }).click();
+  await expect(page.locator("h1")).toHaveText("Hobbies");
+  await page.goBack();
+  await expect(page.locator("h1")).toHaveText("Personal");
+  expect(await page.evaluate(() => (window as unknown as { started: number }).started)).toBe(0);
+  // The content has no line to wait for, so it appears at once.
+  expect(await page.evaluate(() => getComputedStyle(document.querySelector("main")!).animationName)).toBe("none");
+});
+
+test("changing branch through history passes the fork and lands on the new branch", async ({ page }) => {
+  await page.goto("/personal");
+  await whenReady(page);
+  await page.getByRole("link", { name: "Back" }).click();
+  await settledAt(page, 0);
+  await page.getByRole("link", { name: "Projects and blog" }).click();
+  await settledAt(page, 1);
+  await page.evaluate(() => {
+    const win = window as unknown as { targets: number[] };
+    win.targets = [];
+    document.addEventListener("line:transition-start", (event) => win.targets.push((event as CustomEvent).detail.to));
+  });
+  await page.evaluate(() => history.go(-2));
+  await expect(page.locator("h1")).toHaveText("Personal");
+  await expect.poll(() => page.evaluate(() => (window as unknown as { targets: number[] }).targets)).toEqual([0, 1]);
+  await settledAt(page, 1);
+  expect(await chosen(page)).toBe("-1");
+  await expect(page.getByRole("link", { name: "Back" })).toHaveAttribute("href", "/");
+});
+
+test("wheel past the page bottom at the fork continues straight on", async ({ page }) => {
+  await page.goto("/");
+  await whenReady(page);
+  await page.mouse.move(100, 100);
+  await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+  await page.waitForTimeout(100);
+  await page.mouse.wheel(0, -40);
+  await page.waitForTimeout(100);
+  await expect(page).toHaveURL(/\/$/);
+  await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+  await page.waitForTimeout(100);
+  await page.mouse.wheel(0, 150);
+  await expect(page).toHaveURL(/\/professional$/);
+  await settledAt(page, 1);
+  expect(await chosen(page)).toBe("0");
+
+  // Past the fork the wheel only scrolls.
+  await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+  await page.waitForTimeout(100);
+  await page.mouse.wheel(0, 300);
+  await page.waitForTimeout(200);
+  await expect(page).toHaveURL(/\/professional$/);
+});
+
+test("arrow keys pick a branch at the fork, and modified arrows stay with the browser", async ({ page }) => {
+  await page.goto("/");
+  await whenReady(page);
+  await page.keyboard.press("Alt+ArrowRight");
+  await page.keyboard.press("Shift+ArrowLeft");
+  await page.waitForTimeout(100);
+  await expect(page).toHaveURL(/\/$/);
+  await page.keyboard.press("ArrowLeft");
+  await expect(page).toHaveURL(/\/personal$/);
+  await settledAt(page, 1);
+  await page.keyboard.press("ArrowRight");
+  await page.waitForTimeout(100);
+  await expect(page).toHaveURL(/\/personal$/);
+});
+
+test.describe("on a touch screen", () => {
+  test.use({ hasTouch: true });
+  test("a swipe up from the page bottom at the fork continues straight on", async ({ page, context }) => {
+    await page.goto("/");
+    await whenReady(page);
+    await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+    await page.waitForTimeout(100);
+    const client = await context.newCDPSession(page);
+    const touch = (type: "touchStart" | "touchMove" | "touchEnd", y: number) =>
+      client.send("Input.dispatchTouchEvent", {
+        type,
+        touchPoints: type === "touchEnd" ? [] : [{ x: 20, y }],
+      });
+    await touch("touchStart", 500);
+    await touch("touchMove", 400);
+    await touch("touchEnd", 400);
+    await expect(page).toHaveURL(/\/professional$/);
+  });
 });
 
 test("reduced motion jumps straight to the end state", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/spike");
+  await page.goto("/");
   await whenReady(page);
-  await page.getByRole("link", { name: "Projects" }).click();
-  await expect(page.locator("h1")).toHaveText("Projects");
+  await page.getByRole("link", { name: "Projects and blog" }).click();
+  await expect(page.locator("h1")).toHaveText("Projects and blog");
   expect(await progress(page)).toBe(1);
 });
 
 test("the stage starts at the page top, and labels have large tap targets", async ({ page }) => {
-  await page.goto("/spike");
+  await page.goto("/");
   await whenReady(page);
   const top = await page.evaluate(() => document.querySelector(".line-stage")!.getBoundingClientRect().top);
   expect(top).toBe(0);
@@ -156,7 +277,7 @@ test("the stage starts at the page top, and labels have large tap targets", asyn
 });
 
 test("no sideways page scroll in any state", async ({ page }) => {
-  for (const path of ["/spike", "/spike/personal", "/spike/projects"]) {
+  for (const path of ["/", "/personal", "/projects-blog/blog"]) {
     await page.goto(path);
     await whenReady(page);
     const overflow = await page.evaluate(
@@ -169,7 +290,7 @@ test("no sideways page scroll in any state", async ({ page }) => {
 test.describe("without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
   test("every path is a real link", async ({ page }) => {
-    await page.goto("/spike");
+    await page.goto("/");
     await page.getByRole("link", { name: "Personal" }).click();
     await expect(page.locator("h1")).toHaveText("Personal");
     await page.getByRole("link", { name: "Back" }).click();

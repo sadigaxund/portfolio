@@ -139,12 +139,15 @@ body {
   margin-left: var(--line-content-start);
   margin-top: calc(var(--line-fork-y) + var(--line-stem) * 2 + 3rem);
   padding-block: 2rem;
-  /* Waits for the line to pass, so the two never overlap on a phone. */
-  animation: line-content-in var(--duration-slow) var(--ease-out) 600ms backwards;
 }
 
-.line-content[data-depth="1"] {
+.line-content:not([data-at-root="true"]) {
   margin-top: var(--line-content-top);
+}
+
+/* Waits for the line to pass, so the two never overlap on a phone. */
+[data-line-moved] .line-content {
+  animation: line-content-in var(--duration-slow) var(--ease-out) 600ms backwards;
 }
 
 @keyframes line-content-in {
@@ -154,7 +157,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .line-content {
+  [data-line-moved] .line-content {
     animation: none;
   }
 }

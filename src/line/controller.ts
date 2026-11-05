@@ -1,10 +1,6 @@
-import { branchPath, DIRECTIONS, labelOpacity, retraction, type Direction, type Measure } from "./geometry";
-
-export interface ForkOption {
-  direction: Direction;
-  label: string;
-  href: string;
-}
+import type { Direction } from "../tree/tree";
+import { nodeAt, ROOT } from "../tree/walk";
+import { branchPath, DIRECTIONS, labelOpacity, retraction, type Measure } from "./geometry";
 
 const EASES = {
   sine: "cubic-bezier(0.37, 0, 0.63, 1)",
@@ -20,15 +16,6 @@ const LABEL_SHARE = 0.35;
 function chooseEase(): string {
   const name = new URLSearchParams(location.search).get("ease");
   return name === "cubic" || name === "fast" ? EASES[name] : EASES.sine;
-}
-
-function normalize(path: string): string {
-  return path.length > 1 ? path.replace(/\/$/, "") : path;
-}
-
-export function chosenFor(options: ForkOption[], path: string): Direction | null {
-  const match = options.find((option) => normalize(option.href) === normalize(path));
-  return match ? match.direction : null;
 }
 
 function prefersReducedMotion(): boolean {
@@ -80,6 +67,13 @@ function animateParts(parts: Parts, move: Move): Animation[] {
   return running;
 }
 
+function measureStage(stage: HTMLElement, probe: HTMLElement): Measure {
+  const box = probe.getBoundingClientRect();
+  const stem = probe.firstElementChild?.getBoundingClientRect().height ?? 0;
+  const lift = probe.lastElementChild?.getBoundingClientRect().height ?? 0;
+  return { centerX: stage.clientWidth / 2, forkY: box.height, spread: box.width, stem, height: stage.clientHeight, lift };
+}
+
 /**
  * Declares each move once and lets the browser run it, so the camera and the long
  * line animate on the compositor. Nothing here runs per frame. Returns a cleanup.
@@ -87,7 +81,6 @@ function animateParts(parts: Parts, move: Move): Animation[] {
 export function mountLine(
   stage: HTMLElement,
   probe: HTMLElement,
-  options: ForkOption[],
   initialChosen: Direction | null,
 ): () => void {
   const ease = chooseEase();
@@ -106,13 +99,9 @@ export function mountLine(
   let settled = initialChosen === null ? 0 : 1;
   let running: Animation[] = [];
   let currentProgress: () => number = () => settled;
+  let moved = false;
 
-  const measure = (): Measure => {
-    const box = probe.getBoundingClientRect();
-    const stem = probe.firstElementChild?.getBoundingClientRect().height ?? 0;
-    const lift = probe.lastElementChild?.getBoundingClientRect().height ?? 0;
-    return { centerX: stage.clientWidth / 2, forkY: box.height, spread: box.width, stem, height: stage.clientHeight, lift };
-  };
+  const measure = () => measureStage(stage, probe);
 
   const drawPaths = () => {
     const { spread, stem } = measure();
@@ -193,7 +182,13 @@ export function mountLine(
   };
 
   const goTo = (path: string) => {
-    target = chosenFor(options, path);
+    const node = nodeAt(path);
+    target = node?.direction ?? null;
+    back.querySelector("a")?.setAttribute("href", (node?.parent ?? ROOT).url);
+    const goal = target === null ? 0 : 1;
+    // Moving between pages on one branch leaves the line where it is.
+    moved = currentProgress() !== goal || (goal === 1 && chosen !== target);
+    if (!moved) return;
     if (chosen === target) {
       run(target === null ? 0 : 1, FORWARD_MS, () => undefined);
     } else if (chosen === null || currentProgress() === 0) {
@@ -209,6 +204,12 @@ export function mountLine(
     if (to) goTo(to.pathname);
   };
 
+  // Tells the incoming page whether to hold its content back for the moving line.
+  const onSwap = (event: Event) => {
+    const incoming = (event as Event & { newDocument?: Document }).newDocument;
+    if (moved && incoming) incoming.documentElement.dataset.lineMoved = "true";
+  };
+
   drawPaths();
   applyState(settled);
   applyVisibility(settled, false);
@@ -217,9 +218,11 @@ export function mountLine(
   const resize = new ResizeObserver(drawPaths);
   resize.observe(stage);
   document.addEventListener("astro:before-preparation", onNavigate);
+  document.addEventListener("astro:before-swap", onSwap);
   return () => {
     stopRunning();
     resize.disconnect();
     document.removeEventListener("astro:before-preparation", onNavigate);
+    document.removeEventListener("astro:before-swap", onSwap);
   };
 }

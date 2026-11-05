@@ -19,21 +19,21 @@ const result = (page: Page) =>
 test("without the flag there is no overlay and the debug code is not fetched", async ({ page }) => {
   const requests: string[] = [];
   page.on("request", (request) => requests.push(request.url()));
-  await page.goto("/spike");
+  await page.goto("/");
   await page.waitForSelector(".line-stage[data-ready]");
-  await page.getByRole("link", { name: "Projects" }).click();
-  await expect(page.locator("h1")).toHaveText("Projects");
+  await page.getByRole("link", { name: "Projects and blog" }).click();
+  await expect(page.locator("h1")).toHaveText("Projects and blog");
   await expect(overlay(page)).toHaveCount(0);
   expect(requests.filter((url) => /debug/.test(url))).toEqual([]);
 });
 
 test("?debug=line shows the overlay, and it survives a route change", async ({ page }) => {
-  await page.goto("/spike?debug=line");
+  await page.goto("/?debug=line");
   await page.waitForSelector(".line-stage[data-ready]");
   await expect(overlay(page)).toBeVisible();
   await idleMeasured(page);
-  await page.getByRole("link", { name: "Projects" }).click();
-  await expect(page.locator("h1")).toHaveText("Projects");
+  await page.getByRole("link", { name: "Projects and blog" }).click();
+  await expect(page.locator("h1")).toHaveText("Projects and blog");
   await expect(page).not.toHaveURL(/debug/);
   await expect(overlay(page)).toHaveAttribute("data-state", "done");
   await expect(overlay(page)).toContainText("rafFrames");
@@ -56,7 +56,7 @@ test("a planted 200 ms block shows up as dropped frames and a long gap", async (
       }, 300),
     );
   });
-  await page.goto("/spike?debug=line");
+  await page.goto("/?debug=line");
   await page.waitForSelector(".line-stage[data-ready]");
   await idleMeasured(page);
   await page.getByRole("link", { name: "Personal" }).click();

@@ -1,20 +1,17 @@
 ---
 import { ClientRouter } from "astro:transitions";
+import { Link } from "my-you-eye";
 import "../styles/global.css";
 import "../styles/line.css";
 import LineStage from "../line/LineStage";
+import type { TreeNode } from "../tree/walk";
 
 interface Props {
-  title: string;
-  depth: 0 | 1;
+  node: TreeNode;
 }
 
-const { title, depth } = Astro.props;
-const options = [
-  { direction: -1 as const, label: "Personal", href: "/spike/personal" },
-  { direction: 0 as const, label: "Professional", href: "/spike/professional" },
-  { direction: 1 as const, label: "Projects", href: "/spike/projects" },
-];
+const { node } = Astro.props;
+const atRoot = node.parent === null;
 ---
 
 <!doctype html>
@@ -23,23 +20,27 @@ const options = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
-    <title>{title}</title>
+    <title>{node.label}</title>
     <ClientRouter />
   </head>
   <body>
-    <LineStage
-      client:load
-      transition:persist="line"
-      transition:persist-props
-      rootHref="/spike"
-      options={options}
-      initialPath={Astro.url.pathname}
-    />
-    <main class="line-content" data-depth={depth}>
-      <h1>{title}</h1>
+    <LineStage client:load transition:persist="line" transition:persist-props initialPath={node.url} />
+    <main class="line-content" data-at-root={atRoot}>
+      <h1>{node.label}</h1>
       <p>PLACEHOLDER</p>
-      <div style="height: 120vh"></div>
-      <p>PLACEHOLDER end of page</p>
+      {
+        !atRoot && node.children.length > 0 && (
+          <ul>
+            {node.children.map((child) => (
+              <li>
+                <Link href={child.url}>{child.label}</Link>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+      {!atRoot && <div style="height: 120vh" />}
+      {!atRoot && <p>PLACEHOLDER end of page</p>}
     </main>
   </body>
 </html>

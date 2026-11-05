@@ -44,7 +44,7 @@ export function buildWithoutLibrary(work) {
   // The variant is only a valid control if the library left no trace in it.
   const files = readdirSync(join(dist, "_astro")).map((name) => join(dist, "_astro", name));
   const leaked = files.filter((file) => /my-you-eye|Plus Jakarta|@font-face|data-slot/.test(readFileSync(file, "utf8")));
-  const html = readFileSync(join(dist, "spike/index.html"), "utf8");
+  const html = readFileSync(join(dist, "index.html"), "utf8");
   if (leaked.length > 0 || /Plus Jakarta|@font-face/.test(html)) {
     throw new Error(`library code found in the no-library build: ${leaked.join(", ")}`);
   }
@@ -64,11 +64,11 @@ const click = (page) => page.getByRole("link", { name: "Projects" }).click();
 const synthetic = (page) =>
   page.evaluate(`(() => {
     const event = new Event("astro:before-preparation");
-    event.to = new URL("/spike/projects", location.href);
+    event.to = new URL("/projects-blog", location.href);
     document.dispatchEvent(event);
   })()`);
 
-const warm = (page) => page.evaluate(`fetch("/spike/projects").then((r) => r.text())`);
+const warm = (page) => page.evaluate(`fetch("/projects-blog").then((r) => r.text())`);
 
 /** Each variant names its build, optional injected CSS, an optional warm-up, and how it starts the transition. */
 export const VARIANTS = {

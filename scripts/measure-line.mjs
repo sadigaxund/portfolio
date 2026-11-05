@@ -67,7 +67,7 @@ async function oneRun(browser, variant, base, viewport, cpu, plant) {
     await page.addInitScript(MARKS);
     if (plant) await page.addInitScript(PLANTS[plant].script);
     if (variant.css) await page.addInitScript(injectCss(variant.css));
-    await page.goto(`${base}/spike`);
+    await page.goto(`${base}/`);
     await page.waitForSelector(".line-stage[data-ready]");
     const cdp = await context.newCDPSession(page);
     await cdp.send("Emulation.setCPUThrottlingRate", { rate: cpu });
@@ -142,7 +142,7 @@ async function geometry(browser, base) {
       window.__geometry = { ...event.detail.measure, rest, chosen: event.detail.chosen };
     });
   `);
-  await page.goto(`${base}/spike`);
+  await page.goto(`${base}/`);
   await page.waitForSelector(".line-stage[data-ready]");
   await page.getByRole("link", { name: "Projects" }).click();
   await page.waitForFunction("window.__geometry", null, { polling: 100 });

@@ -1,23 +1,30 @@
 import { useEffect, useRef } from "react";
 import { Link } from "my-you-eye";
-import { chosenFor, mountLine, type ForkOption } from "./controller";
+import type { Direction } from "../tree/tree";
+import { BRANCHES, nodeAt, ROOT } from "../tree/walk";
+import { mountLine } from "./controller";
 import { DIRECTIONS } from "./geometry";
+import { mountIntent } from "./intent";
 
 export interface LineStageProps {
-  rootHref: string;
-  options: ForkOption[];
   initialPath: string;
 }
 
-export default function LineStage({ rootHref, options, initialPath }: LineStageProps) {
+export default function LineStage({ initialPath }: LineStageProps) {
   const stageRef = useRef<HTMLDivElement>(null);
   const probeRef = useRef<HTMLDivElement>(null);
-  const initialChosen = chosenFor(options, initialPath);
+  const initialNode = nodeAt(initialPath);
+  const initialChosen: Direction | null = initialNode?.direction ?? null;
 
   useEffect(() => {
     if (!stageRef.current || !probeRef.current) return;
-    return mountLine(stageRef.current, probeRef.current, options, initialChosen);
-  }, [initialChosen, options]);
+    const stopLine = mountLine(stageRef.current, probeRef.current, initialChosen);
+    const stopIntent = mountIntent();
+    return () => {
+      stopLine();
+      stopIntent();
+    };
+  }, [initialChosen]);
 
   const progress = initialChosen === null ? 0 : 1;
   return (
@@ -39,17 +46,17 @@ export default function LineStage({ rootHref, options, initialPath }: LineStageP
         </svg>
         <div className="line-tail" aria-hidden="true" />
         <nav aria-label="Paths">
-          {options.map((option) => (
+          {BRANCHES.map((branch) => (
             <div
-              key={option.direction}
-              data-option={option.direction}
+              key={branch.direction}
+              data-option={branch.direction}
               className="line-option"
               style={{
-                "--option-dir": option.direction,
+                "--option-dir": branch.direction,
                 visibility: initialChosen === null ? "visible" : "hidden",
               } as React.CSSProperties}
             >
-              <Link href={option.href}>{option.label}</Link>
+              <Link href={branch.url}>{branch.label}</Link>
             </div>
           ))}
         </nav>
@@ -59,7 +66,7 @@ export default function LineStage({ rootHref, options, initialPath }: LineStageP
         className="line-back"
         style={{ opacity: progress, visibility: progress > 0 ? "visible" : "hidden" }}
       >
-        <Link href={rootHref}>Back</Link>
+        <Link href={(initialNode?.parent ?? ROOT).url}>Back</Link>
       </div>
     </div>
   );
