@@ -74,11 +74,17 @@ export function mountLine(
     }
   };
 
+  // Reports each run to listeners such as the debug meter. Changes no motion.
+  const announce = (name: string, detail: object) =>
+    stage.dispatchEvent(new CustomEvent(name, { bubbles: true, detail }));
+
   const run = (to: number, seconds: number, done: () => void) => {
     stop?.();
+    announce("line:transition-start", { from: state.progress, to, seconds, chosen: state.chosen, measure });
     if (prefersReducedMotion()) {
       state.progress = to;
       render();
+      announce("line:transition-end", { reduced: true });
       done();
       return;
     }
@@ -89,7 +95,10 @@ export function mountLine(
         state.progress = value;
         render();
       },
-      onComplete: done,
+      onComplete: () => {
+        announce("line:transition-end", { reduced: false });
+        done();
+      },
     });
     stop = () => controls.stop();
   };

@@ -43,3 +43,14 @@ const options = [
     </main>
   </body>
 </html>
+
+<script>
+  // ?debug=line turns on the frame meter, and sessionStorage keeps it on across pages.
+  const wanted = new URLSearchParams(location.search).get("debug") === "line";
+  try {
+    if (wanted) sessionStorage.setItem("line-debug", "1");
+    if (wanted || sessionStorage.getItem("line-debug") === "1") void import("../line/debug");
+  } catch {
+    if (wanted) void import("../line/debug");
+  }
+</script>
