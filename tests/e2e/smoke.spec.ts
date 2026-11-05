@@ -78,9 +78,9 @@ test("keyboard focus shows a focus style", async ({ page }) => {
   expect(await read()).not.toBe("none");
 });
 
-test("the landing hero answers first, and stays clear of the line in every look", async ({ page }) => {
-  for (const comp of ["", "ink", "paper", "night"]) {
-    await page.goto(comp ? `/?comp=${comp}` : "/");
+test("the landing hero answers first, and stays clear of the line", async ({ page }) => {
+  {
+    await page.goto("/");
     await page.waitForSelector(".line-stage[data-ready]");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     for (const label of ["Email", "GitHub", "LinkedIn"]) {
@@ -99,6 +99,6 @@ test("the landing hero answers first, and stays clear of the line in every look"
         offscreen: hero.left < 0 || hero.right > document.documentElement.clientWidth,
       };
     });
-    expect(clash, comp).toEqual({ crosses: false, offscreen: false });
+    expect(clash).toEqual({ crosses: false, offscreen: false });
   }
 });

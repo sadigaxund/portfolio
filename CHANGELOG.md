@@ -4,6 +4,10 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ## [Unreleased]
 
+## [2026.11.0] - 2026-11-06
+
+Skeleton checkpoint. All content is placeholder.
+
 ### Added
 
 - The landing page shows the name, role, summary, and contact links above a line with a fork, and every path and leaf has its own page and URL, with placeholder content.

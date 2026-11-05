@@ -72,12 +72,12 @@
 /* On a phone every comp stacks: the hero first, then the line below it. */
 @media (max-width: 40rem) {
   :root {
-    --line-trunk-top: 17rem !important;
-    --hero-width: 100% !important;
-    --hero-margin-inline: 1.5rem !important;
-    --hero-top: 2rem !important;
-    --hero-align: left !important;
-    --hero-links-justify: flex-start !important;
+    --line-trunk-top: 17rem;
+    --hero-width: 100%;
+    --hero-margin-inline: 1.5rem;
+    --hero-top: 2rem;
+    --hero-align: left;
+    --hero-links-justify: flex-start;
   }
 
   .hero {
