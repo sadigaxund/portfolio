@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { Link } from "my-you-eye";
 import type { Direction } from "../tree/tree";
 import { BRANCHES, nodeAt, ROOT } from "../tree/walk";
-import { mountContinuation } from "./continuation";
 import { mountLine } from "./controller";
 import { DIRECTIONS } from "./geometry";
 import { mountIntent } from "./intent";
@@ -21,19 +20,17 @@ export default function LineStage({ initialPath }: LineStageProps) {
 
   useEffect(() => {
     if (!stageRef.current || !probeRef.current) return;
-    const stopLine = mountLine(stageRef.current, probeRef.current, initialChosen);
+    const stopLine = mountLine(stageRef.current, probeRef.current, initialPath);
     const stopIntent = mountIntent();
     const stopSeam = mountSeam(stageRef.current);
-    const stopContinuation = mountContinuation(stageRef.current);
     const stopRepeatGuard = mountRepeatGuard();
     return () => {
       stopLine();
       stopIntent();
       stopSeam();
-      stopContinuation();
       stopRepeatGuard();
     };
-  }, [initialChosen]);
+  }, [initialPath]);
 
   const progress = initialChosen === null ? 0 : 1;
   return (
@@ -45,6 +42,10 @@ export default function LineStage({ initialPath }: LineStageProps) {
       <div ref={probeRef} className="line-probe" aria-hidden="true">
         <div className="line-probe-stem" />
         <div className="line-probe-lift" />
+        <div className="line-probe-reach" />
+        <div className="line-probe-drop" />
+        <div className="line-probe-first" />
+        <div className="line-probe-gap" />
       </div>
       <div className="line-world">
         <div className="line-trunk" aria-hidden="true" />
@@ -54,6 +55,7 @@ export default function LineStage({ initialPath }: LineStageProps) {
           ))}
         </svg>
         <div className="line-tail" aria-hidden="true" />
+        <div className="line-levels" aria-hidden="true" />
         <nav aria-label="Paths">
           {BRANCHES.map((branch) => (
             <div
@@ -69,16 +71,6 @@ export default function LineStage({ initialPath }: LineStageProps) {
             </div>
           ))}
         </nav>
-      </div>
-      <div data-continue className="line-continue" aria-hidden="true">
-        <div className="line-continue-world">
-          <div className="line-continue-upper" />
-          <div className="line-continue-rest" />
-          <svg className="line-continue-curve">
-            <path pathLength={1} className="line-path" />
-          </svg>
-          <div className="line-continue-ahead" />
-        </div>
       </div>
       <div data-seam className="line-seam line-seam-start" aria-hidden="true" />
       <div data-seam className="line-seam line-seam-end" aria-hidden="true" />

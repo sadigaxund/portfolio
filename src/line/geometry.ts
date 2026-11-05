@@ -11,6 +11,13 @@ export interface Measure {
   height: number;
   /** How far the fork travels upward once a branch is chosen. */
   lift: number;
+  /** A stop's straight branch length, and the radius of its bends. */
+  reach: number;
+  drop: number;
+  /** From the top of a run to its first stop, and between stops. */
+  firstStop: number;
+  stopGap: number;
+  bothSides: boolean;
 }
 
 /** How long a branch stub runs below the fork, as a multiple of the stem. */
@@ -32,4 +39,12 @@ export function retraction(chosen: Direction | null, direction: Direction, progr
 /** Fork labels clear out in the first third of a choice. */
 export function labelOpacity(chosen: Direction | null, progress: number): number {
   return chosen === null ? 1 : Math.max(0, 1 - progress * 3);
+}
+
+/** The curve from the main line to a stop's turn, matching the stop's own drawn branch. */
+export function stopCurvePath(side: -1 | 1, reach: number, radius: number): string {
+  const out = side > 0 ? 0 : 1;
+  const bend = side > 0 ? 1 : 0;
+  const level = radius - 1;
+  return `M 0 0 A ${radius} ${radius} 0 0 ${out} ${side * radius} ${level} L ${side * reach} ${level} A ${radius} ${radius} 0 0 ${bend} ${side * (reach + radius - 1)} ${level + radius}`;
 }

@@ -1,5 +1,5 @@
 import { isLeafPath } from "../tree/walk";
-import { chooseEase } from "./controller";
+import { chooseEase } from "./ease";
 import { holdScroll } from "./scrollHold";
 
 const COVER_FADE_MS = 180;
