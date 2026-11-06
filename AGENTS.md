@@ -218,6 +218,7 @@ Each row is a mistake a reasonable agent would repeat. One line, then where to l
 | Chain a gate as `npm run validate \| tail && next` | The chain reads `tail`'s exit code, so a failed gate still ran Playwright against a stale build. Send the output to a file and read `$?`. |
 | Animate a scale through to zero with computed matrices | A browser cannot blend a zero-scale matrix, so the long line jumped to full length in one frame, and suites and still frames both missed it. Name the `scaleY` values and sample positions over time, as `tests/e2e/leaf.spec.ts` does. |
 | Build a transition from a copy of the line on a covering layer | Every handoff between tricks showed as a seam, and the user saw the root line vanish. The line lives in one world with one camera, and every route change walks it. See `src/line/steps.ts`. |
+| Import stylesheets directly from a new page | The bundle keeps import order across pages, so an unbuilt dev page moved `line.css` after `tokens.css` and the line crossed the hero in production. Import `src/layouts/styles.ts`. |
 | Undo a planted defect with `cp` | `cp` prompts on this machine, so the restore silently did nothing and the defect stayed. Commit first, then use `git restore`, and rerun the gate. |
 
 ---
