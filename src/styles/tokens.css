@@ -1,17 +1,31 @@
-/* The site's base look. It stays plain on purpose, and polish replaces these values freely. */
+/* Color and font tokens. DESIGN.md lists what each one is for. */
 :root {
-  --font-sans: "Instrument Sans Variable", sans-serif;
-  --color-bg: #fbfbf9;
-  --color-fg: #16161a;
-  --color-muted: #55555c;
-  --color-primary: #16161a;
-  --color-border: #d9d9d4;
-  --line-trunk-top: 16rem;
-  --hero-width: 40rem;
+  --font-sans: "Instrument Sans Variable", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Geologica Variable", "Helvetica Neue", Arial, sans-serif;
+  --color-bg: #fbfcfd;
+  --color-fg: #12151c;
+  --color-muted: #565d6b;
+  --color-primary: #12151c;
+  --color-border: #cfd5de;
+  --color-route: #1d3fd8;
+  --line-trunk-top: 20rem;
+  --hero-width: 44rem;
   --hero-margin-inline: auto;
   --hero-top: 3.5rem;
   --hero-align: center;
   --hero-links-justify: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #11151d;
+    --color-fg: #eef1f6;
+    --color-muted: #9aa3b2;
+    --color-primary: #eef1f6;
+    --color-border: #2d3543;
+    --color-route: #8199ff;
+    color-scheme: dark;
+  }
 }
 
 html {
@@ -29,14 +43,11 @@ body {
 }
 
 /* Links share the text color here, so an underline is what marks them. */
-.hero-links a,
-.line-option a,
-.line-back a,
-.stop a {
+a {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
 
-.hero .role-summary {
+.hero .role-body {
   margin-inline: auto;
 }

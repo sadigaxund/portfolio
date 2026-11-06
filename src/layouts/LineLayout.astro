@@ -3,6 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import { Link } from "my-you-eye";
 import "../styles/global.css";
 import "../styles/line.css";
+import "@fontsource-variable/geologica";
 import "@fontsource-variable/instrument-sans";
 import "../styles/seam.css";
 import "../styles/stops.css";
@@ -36,7 +37,7 @@ const leaf = isLeaf(node);
       leaf ? (
         <main class="leaf-surface">
           <h1 class="role-heading">{node.label}</h1>
-          <p class="role-summary">PLACEHOLDER</p>
+          <p class="role-body">PLACEHOLDER</p>
         </main>
       ) : (
         <main class={atRoot ? "line-section line-landing" : "line-section"}>
@@ -45,7 +46,7 @@ const leaf = isLeaf(node);
           ) : (
             <div class="line-content">
               <h1 class="role-heading">{node.label}</h1>
-              <p class="role-summary">PLACEHOLDER</p>
+              <p class="role-body">PLACEHOLDER</p>
             </div>
           )}
           {!atRoot && (

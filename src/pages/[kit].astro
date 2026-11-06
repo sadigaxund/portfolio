@@ -1,0 +1,98 @@
+---
+import { Link } from "my-you-eye";
+import "../styles/global.css";
+import "@fontsource-variable/geologica";
+import "@fontsource-variable/instrument-sans";
+import "../styles/tokens.css";
+import "../styles/roles.css";
+import Hero from "../discovery/Hero.astro";
+
+// Returning no paths keeps this page out of a production build.
+export function getStaticPaths() {
+  return import.meta.env.DEV ? [{ params: { kit: "kit" } }] : [];
+}
+
+const COLORS = ["bg", "fg", "primary", "muted", "border", "route"];
+const LONG_WORD = "x".repeat(220);
+const SENTENCE =
+  "A body sentence that runs on long enough to test the slot, so that wrapping and measure both show on this page, at two hundred characters or a little more than that.";
+const swatch = (name: string) => `background: var(--color-${name}); border: 1px solid var(--color-border); width: 3rem; height: 3rem;`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Kit</title>
+    <style>
+      main {
+        display: grid;
+        gap: 3rem;
+        max-width: 60rem;
+        margin: auto;
+        padding: 3rem 1.5rem;
+      }
+      section {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+      ul {
+        list-style: none;
+      }
+      .colors {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section>
+        <h2 class="role-item">Color</h2>
+        <ul class="colors">
+          {
+            COLORS.map((name) => (
+              <li>
+                <div style={swatch(name)} />
+                <p class="role-detail">{name}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+      <section>
+        <h2 class="role-item">Text roles</h2>
+        <p class="role-name">role-name</p>
+        <p class="role-heading">role-heading</p>
+        <p class="role-item">role-item</p>
+        <p class="role-body">role-body. {SENTENCE} Cut triage to <span class="role-result">role-result</span>.</p>
+        <p class="role-detail">role-detail</p>
+      </section>
+      <section>
+        <h2 class="role-item">Long content</h2>
+        <p class="role-item">{LONG_WORD}</p>
+        <p class="role-body">{LONG_WORD}</p>
+      </section>
+      <section>
+        <h2 class="role-item">Text link</h2>
+        <Link href="#">Link from the library</Link>
+      </section>
+      <section>
+        <h2 class="role-item">Hero</h2>
+        <Hero name="PLACEHOLDER name" />
+      </section>
+      <section>
+        <h2 class="role-item">Roles placed by the line</h2>
+        <p class="role-body">Signpost, stop, and Back link take their position from the line, so they show on real pages.</p>
+        <ul>
+          <li><a href="/">Signposts on the landing page</a></li>
+          <li><a href="/professional">Stops on a section</a></li>
+          <li><a href="/professional/career">Back link on a leaf</a></li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>
