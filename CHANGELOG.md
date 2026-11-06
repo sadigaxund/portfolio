@@ -4,6 +4,15 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ## [Unreleased]
 
+### Changed
+
+- New colors and type, including a dark look that follows the visitor's setting.
+- Career now has a timeline layout, with placeholder content.
+
+### Added
+
+- A site icon drawn from the fork in the line.
+
 ## [2026.11.0] - 2026-11-06
 
 Skeleton checkpoint. All content is placeholder.

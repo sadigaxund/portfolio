@@ -1,0 +1,15 @@
+---
+import Timeline from "../../../ui/Timeline.astro";
+import type { TreeNode } from "../../../tree/walk";
+import { CAREER } from "./career";
+
+interface Props {
+  node: TreeNode;
+}
+
+const { node } = Astro.props;
+---
+
+<h1 class="role-heading">{node.label}</h1>
+<p class="role-detail">PLACEHOLDER one line on the career so far.</p>
+<Timeline entries={CAREER} />

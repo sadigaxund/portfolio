@@ -1,0 +1,12 @@
+---
+import type { TreeNode } from "../tree/walk";
+
+interface Props {
+  node: TreeNode;
+}
+
+const { node } = Astro.props;
+---
+
+<h1 class="role-heading">{node.label}</h1>
+<p class="role-body">PLACEHOLDER</p>

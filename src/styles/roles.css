@@ -1,45 +1,55 @@
-/* The closed set of text roles. A comp changes their values, and pages only name the role. */
-:root {
-  --role-name-size: clamp(2.25rem, 1.8rem + 2vw, 3.5rem);
-  --role-name-weight: 600;
-  --role-name-tracking: -0.02em;
-  --role-heading-size: clamp(1.5rem, 1.3rem + 1vw, 2rem);
-  --role-heading-weight: 600;
-  --font-display: var(--font-sans);
+/* The closed set of text roles. DESIGN.md lists them, and pages only name the role. */
+.role-name,
+.role-heading,
+.role-item,
+.role-body,
+.role-detail {
+  overflow-wrap: anywhere;
 }
 
 .role-name,
 .role-heading {
   font-family: var(--font-display);
-  font-weight: var(--role-name-weight);
-  letter-spacing: var(--role-name-tracking);
-  line-height: 1.1;
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
   text-wrap: balance;
 }
 
 .role-name {
-  font-size: var(--role-name-size);
+  font-size: clamp(3rem, 2.4rem + 3vw, 4.5rem);
 }
 
 .role-heading {
-  font-size: var(--role-heading-size);
-  font-weight: var(--role-heading-weight);
+  font-size: clamp(2.5rem, 2rem + 2vw, 3.4rem);
 }
 
-.role-title {
-  margin-top: 0.5rem;
-  font-size: 1.125rem;
-  font-weight: 500;
+.role-item {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1.2;
 }
 
-.role-summary {
+.role-body {
   max-width: 34rem;
   margin-top: 0.75rem;
-  color: var(--color-muted);
+  line-height: 1.55;
   text-wrap: pretty;
 }
 
-/* The landing hero sits above where the line begins, or beside it when a comp starts the line at the top. */
+.role-detail {
+  margin-top: 0.5rem;
+  color: var(--color-muted);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.role-result {
+  font-weight: 600;
+}
+
+/* The landing hero sits above where the line begins. */
 .line-landing {
   position: relative;
   min-height: calc(var(--line-fork-y) + var(--line-stub) + 5rem);
@@ -72,7 +82,7 @@
 /* On a phone every comp stacks: the hero first, then the line below it. */
 @media (max-width: 40rem) {
   :root {
-    --line-trunk-top: 17rem;
+    --line-trunk-top: 21rem;
     --hero-width: 100%;
     --hero-margin-inline: 1.5rem;
     --hero-top: 2rem;
