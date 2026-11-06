@@ -1,0 +1,40 @@
+---
+import "../styles/timeline.css";
+import type { TimelineEntry } from "./timeline";
+
+interface Props {
+  entries: TimelineEntry[];
+}
+
+const { entries } = Astro.props;
+---
+
+{
+  entries.length === 0 ? (
+    <p class="role-detail">Nothing here yet.</p>
+  ) : (
+    <ol class="timeline">
+      {entries.map((entry) => (
+        <li class="timeline-entry">
+          <p class="role-detail timeline-when">{entry.when}</p>
+          <div class="timeline-body">
+            <h2 class="role-item">{entry.title}</h2>
+            {entry.role && <p class="role-detail">{entry.role}</p>}
+            {entry.results && (
+              <ul class="timeline-results">
+                {entry.results.map((line) => (
+                  <li class="role-body">
+                    {line.before}
+                    {line.result && <span class="role-result">{line.result}</span>}
+                    {line.after}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {entry.stack && <p class="role-detail">{entry.stack}</p>}
+          </div>
+        </li>
+      ))}
+    </ol>
+  )
+}

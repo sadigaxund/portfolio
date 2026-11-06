@@ -11,7 +11,8 @@ import "../styles/tokens.css";
 import "../styles/roles.css";
 import Hero from "../discovery/Hero.astro";
 import LineStage from "../line/LineStage";
-import { isLeaf, type TreeNode } from "../tree/walk";
+import DefaultLeaf from "../sections/DefaultLeaf.astro";
+import { isLeaf, routeParam, type TreeNode } from "../tree/walk";
 
 interface Props {
   node: TreeNode;
@@ -20,6 +21,10 @@ interface Props {
 const { node } = Astro.props;
 const atRoot = node.parent === null;
 const leaf = isLeaf(node);
+
+// A leaf's folder mirrors its route. A leaf with no folder gets the default.
+const LEAVES = import.meta.glob<{ default: typeof DefaultLeaf }>("../sections/**/Leaf.astro", { eager: true });
+const Leaf = LEAVES[`../sections/${routeParam(node)}/Leaf.astro`]?.default ?? DefaultLeaf;
 ---
 
 <!doctype html>
@@ -36,8 +41,7 @@ const leaf = isLeaf(node);
     {
       leaf ? (
         <main class="leaf-surface">
-          <h1 class="role-heading">{node.label}</h1>
-          <p class="role-body">PLACEHOLDER</p>
+          <Leaf node={node} />
         </main>
       ) : (
         <main class={atRoot ? "line-section line-landing" : "line-section"}>

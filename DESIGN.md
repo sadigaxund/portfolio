@@ -43,12 +43,21 @@ Each role has one implementation. A variant needs a row here first.
 | Hero | `src/discovery/Hero.astro` | Name, role line, one summary, contact links. Appears only on the landing page. |
 | Signpost | `.line-option` | Road name in `role-item`, with its children in `role-detail`. |
 | Stop | `.stop` | Title in `role-item`, with a one-line preview in `role-detail`. Text hangs directly off its branch, with no card. |
-| Timeline entry | Built with the first timeline leaf | Dates in `role-detail`, a route-colored thread with a stop, then title, role line, results, and stack. |
+| Timeline entry | `src/ui/Timeline.astro` | Dates in `role-detail`, a route-colored thread with a stop, then title, role line, results, and stack. |
 | Step path | Built with the first project leaf | Steps on a route-colored line, each with a short label. A project draws its own idea this way. |
 
 ## Leaves
 
 A leaf owns the whole screen, and its layout may differ from other leaves. Type, color tokens, and the Back link never differ.
+
+The contract:
+
+- A leaf is `src/sections/<route>/Leaf.astro`, where `<route>` is the node's URL path. The folder holds everything the leaf needs.
+- It receives `node`, and renders inside the surface the layout provides. It adds no `main`, and the layout supplies Back.
+- It renders exactly one `h1`, in `role-heading`.
+- It imports shared code only, never another section.
+- It needs no engine change and no tree change beyond its own node.
+- A leaf with no folder gets `src/sections/DefaultLeaf.astro`.
 
 ## Motion
 

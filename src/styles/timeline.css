@@ -1,0 +1,61 @@
+/* The timeline entry role: dates, a route-colored thread with a stop, then the entry. */
+.timeline {
+  margin-top: 2.5rem;
+  list-style: none;
+}
+
+.timeline-entry {
+  display: grid;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  column-gap: 2rem;
+}
+
+.timeline-entry .timeline-when {
+  margin-top: 0.35rem;
+}
+
+.timeline-body {
+  position: relative;
+  min-width: 0;
+  padding: 0 0 2.25rem 2rem;
+  border-left: var(--line-width, 2px) solid var(--color-route);
+}
+
+.timeline-entry:last-child .timeline-body {
+  padding-bottom: 0;
+}
+
+.timeline-body::before {
+  content: "";
+  position: absolute;
+  top: 0.55rem;
+  left: -0.45rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border: var(--line-width, 2px) solid var(--color-route);
+  border-radius: 50%;
+  background: var(--color-bg);
+}
+
+.timeline-results {
+  margin-top: 0.5rem;
+  list-style: none;
+}
+
+.timeline-results .role-body {
+  margin-top: 0.4rem;
+  max-width: 42rem;
+}
+
+/* On a phone the dates sit above their entry, on the same thread. */
+@media (max-width: 40rem) {
+  .timeline-entry {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .timeline-entry .timeline-when {
+    margin-top: 0;
+    padding: 0 0 0.4rem 2rem;
+    border-left: var(--line-width, 2px) solid var(--color-route);
+  }
+}
