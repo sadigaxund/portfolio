@@ -1,14 +1,7 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import { Link } from "my-you-eye";
-import "../styles/global.css";
-import "../styles/line.css";
-import "@fontsource-variable/geologica";
-import "@fontsource-variable/instrument-sans";
-import "../styles/seam.css";
-import "../styles/stops.css";
-import "../styles/tokens.css";
-import "../styles/roles.css";
+import "./styles";
 import Hero from "../discovery/Hero.astro";
 import LineStage from "../line/LineStage";
 import DefaultLeaf from "../sections/DefaultLeaf.astro";
@@ -34,6 +27,7 @@ const Leaf = LEAVES[`../sections/${routeParam(node)}/Leaf.astro`]?.default ?? De
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
     <title>{node.label}</title>
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
     <ClientRouter />
   </head>
   <body>

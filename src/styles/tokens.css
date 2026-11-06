@@ -37,6 +37,11 @@ body {
   color: var(--color-fg);
 }
 
+a:focus-visible {
+  outline: 2px solid var(--color-route);
+  outline-offset: 2px;
+}
+
 ::selection {
   background: var(--color-primary);
   color: var(--color-bg);
@@ -44,6 +49,7 @@ body {
 
 /* Links share the text color here, so an underline is what marks them. */
 a {
+  overflow-wrap: anywhere;
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }

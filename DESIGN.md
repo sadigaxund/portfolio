@@ -17,7 +17,7 @@ Tokens live in `src/styles/tokens.css`. The site follows the visitor's light or 
 | `--color-primary` | `#12151c` | `#eef1f6` | Ink. The road ahead. |
 | `--color-muted` | `#565d6b` | `#9aa3b2` | Dates, previews, and stack lists. |
 | `--color-border` | `#cfd5de` | `#2d3543` | Hairlines between regions. |
-| `--color-route` | `#1d3fd8` | `#8199ff` | The road walked, and threads inside leaves. Nothing else. |
+| `--color-route` | `#1d3fd8` | `#8199ff` | The road walked, threads inside leaves, and keyboard focus. Nothing else. |
 
 ## Text roles
 
