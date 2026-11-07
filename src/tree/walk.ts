@@ -59,3 +59,9 @@ export function isLeafPath(path: string): boolean {
   const node = nodeAt(path);
   return node !== undefined && isLeaf(node);
 }
+
+/** The Back link names where it goes. The landing page is called start. */
+export function backLabelOf(node: TreeNode | undefined): string {
+  const parent = node?.parent ?? ROOT;
+  return `Back to ${parent === ROOT ? "start" : parent.label}`;
+}

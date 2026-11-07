@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 import { Link } from "my-you-eye";
 import type { Direction } from "../tree/tree";
-import { BRANCHES, nodeAt, ROOT } from "../tree/walk";
+import { previewOf } from "../sections/previews";
+import { backLabelOf, BRANCHES, nodeAt, ROOT } from "../tree/walk";
 import { mountLine } from "./controller";
 import { DIRECTIONS } from "./geometry";
 import { mountIntent } from "./intent";
@@ -37,6 +38,7 @@ export default function LineStage({ initialPath }: LineStageProps) {
     <div
       ref={stageRef}
       className="line-stage"
+      data-chosen={initialChosen ?? "none"}
       style={{ "--line-p": progress, "--line-dir": initialChosen ?? 0 } as React.CSSProperties}
     >
       <div ref={probeRef} className="line-probe" aria-hidden="true">
@@ -67,7 +69,10 @@ export default function LineStage({ initialPath }: LineStageProps) {
                 visibility: initialChosen === null ? "visible" : "hidden",
               } as React.CSSProperties}
             >
-              <Link href={branch.url}>{branch.label}</Link>
+              <span className="role-item line-option-name">
+                <Link href={branch.url}>{branch.label}</Link>
+              </span>
+              <span className="role-detail line-option-preview">{previewOf(branch)}</span>
             </div>
           ))}
         </nav>
@@ -79,7 +84,7 @@ export default function LineStage({ initialPath }: LineStageProps) {
         className="line-back"
         style={{ opacity: progress, visibility: progress > 0 ? "visible" : "hidden" }}
       >
-        <Link href={(initialNode?.parent ?? ROOT).url}>Back</Link>
+        <Link href={(initialNode?.parent ?? ROOT).url}>{backLabelOf(initialNode)}</Link>
       </div>
     </div>
   );

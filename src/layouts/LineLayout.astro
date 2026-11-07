@@ -5,6 +5,7 @@ import "./styles";
 import Hero from "../discovery/Hero.astro";
 import LineStage from "../line/LineStage";
 import DefaultLeaf from "../sections/DefaultLeaf.astro";
+import { previewOf } from "../sections/previews";
 import { isLeaf, routeParam, type TreeNode } from "../tree/walk";
 
 interface Props {
@@ -58,7 +59,12 @@ const Leaf = LEAVES[`../sections/${routeParam(node)}/Leaf.astro`]?.default ?? De
                   style={`--stop-index: ${index}`}
                 >
                   <span class="stop-branch" aria-hidden="true" />
-                  <Link href={child.url}>{child.label}</Link>
+                  <div class="stop-text">
+                    <h2 class="role-item">
+                      <Link href={child.url}>{child.label}</Link>
+                    </h2>
+                    {previewOf(child) && <p class="role-detail">{previewOf(child)}</p>}
+                  </div>
                 </li>
               ))}
             </ol>

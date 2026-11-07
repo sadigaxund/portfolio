@@ -285,7 +285,7 @@ test("fork labels stay on screen, apart, and centered on their branches", async 
       const range = document.createRange();
       range.selectNodeContents(link);
       const box = range.getBoundingClientRect();
-      const option = link.parentElement!;
+      const option = link.closest<HTMLElement>("[data-option]")!;
       const branch = document.querySelector<SVGPathElement>(`[data-branch="${option.dataset.option}"]`)!;
       const end = branch.getPointAtLength(branch.getTotalLength());
       return { left: box.left, right: box.right, lines: range.getClientRects().length, branchX: branch.getScreenCTM()!.a * end.x + branch.getScreenCTM()!.e };

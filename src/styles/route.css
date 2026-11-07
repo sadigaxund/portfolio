@@ -1,0 +1,26 @@
+:root {
+  --line-color-ms: 240ms;
+}
+
+/* The road walked turns blue, like a route on a map. The road ahead stays ink. */
+.line-tail,
+.line-run,
+.line-stage:is([data-chosen="-1"], [data-chosen="0"], [data-chosen="1"]) .line-trunk {
+  background: var(--color-route);
+}
+
+.line-levels .line-path,
+.line-stage[data-chosen="-1"] .line-path[data-branch="-1"],
+.line-stage[data-chosen="0"] .line-path[data-branch="0"],
+.line-stage[data-chosen="1"] .line-path[data-branch="1"] {
+  stroke: var(--color-route);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .line-trunk,
+  .line-path {
+    transition:
+      background-color var(--line-color-ms),
+      stroke var(--line-color-ms);
+  }
+}

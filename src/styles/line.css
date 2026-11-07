@@ -147,16 +147,35 @@ body {
   pointer-events: auto;
 }
 
-/* Tap targets stay at least 2.75rem tall. */
+/* A signpost: the road's name, then what is down it. Tap targets stay at least 2.75rem tall. */
+.line-option-name,
+.line-option-preview {
+  display: block;
+}
+
+.line-option-preview {
+  margin-top: 0;
+  padding-inline: 0.75rem;
+}
+
 .line-option a,
 .line-back a {
   display: block;
   padding: 0.75rem;
 }
 
+/* Three roads share a phone's width, so the name drops to the body face. DESIGN.md states this exception. */
 @media (max-width: 40rem) {
-  .line-option a {
+  .line-option a,
+  .line-option-preview {
     padding-inline: 0.25rem;
+  }
+
+  .line-option .line-option-name {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.3;
   }
 }
 

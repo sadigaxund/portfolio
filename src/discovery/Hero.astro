@@ -10,10 +10,13 @@ const { name } = Astro.props;
 ---
 
 <header class="hero">
-  <h1 class="role-name">{name}</h1>
-  <p class="role-detail">{PROFILE.role}</p>
-  <p class="role-body">{PROFILE.summary}</p>
-  <ul class="hero-links">
+  <div class="hero-who">
+    <h1 class="role-name">{name}</h1>
+    <p class="role-detail">{PROFILE.role}</p>
+  </div>
+  <div class="hero-what">
+    <p class="role-body">{PROFILE.summary}</p>
+    <ul class="hero-links">
     {
       PROFILE.links.map((link) => (
         <li>
@@ -21,5 +24,6 @@ const { name } = Astro.props;
         </li>
       ))
     }
-  </ul>
+    </ul>
+  </div>
 </header>

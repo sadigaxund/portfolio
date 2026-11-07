@@ -9,11 +9,8 @@
   --color-border: #cfd5de;
   --color-route: #1d3fd8;
   --line-trunk-top: 20rem;
-  --hero-width: 44rem;
-  --hero-margin-inline: auto;
+  --hero-width: 72rem;
   --hero-top: 3.5rem;
-  --hero-align: center;
-  --hero-links-justify: center;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -52,8 +49,4 @@ a {
   overflow-wrap: anywhere;
   text-decoration: underline;
   text-underline-offset: 0.2em;
-}
-
-.hero .role-body {
-  margin-inline: auto;
 }

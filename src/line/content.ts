@@ -26,7 +26,7 @@ export function clearContent(runner: Runner, duration: number, keepUrl?: string)
   const parts: Promise<unknown>[] = blocks().map((block) => runner.play(block, { opacity: [1, 0] }, timing));
   for (const stop of stops()) {
     const branch = stop.querySelector(".stop-branch")!;
-    const label = stop.querySelector("a");
+    const label = stop.querySelector<HTMLElement>(".stop-text");
     if (label) parts.push(runner.play(label, { opacity: [1, 0] }, timing));
     if (stop.dataset.stopUrl === keepUrl) {
       branch.setAttribute("style", "visibility: hidden");
@@ -50,7 +50,7 @@ export function revealContent(runner: Runner, returnedUrl?: string): Promise<unk
   stops().forEach((stop, index) => {
     const delay = STOP_HOLD_MS + Math.min(index, 8) * STOP_STEP_MS;
     const branch = stop.querySelector(".stop-branch")!;
-    const label = stop.querySelector("a");
+    const label = stop.querySelector<HTMLElement>(".stop-text");
     if (stop.dataset.stopUrl !== returnedUrl) {
       const side = sideOf(stop);
       parts.push(

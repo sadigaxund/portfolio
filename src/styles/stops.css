@@ -2,7 +2,7 @@
 :root {
   --stop-reach: min(12vw, 8rem);
   --stop-drop: 1.5rem;
-  --stop-gap: 5rem;
+  --stop-gap: 7rem;
   --line-x: calc(var(--line-center) + var(--line-rest));
 }
 
@@ -14,14 +14,22 @@
 .stop {
   display: flex;
   align-items: flex-start;
-  min-height: var(--stop-gap);
+  /* Fixed, because the engine places each curve one gap below the last. */
+  height: var(--stop-gap);
   margin-left: calc(var(--line-x) - var(--line-width) / 2);
 }
 
-.stop a {
+.stop-text {
   min-width: 0;
-  padding: 0.75rem;
-  overflow-wrap: anywhere;
+  padding: 0.5rem 0.75rem;
+}
+
+.stop-text .role-detail {
+  display: -webkit-box;
+  margin-top: 0.25rem;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .stop-branch {
@@ -59,7 +67,7 @@
   border-top-right-radius: var(--stop-drop);
 }
 
-.stop[data-kind="section"] a {
+.stop[data-kind="section"] .stop-text {
   margin-left: var(--stop-drop);
 }
 
@@ -92,7 +100,7 @@
     border-top-left-radius: var(--stop-drop);
   }
 
-  .stop[data-side="start"][data-kind="section"] a {
+  .stop[data-side="start"][data-kind="section"] .stop-text {
     margin-left: 0;
     margin-right: var(--stop-drop);
   }
