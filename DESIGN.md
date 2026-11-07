@@ -40,9 +40,9 @@ Each role has one implementation. A variant needs a row here first.
 |---|---|---|
 | Text link | `Link` from `my-you-eye`, or an anchor in `.hero-links`, `.line-option`, `.line-back`, `.stop` | Always underlined. |
 | Back link | `.line-back` | Names its destination, as in "Back to Professional". The first control on every page below the root. |
-| Hero | `src/discovery/Hero.astro` | Name, role line, one summary, contact links. Appears only on the landing page. |
-| Signpost | `.line-option` | Road name in `role-item`, with its children in `role-detail`. |
-| Stop | `.stop` | Title in `role-item`, with a one-line preview in `role-detail`. Text hangs directly off its branch, with no card. |
+| Hero | `src/discovery/Hero.astro` | Name and role line on the left, summary and contact links on the right. One column on a phone. Appears only on the landing page. |
+| Signpost | `.line-option` in `src/line/LineStage.tsx` | Road name in `role-item`, with its children's names in `role-detail`. On a phone three roads share about 108px each, so the name uses the body face at 1rem, weight 500, which keeps "Professional" on one line. |
+| Stop | `.stop` in `src/layouts/LineLayout.astro` | Title in `role-item`, then a preview in `role-detail`, at most two lines. A section previews its children's names, and a leaf exports `preview` from its own `meta.ts`. Text hangs directly off its branch, with no card. |
 | Timeline entry | `src/ui/Timeline.astro` | Dates in `role-detail`, a route-colored thread with a stop, then title, role line, results, and stack. |
 | Step path | Built with the first project leaf | Steps on a route-colored line, each with a short label. A project draws its own idea this way. |
 
@@ -73,6 +73,7 @@ The line is the one authored motion. It lives in one world with one camera, and 
 | Certifications | Awards and certificates | Credentials, badges |
 | Education | Degrees | Academics, studies |
 | Back | The control that returns one level | Return, go up |
+| Start | The landing page, as Back names it | Home, top |
 
 ## Review
 

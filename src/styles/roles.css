@@ -57,18 +57,30 @@
   pointer-events: none;
 }
 
+/* Wide on a desktop: who on the left, what and how to reach on the right. */
 .hero {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: end;
+  gap: 1.5rem 3rem;
   width: min(var(--hero-width), 100% - 3rem);
-  margin-inline: var(--hero-margin-inline);
+  margin-inline: auto;
   padding-top: var(--hero-top);
-  text-align: var(--hero-align);
   pointer-events: auto;
+}
+
+.hero-who,
+.hero-what {
+  min-width: 0;
+}
+
+.hero-what > .role-body {
+  margin-top: 0;
 }
 
 .hero-links {
   display: flex;
   flex-wrap: wrap;
-  justify-content: var(--hero-links-justify);
   gap: 0.25rem 1.25rem;
   margin-top: 1rem;
   list-style: none;
@@ -79,18 +91,14 @@
   padding-block: 0.625rem;
 }
 
-/* On a phone every comp stacks: the hero first, then the line below it. */
+/* On a phone the hero stacks, then the line starts below it. */
 @media (max-width: 40rem) {
   :root {
-    --line-trunk-top: 21rem;
-    --hero-width: 100%;
-    --hero-margin-inline: 1.5rem;
+    --line-trunk-top: 23rem;
     --hero-top: 2rem;
-    --hero-align: left;
-    --hero-links-justify: flex-start;
   }
 
   .hero {
-    width: calc(100% - 3rem);
+    grid-template-columns: minmax(0, 1fr);
   }
 }

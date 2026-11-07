@@ -8,10 +8,14 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 - New colors and type, including a dark look that follows the visitor's setting.
 - Career now has a timeline layout, with placeholder content.
+- The landing hero spans the page in two columns.
+- The road walked turns blue, and the road ahead stays ink.
+- Back names where it goes.
 
 ### Added
 
 - A site icon drawn from the fork in the line.
+- Each road at the fork, and each stop on a section, says what is down it.
 
 ## [2026.11.0] - 2026-11-06
 
