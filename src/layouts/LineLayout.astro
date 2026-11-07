@@ -5,7 +5,7 @@ import "./styles";
 import Hero from "../discovery/Hero.astro";
 import LineStage from "../line/LineStage";
 import DefaultLeaf from "../sections/DefaultLeaf.astro";
-import { previewOf } from "../sections/previews";
+import { previewOf, summaryOf } from "../sections/previews";
 import { isLeaf, routeParam, type TreeNode } from "../tree/walk";
 
 interface Props {
@@ -45,7 +45,7 @@ const Leaf = LEAVES[`../sections/${routeParam(node)}/Leaf.astro`]?.default ?? De
           ) : (
             <div class="line-content">
               <h1 class="role-heading">{node.label}</h1>
-              <p class="role-body">PLACEHOLDER</p>
+              {summaryOf(node) && <p class="role-body">{summaryOf(node)}</p>}
             </div>
           )}
           {!atRoot && (

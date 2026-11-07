@@ -4,8 +4,8 @@ test("a leaf with a folder renders its own content on the surface", async ({ pag
   await page.goto("/professional/career");
   await expect(page.locator("h1")).toHaveCount(1);
   await expect(page.locator("h1")).toHaveText("Career");
-  await expect(page.locator(".leaf-surface .timeline-entry")).toHaveCount(2);
-  await expect(page.locator(".leaf-surface .role-result")).toHaveCount(1);
+  await expect(page.locator(".leaf-surface .timeline-entry")).toHaveCount(3);
+  await expect(page.locator(".leaf-surface .role-result")).toHaveCount(5);
   await page.getByRole("link", { name: "Back" }).click();
   await expect(page.locator("h1")).toHaveText("Professional");
 });

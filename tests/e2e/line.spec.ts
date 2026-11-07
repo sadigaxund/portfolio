@@ -130,7 +130,7 @@ test("back retraces the path, and an interrupted choice settles", async ({ page 
   await page.getByRole("link", { name: "Professional" }).click();
   await settledAt(page, 1);
   await page.goBack();
-  await expect(page.locator("h1")).toHaveText("PLACEHOLDER name");
+  await expect(page.locator("h1")).toHaveText("Sadig Akhund");
   await settledAt(page, 0);
   await expect(page.getByRole("link", { name: "Personal" })).toBeVisible();
 
@@ -138,7 +138,7 @@ test("back retraces the path, and an interrupted choice settles", async ({ page 
   await expect(page).toHaveURL(/\/personal$/);
   await page.waitForTimeout(120);
   await page.goBack();
-  await expect(page.locator("h1")).toHaveText("PLACEHOLDER name");
+  await expect(page.locator("h1")).toHaveText("Sadig Akhund");
   await settledAt(page, 0);
   await expect(page.getByRole("link", { name: "Projects and blog" })).toBeVisible();
 });
@@ -318,7 +318,7 @@ test.describe("without JavaScript", () => {
     await page.getByRole("link", { name: "Personal" }).click();
     await expect(page.locator("h1")).toHaveText("Personal");
     await page.getByRole("link", { name: "Back" }).click();
-    await expect(page.locator("h1")).toHaveText("PLACEHOLDER name");
+    await expect(page.locator("h1")).toHaveText("Sadig Akhund");
   });
 });
 

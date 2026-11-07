@@ -1,0 +1,14 @@
+---
+import Timeline from "../../../ui/Timeline.astro";
+import type { TreeNode } from "../../../tree/walk";
+import { CERTIFICATIONS } from "./certifications";
+
+interface Props {
+  node: TreeNode;
+}
+
+const { node } = Astro.props;
+---
+
+<h1 class="role-heading">{node.label}</h1>
+<Timeline entries={CERTIFICATIONS} />

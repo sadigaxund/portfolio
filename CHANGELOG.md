@@ -16,6 +16,8 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 - A site icon drawn from the fork in the line.
 - Each road at the fork, and each stop on a section, says what is down it.
+- The landing page shows the owner's name, DevOps role, summary, and a Resume link before Email, GitHub, and LinkedIn.
+- Career, Education, and Certifications show real entries from the resume.
 
 ## [2026.11.0] - 2026-11-06
 

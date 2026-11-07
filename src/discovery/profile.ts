@@ -3,13 +3,15 @@ export interface ProfileLink {
   href: string;
 }
 
-/** What a recruiter sees before making any choice. Every value here awaits the owner's approval. */
+/** What a recruiter sees before making any choice. Facts come from the owner's DevOps resume. */
 export const PROFILE = {
-  role: "PLACEHOLDER role",
-  summary: "PLACEHOLDER summary, one line on what the owner builds and where.",
+  role: "DevOps engineer. Baku, Azerbaijan.",
+  summary:
+    "I run Linux servers and delivery pipelines behind data platforms. 3+ years, including a government data platform on RHEL and the CI/CD and Terraform setup for a product team.",
   links: [
-    { label: "Email", href: "#" },
-    { label: "GitHub", href: "#" },
-    { label: "LinkedIn", href: "#" },
+    { label: "Resume", href: "https://resume.sakhund.cc" },
+    { label: "Email", href: "mailto:sadigaxund@hotmail.com" },
+    { label: "GitHub", href: "https://github.com/sadigaxund" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/sakhund" },
   ] satisfies ProfileLink[],
 };
