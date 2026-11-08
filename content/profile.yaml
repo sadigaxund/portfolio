@@ -1,0 +1,12 @@
+# The landing page hero. Links show in this order.
+role: DevOps engineer. Baku, Azerbaijan.
+summary: I run Linux servers and delivery pipelines behind data platforms. 3+ years, including a government data platform on RHEL and the CI/CD and Terraform setup for a product team.
+links:
+  - label: Resume
+    href: https://resume.sakhund.cc
+  - label: Email
+    href: mailto:sadigaxund@hotmail.com
+  - label: GitHub
+    href: https://github.com/sadigaxund
+  - label: LinkedIn
+    href: https://www.linkedin.com/in/sakhund

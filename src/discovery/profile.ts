@@ -1,17 +1,24 @@
+import profileData from "../../content/profile.yaml";
+import { asList, asRecord, asString } from "../tree/check";
+
 export interface ProfileLink {
   label: string;
   href: string;
 }
 
-/** What a recruiter sees before making any choice. Facts come from the owner's DevOps resume. */
-export const PROFILE = {
-  role: "DevOps engineer. Baku, Azerbaijan.",
-  summary:
-    "I run Linux servers and delivery pipelines behind data platforms. 3+ years, including a government data platform on RHEL and the CI/CD and Terraform setup for a product team.",
-  links: [
-    { label: "Resume", href: "https://resume.sakhund.cc" },
-    { label: "Email", href: "mailto:sadigaxund@hotmail.com" },
-    { label: "GitHub", href: "https://github.com/sadigaxund" },
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/sakhund" },
-  ] satisfies ProfileLink[],
-};
+const FILE = "content/profile.yaml";
+
+function parseProfile(data: unknown) {
+  const record = asRecord(FILE, "(root)", data, ["role", "summary", "links"]);
+  const links = asList(FILE, "links", record.links).map((entry, index): ProfileLink => {
+    const link = asRecord(FILE, `links[${index}]`, entry, ["label", "href"]);
+    return {
+      label: asString(FILE, `links[${index}].label`, link.label),
+      href: asString(FILE, `links[${index}].href`, link.href),
+    };
+  });
+  return { role: asString(FILE, "role", record.role), summary: asString(FILE, "summary", record.summary), links };
+}
+
+/** What a recruiter sees before making any choice, read from `content/profile.yaml`. */
+export const PROFILE = parseProfile(profileData);

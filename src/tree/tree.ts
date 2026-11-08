@@ -1,3 +1,6 @@
+import siteData from "../../content/site.yaml";
+import { parseTree } from "./schema";
+
 /** Direction of a branch at the fork: left, straight on, or right. */
 export type Direction = -1 | 0 | 1;
 
@@ -5,53 +8,25 @@ export type Direction = -1 | 0 | 1;
 export interface NodeSpec {
   slug: string;
   label: string;
+  /** One line under a section's heading. Sections only. */
+  summary?: string;
+  /** One line under a leaf's name on its parent. Leaves only. */
+  preview?: string;
   children?: NodeSpec[];
 }
 
-export interface TreeSpec {
-  label: string;
-  left: NodeSpec;
-  straight: NodeSpec;
-  right: NodeSpec;
+/** Where a road leaves the fork. Only the root's children carry one. */
+export type Side = "left" | "straight" | "right";
+
+export interface RoadSpec extends NodeSpec {
+  side: Side;
 }
 
-/** Every node of the site. A node's URL is its parent's URL plus its slug. */
-export const TREE: TreeSpec = {
-  label: "Sadig Akhund",
-  left: {
-    slug: "personal",
-    label: "Personal",
-    children: [
-      {
-        slug: "hobbies",
-        label: "Hobbies",
-        children: [
-          { slug: "placeholder-leaf", label: "PLACEHOLDER leaf" },
-          {
-            slug: "placeholder-group",
-            label: "PLACEHOLDER group",
-            children: [{ slug: "placeholder-deep", label: "PLACEHOLDER deep leaf" }],
-          },
-        ],
-      },
-      { slug: "instagram", label: "Instagram" },
-    ],
-  },
-  straight: {
-    slug: "professional",
-    label: "Professional",
-    children: [
-      { slug: "career", label: "Career" },
-      { slug: "education", label: "Education" },
-      { slug: "certifications", label: "Certifications" },
-    ],
-  },
-  right: {
-    slug: "projects-blog",
-    label: "Projects and blog",
-    children: [
-      { slug: "projects", label: "Projects" },
-      { slug: "blog", label: "Blog" },
-    ],
-  },
-};
+/** The root is the landing page. Its children are the roads at the fork. */
+export interface TreeSpec {
+  label: string;
+  children: RoadSpec[];
+}
+
+/** Every node of the site, read from `content/site.yaml`. A node's URL is its parent's URL plus its slug. */
+export const TREE: TreeSpec = parseTree(siteData);

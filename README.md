@@ -17,6 +17,10 @@ npx playwright install chromium
 npm run dev
 ```
 
+## Content
+
+The site map, hero text, and leaf documents are edited by hand in `content/`. See `content/README.md`.
+
 ## Validate
 
 ```bash

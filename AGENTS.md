@@ -10,7 +10,7 @@ Read this before touching code. Read `PLAN.md` next.
 
 ## 1. The invariants that define the project
 
-> **The tree is data.** One typed file defines every node of the site: its parent, label, direction, and URL. The line engine reads that file and contains no node-specific logic. No `if (id === "personal")` in the engine, ever.
+> **The tree is data.** `content/site.yaml` defines every node of the site: its parent, label, direction, and URL. The line engine reads that file and contains no node-specific logic. No `if (id === "personal")` in the engine, ever.
 
 Failure it prevents: each new leaf patches the engine, and the core transition breaks a little more with every section. Custom behavior for a topic lives inside that leaf's own folder, behind the leaf contract.
 
@@ -191,7 +191,7 @@ Touch the left column and the right column moves in the same commit.
 
 | If you change | You must also |
 |---|---|
-| The tree data file | Update the site map in `PLAN.md` |
+| `content/site.yaml` | Update the site map in `PLAN.md` |
 | The line engine | Rerun the section 5 motion checks at both widths |
 | The leaf contract | Check every existing leaf against it |
 | A dependency | Log the reason in `PLAN.md` |

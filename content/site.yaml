@@ -1,0 +1,69 @@
+# The map of the site. Each node becomes a page at its parent's URL plus its slug.
+# A leaf's note lives at content/<url path>.md or .mk.md, such as
+# content/professional/career.mk.md for /professional/career.
+#
+# A node has these fields:
+#   slug      lowercase letters, digits, and hyphens. Unique among siblings.
+#   label     the name shown on the site.
+#   side      on the root's children only: left, straight, or right.
+#             One road per side for now. Scrolling continues down the straight road.
+#   summary   one line, on a section only (a node with children).
+#   preview   one line, on a leaf only (a node without children).
+#   children  nodes below this one, in display order.
+
+# The root is the landing page. Its label is the name shown there.
+label: Sadig Akhund
+children:
+  - slug: personal
+    label: Personal
+    side: left
+    children:
+      - slug: hobbies
+        label: Hobbies
+        children:
+          - slug: placeholder-leaf
+            label: PLACEHOLDER leaf
+          - slug: placeholder-group
+            label: PLACEHOLDER group
+            children:
+              - slug: placeholder-deep
+                label: PLACEHOLDER deep leaf
+      - slug: instagram
+        label: Instagram
+
+  - slug: professional
+    label: Professional
+    side: straight
+    summary: 3+ years of infrastructure and delivery pipelines behind data platforms.
+    children:
+      - slug: career
+        label: Career
+        preview: KDM Force, Ministry of Tourism, Unibank. 2021 to 2025.
+      - slug: education
+        label: Education
+        preview: MS, George Washington University. BS, ADA University.
+      - slug: certifications
+        label: Certifications
+        preview: Astronomer hackathon winner. Google Data Analytics certificate.
+
+  - slug: projects-blog
+    label: Projects and blog
+    side: right
+    children:
+      - slug: projects
+        label: Projects
+        children:
+          - slug: git-resume
+            label: git-resume
+            preview: PLACEHOLDER
+          - slug: mandible
+            label: Mandible
+            preview: PLACEHOLDER
+          - slug: markii
+            label: Markii
+            preview: PLACEHOLDER
+          - slug: aqueduct
+            label: Aqueduct
+            preview: PLACEHOLDER
+      - slug: blog
+        label: Blog

@@ -18,6 +18,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 - Each road at the fork, and each stop on a section, says what is down it.
 - The landing page shows the owner's name, DevOps role, summary, and a Resume link before Email, GitHub, and LinkedIn.
 - Career, Education, and Certifications show real entries from the resume.
+- Projects lists git-resume, Mandible, Markii, and Aqueduct.
 
 ## [2026.11.0] - 2026-11-06
 

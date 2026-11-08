@@ -1,10 +1,10 @@
 import { listFiles, readLines } from "./lib/source.mjs";
 
 // The line engine stays free of node-specific logic, so no slug from the tree may appear in it.
-const treeText = readLines("src/tree/tree.ts").join("\n");
-const slugs = [...treeText.matchAll(/slug: "([^"]+)"/g)].map((match) => match[1]);
+const treeText = readLines("content/site.yaml").join("\n");
+const slugs = [...treeText.matchAll(/^\s*(?:-\s+)?slug:\s*"?([a-z0-9-]+)"?\s*$/gm)].map((match) => match[1]);
 if (slugs.length === 0) {
-  console.error("tree guard: found no slugs in src/tree/tree.ts");
+  console.error("tree guard: found no slugs in content/site.yaml");
   process.exit(1);
 }
 
