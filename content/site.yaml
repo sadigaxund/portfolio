@@ -55,15 +55,15 @@ children:
         children:
           - slug: git-resume
             label: git-resume
-            preview: PLACEHOLDER
+            preview: Push a LaTeX resume, and GitHub Actions builds versioned PDFs and a live viewer.
           - slug: mandible
             label: Mandible
-            preview: PLACEHOLDER
+            preview: A Rust TUI manual for any CLI tool, with every command and flag in one tree.
           - slug: markii
             label: Markii
-            preview: PLACEHOLDER
+            preview: Markdown that renders your own components, with sandboxed Lua feeding live data.
           - slug: aqueduct
             label: Aqueduct
-            preview: PLACEHOLDER
+            preview: Declarative data pipelines on Spark or DuckDB that propose their own fix when a run fails.
       - slug: blog
         label: Blog

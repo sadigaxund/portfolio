@@ -35,3 +35,7 @@ A section has no note.
 ## Not yet
 
 Notes are not rendered on the site. Professional still shows its `Leaf.astro` pages until Markii rendering lands, and other leaves show a placeholder.
+
+## YAML tip
+
+A value that contains a colon followed by a space breaks the file. Wrap such a value in double quotes: `preview: "Rust: a TUI manual"`. The build names the line when this happens.
