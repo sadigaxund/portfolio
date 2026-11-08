@@ -58,6 +58,7 @@ The contract:
 - It imports shared code only, never another section.
 - It needs no engine change and no tree change beyond its own node.
 - A leaf with no folder gets `src/sections/DefaultLeaf.astro`.
+- A leaf's document lives at `content/<route>.md` or `content/<route>.mk.md`. Map text (labels, summaries, previews) lives in `content/site.yaml`.
 
 ## Motion
 
