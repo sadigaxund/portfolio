@@ -1,8 +1,10 @@
-import { TREE, type Direction, type NodeSpec } from "./tree";
+import { TREE, type Direction, type NodeSpec, type Side } from "./tree";
 
 export interface TreeNode {
   url: string;
   label: string;
+  summary?: string;
+  preview?: string;
   parent: TreeNode | null;
   children: TreeNode[];
   /** The branch walked to reach this node. Null at the root. */
@@ -16,7 +18,15 @@ const trimSlash = (path: string) => (path.length > 1 ? path.replace(/\/$/, "") :
 
 function buildNode(spec: NodeSpec, parent: TreeNode, direction: Direction): TreeNode {
   const prefix = trimSlash(parent.url).replace(/^\/$/, "");
-  const node: TreeNode = { url: `${prefix}/${spec.slug}`, label: spec.label, parent, children: [], direction };
+  const node: TreeNode = {
+    url: `${prefix}/${spec.slug}`,
+    label: spec.label,
+    summary: spec.summary,
+    preview: spec.preview,
+    parent,
+    children: [],
+    direction,
+  };
   node.children = (spec.children ?? []).map((child) => buildNode(child, node, direction));
   return node;
 }
@@ -27,14 +37,13 @@ function withDescendants(node: TreeNode): TreeNode[] {
 
 export const ROOT: TreeNode = { url: `${BASE}/`, label: TREE.label, parent: null, children: [], direction: null };
 
+const DIRECTION_OF: Record<Side, Direction> = { left: -1, straight: 0, right: 1 };
+
 /** The fork's branches, ordered left to right. */
-export const BRANCHES = [
-  { ...buildNode(TREE.left, ROOT, -1), direction: -1 as const },
-  { ...buildNode(TREE.straight, ROOT, 0), direction: 0 as const },
-  { ...buildNode(TREE.right, ROOT, 1), direction: 1 as const },
-];
+export const BRANCHES = TREE.children
+  .map((road) => buildNode(road, ROOT, DIRECTION_OF[road.side]))
+  .sort((a, b) => (a.direction ?? 0) - (b.direction ?? 0));
 ROOT.children = BRANCHES;
-for (const branch of BRANCHES) for (const child of branch.children) child.parent = branch;
 
 export const ALL_NODES: readonly TreeNode[] = withDescendants(ROOT);
 

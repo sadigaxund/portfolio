@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { ALL_NODES } from "../../src/tree/walk";
+import { siteNodes } from "./site-nodes.mjs";
 
 const progress = (page: Page) =>
   page.evaluate(() =>
@@ -144,7 +144,7 @@ test("back retraces the path, and an interrupted choice settles", async ({ page 
 });
 
 test("every tree node has its own page", async ({ page }) => {
-  for (const node of ALL_NODES) {
+  for (const node of siteNodes()) {
     const response = await page.goto(node.url);
     expect(response?.status(), node.url).toBe(200);
     await expect(page.locator("h1")).toHaveText(node.label);

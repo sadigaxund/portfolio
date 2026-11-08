@@ -1,8 +1,14 @@
 ---
 import LineLayout from "../layouts/LineLayout.astro";
-import { ALL_NODES, nodeAt, routeParam } from "../tree/walk";
+import { checkDocuments } from "../tree/documents";
+import { ALL_NODES, isLeaf, nodeAt, routeParam } from "../tree/walk";
 
 export function getStaticPaths() {
+  // Lazy glob: only the keys are read, so no document is bundled. The build fails on any mismatch.
+  const documents = Object.keys(import.meta.glob("/content/**/*.{md,mk.md}")).filter((path) => path !== "/content/README.md");
+  const leafRoutes = ALL_NODES.filter(isLeaf).map((node) => routeParam(node) as string);
+  const errors = checkDocuments(leafRoutes, documents);
+  if (errors.length > 0) throw new Error(`Content check failed:\n- ${errors.join("\n- ")}`);
   return ALL_NODES.map((node) => ({ params: { path: routeParam(node) } }));
 }
 

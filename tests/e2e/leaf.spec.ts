@@ -413,3 +413,10 @@ test("spamming a stop or a fork label runs its transition once", async ({ page }
   await page.waitForSelector('.line-stage[data-settled="true"]');
   await expect(page).toHaveURL(/\/personal$/);
 });
+
+test("Projects lists its four stops in order", async ({ page }) => {
+  await page.goto("/projects-blog/projects");
+  await whenReady(page);
+  await expect(page.locator("h1")).toHaveText("Projects");
+  await expect(page.locator(".stop .role-item")).toHaveText(["git-resume", "Mandible", "Markii", "Aqueduct"]);
+});

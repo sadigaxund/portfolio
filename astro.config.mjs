@@ -1,6 +1,7 @@
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite";
+import yaml from "@rollup/plugin-yaml";
 
 export default defineConfig({
   output: "static",
@@ -9,6 +10,6 @@ export default defineConfig({
   base: process.env.BASE_PATH || undefined,
   integrations: [react()],
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), yaml()],
   },
 });
