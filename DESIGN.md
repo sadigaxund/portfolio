@@ -54,7 +54,7 @@ The contract:
 
 - A leaf is a note at `content/<route>.md` or `content/<route>.mk.md`, where `<route>` is the node's URL path. `src/markii/Note.astro` renders every leaf the same way.
 - A note starts with one `h1`. Its elements take the text roles: `h1` is `role-heading`, `h2` is `role-item`, paragraphs and list items are `role-body`, and bold is `role-result`. Code blocks use `CodeBlock` from `my-you-eye`.
-- A note with a script fence gets one Run button directly under its first heading, from `my-you-eye`. Notes with no script fence ship no markii code.
+- A note with a script fence gets one Run button directly under its first heading, from `my-you-eye`. The caption "Values as of <month year>" follows the button in `role-detail`. Notes with no script fence ship no markii code.
 - The layout supplies the surface and Back. A note adds no `main`.
 - Map text (labels, summaries, previews) lives in `content/site.yaml`.
 

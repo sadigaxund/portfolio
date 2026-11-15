@@ -19,7 +19,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 - The landing page shows the owner's name, DevOps role, summary, and a Resume link before Email, GitHub, and LinkedIn.
 - Career, Education, and Certifications show real entries from the resume.
 - Projects lists git-resume, Mandible, Markii, and Aqueduct, each with a one-line description.
-- A note with Lua scripts runs them in the browser when the page opens, and has a Run button under its first heading.
+- A note with Lua scripts runs them in the browser when the page opens, and has a Run button under its first heading. The page already shows the values from the last build, marked as of the build month.
 
 ## [2026.11.0] - 2026-11-06
 
