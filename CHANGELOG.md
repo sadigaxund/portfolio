@@ -4,6 +4,14 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ## [Unreleased]
 
+### Added
+
+- A note with scripts shows the values from the last build, marked as of the build month, before its own run finishes.
+
+### Fixed
+
+- Button labels stay readable in dark mode.
+
 ## [2026.11.1] - 2026-11-15
 
 Content checkpoint. Professional holds real entries, and leaf pages render their notes through markii.
@@ -23,7 +31,7 @@ Content checkpoint. Professional holds real entries, and leaf pages render their
 - The landing page shows the owner's name, DevOps role, summary, and a Resume link before Email, GitHub, and LinkedIn.
 - Career, Education, and Certifications show real entries from the resume.
 - Projects lists git-resume, Mandible, Markii, and Aqueduct, each with a one-line description.
-- A note with Lua scripts runs them in the browser when the page opens, and has a Run button under its first heading. The page already shows the values from the last build, marked as of the build month.
+- A note with Lua scripts runs them in the browser when the page opens, and has a Run button under its first heading.
 
 ## [2026.11.0] - 2026-11-06
 
