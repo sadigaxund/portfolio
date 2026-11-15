@@ -1,0 +1,4 @@
+{
+  "allowedOrigins": ["https://api.github.com"],
+  "runOnOpen": true
+}

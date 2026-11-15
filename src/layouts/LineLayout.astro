@@ -4,9 +4,9 @@ import { Link } from "my-you-eye";
 import "./styles";
 import Hero from "../discovery/Hero.astro";
 import LineStage from "../line/LineStage";
-import DefaultLeaf from "../sections/DefaultLeaf.astro";
+import Note from "../markii/Note.astro";
 import { previewOf, summaryOf } from "../sections/previews";
-import { isLeaf, routeParam, type TreeNode } from "../tree/walk";
+import { isLeaf, type TreeNode } from "../tree/walk";
 
 interface Props {
   node: TreeNode;
@@ -15,10 +15,6 @@ interface Props {
 const { node } = Astro.props;
 const atRoot = node.parent === null;
 const leaf = isLeaf(node);
-
-// A leaf's folder mirrors its route. A leaf with no folder gets the default.
-const LEAVES = import.meta.glob<{ default: typeof DefaultLeaf }>("../sections/**/Leaf.astro", { eager: true });
-const Leaf = LEAVES[`../sections/${routeParam(node)}/Leaf.astro`]?.default ?? DefaultLeaf;
 ---
 
 <!doctype html>
@@ -36,7 +32,7 @@ const Leaf = LEAVES[`../sections/${routeParam(node)}/Leaf.astro`]?.default ?? De
     {
       leaf ? (
         <main class="leaf-surface">
-          <Leaf node={node} />
+          <Note node={node} />
         </main>
       ) : (
         <main class={atRoot ? "line-section line-landing" : "line-section"}>

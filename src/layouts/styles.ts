@@ -10,3 +10,4 @@ import "../styles/stops.css";
 import "../styles/tokens.css";
 import "../styles/roles.css";
 import "../styles/timeline.css";
+import "../styles/note.css";
