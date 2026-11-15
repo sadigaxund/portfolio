@@ -3,15 +3,16 @@ import { defineConfig } from "@playwright/test";
 const port = 4321;
 
 export default defineConfig({
-  testDir: "tests/e2e",
   reporter: "list",
   use: {
     baseURL: `http://localhost:${port}`,
     browserName: "chromium",
   },
   projects: [
-    { name: "desktop", use: { viewport: { width: 1280, height: 800 } } },
-    { name: "phone", use: { viewport: { width: 360, height: 740 } } },
+    { name: "desktop", testDir: "tests/e2e", use: { viewport: { width: 1280, height: 800 } } },
+    { name: "phone", testDir: "tests/e2e", use: { viewport: { width: 360, height: 740 } } },
+    // Unit tests and the markii conformance run use no page, so no browser opens.
+    { name: "node", testDir: "tests/node" },
   ],
   webServer: {
     command: `npx astro preview --ignore-lock --port ${port}`,
