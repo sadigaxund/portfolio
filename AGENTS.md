@@ -220,6 +220,7 @@ Each row is a mistake a reasonable agent would repeat. One line, then where to l
 | Build a transition from a copy of the line on a covering layer | Every handoff between tricks showed as a seam, and the user saw the root line vanish. The line lives in one world with one camera, and every route change walks it. See `src/line/steps.ts`. |
 | Import stylesheets directly from a new page | The bundle keeps import order across pages, so an unbuilt dev page moved `line.css` after `tokens.css` and the line crossed the hero in production. Import `src/layouts/styles.ts`. |
 | Undo a planted defect with `cp` | `cp` prompts on this machine, so the restore silently did nothing and the defect stayed. Commit first, then use `git restore`, and rerun the gate. |
+| Override a `my-you-eye` color token without its paired `-fg` token | The site's dark theme turned `--color-primary` light and left the library's white `--color-primary-fg`, so the Run button's label vanished in dark mode. Override both in `src/styles/tokens.css`, and screenshot the change in both color schemes. |
 
 ---
 
