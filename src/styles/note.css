@@ -1,0 +1,14 @@
+/* A rendered note takes its text roles from roles.css. This file only spaces the blocks. */
+.note ul {
+  margin-top: 0.5rem;
+  padding-inline-start: 1.25rem;
+  list-style: disc;
+}
+
+.note h2 {
+  margin-top: 2.5rem;
+}
+
+.note-run {
+  margin-top: 1rem;
+}

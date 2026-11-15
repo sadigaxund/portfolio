@@ -42,8 +42,8 @@ Each role has one implementation. A variant needs a row here first.
 | Back link | `.line-back` | Names its destination, as in "Back to Professional". The first control on every page below the root. |
 | Hero | `src/discovery/Hero.astro` | Name and role line on the left, summary and contact links on the right. One column on a phone. Appears only on the landing page. |
 | Signpost | `.line-option` in `src/line/LineStage.tsx` | Road name in `role-item`, with its children's names in `role-detail`. On a phone three roads share about 108px each, so the name uses the body face at 1rem, weight 500, which keeps "Professional" on one line. |
-| Stop | `.stop` in `src/layouts/LineLayout.astro` | Title in `role-item`, then a preview in `role-detail`, at most two lines. A section previews its children's names, and a leaf exports `preview` from its own `meta.ts`. Text hangs directly off its branch, with no card. |
-| Timeline entry | `src/ui/Timeline.astro` | Dates in `role-detail`, a route-colored thread with a stop, then title, role line, results, and stack. |
+| Stop | `.stop` in `src/layouts/LineLayout.astro` | Title in `role-item`, then a preview in `role-detail`, at most two lines. A section previews its children's names, and a leaf's `preview` comes from `content/site.yaml`. Text hangs directly off its branch, with no card. |
+| Timeline entry | `src/ui/Timeline.astro`, shown on `/kit` only | Dates in `role-detail`, a route-colored thread with a stop, then title, role line, results, and stack. |
 | Step path | Built with the first project leaf | Steps on a route-colored line, each with a short label. A project draws its own idea this way. |
 
 ## Leaves
@@ -52,13 +52,11 @@ A leaf owns the whole screen, and its layout may differ from other leaves. Type,
 
 The contract:
 
-- A leaf is `src/sections/<route>/Leaf.astro`, where `<route>` is the node's URL path. The folder holds everything the leaf needs.
-- It receives `node`, and renders inside the surface the layout provides. It adds no `main`, and the layout supplies Back.
-- It renders exactly one `h1`, in `role-heading`.
-- It imports shared code only, never another section.
-- It needs no engine change and no tree change beyond its own node.
-- A leaf with no folder gets `src/sections/DefaultLeaf.astro`.
-- A leaf's document lives at `content/<route>.md` or `content/<route>.mk.md`. Map text (labels, summaries, previews) lives in `content/site.yaml`.
+- A leaf is a note at `content/<route>.md` or `content/<route>.mk.md`, where `<route>` is the node's URL path. `src/markii/Note.astro` renders every leaf the same way.
+- A note starts with one `h1`. Its elements take the text roles: `h1` is `role-heading`, `h2` is `role-item`, paragraphs and list items are `role-body`, and bold is `role-result`. Code blocks use `CodeBlock` from `my-you-eye`.
+- A note with a script fence gets one Run button directly under its first heading, from `my-you-eye`. Notes with no script fence ship no markii code.
+- The layout supplies the surface and Back. A note adds no `main`.
+- Map text (labels, summaries, previews) lives in `content/site.yaml`.
 
 ## Motion
 

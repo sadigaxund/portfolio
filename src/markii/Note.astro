@@ -1,0 +1,28 @@
+---
+import { ALL_NODES, isLeaf, routeParam, type TreeNode } from "../tree/walk";
+import NoteBody from "./NoteBody";
+import NoteIsland from "./NoteIsland";
+import { hasScripts } from "./render";
+
+interface Props {
+  node: TreeNode;
+}
+
+const { node } = Astro.props;
+// Notes are read as text at build time. The build check has already matched each leaf to one note.
+const NOTES = import.meta.glob<string>("/content/**/*.{md,mk.md}", { query: "?raw", import: "default", eager: true });
+const route = routeParam(node);
+const path = Object.keys(NOTES).find((key) => key.replace(/\.(mk\.md|md)$/, "") === `/content/${route}`);
+if (path === undefined) throw new Error(`No note for ${node.url}`);
+const text = NOTES[path];
+const documentKey = path.slice(1);
+const routes = Object.fromEntries(ALL_NODES.filter(isLeaf).map((leaf) => [`content/${routeParam(leaf)}`, leaf.url]));
+---
+
+{
+  hasScripts(text) ? (
+    <NoteIsland client:load text={text} documentKey={documentKey} routes={routes} />
+  ) : (
+    <NoteBody text={text} documentKey={documentKey} routes={routes} />
+  )
+}

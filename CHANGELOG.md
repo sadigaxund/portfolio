@@ -7,7 +7,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 ### Changed
 
 - New colors and type, including a dark look that follows the visitor's setting.
-- Career now has a timeline layout, with placeholder content.
+- Every leaf page now shows its note from the content folder. Career reads as a plain list of roles instead of a timeline.
 - The landing hero spans the page in two columns.
 - The road walked turns blue, and the road ahead stays ink.
 - Back names where it goes.
@@ -19,6 +19,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 - The landing page shows the owner's name, DevOps role, summary, and a Resume link before Email, GitHub, and LinkedIn.
 - Career, Education, and Certifications show real entries from the resume.
 - Projects lists git-resume, Mandible, Markii, and Aqueduct, each with a one-line description.
+- A note with Lua scripts runs them in the browser when the page opens, and has a Run button under its first heading.
 
 ## [2026.11.0] - 2026-11-06
 

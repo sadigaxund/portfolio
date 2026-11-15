@@ -3,12 +3,14 @@
 .role-heading,
 .role-item,
 .role-body,
-.role-detail {
+.role-detail,
+.note :is(h1, h2, p, li) {
   overflow-wrap: anywhere;
 }
 
 .role-name,
-.role-heading {
+.role-heading,
+.note h1 {
   font-family: var(--font-display);
   font-weight: 300;
   letter-spacing: -0.03em;
@@ -20,18 +22,21 @@
   font-size: clamp(3rem, 2.4rem + 3vw, 4.5rem);
 }
 
-.role-heading {
+.role-heading,
+.note h1 {
   font-size: clamp(2.5rem, 2rem + 2vw, 3.4rem);
 }
 
-.role-item {
+.role-item,
+.note h2 {
   font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: 400;
   line-height: 1.2;
 }
 
-.role-body {
+.role-body,
+.note :is(p, li) {
   max-width: 34rem;
   margin-top: 0.75rem;
   line-height: 1.55;
@@ -45,7 +50,8 @@
   line-height: 1.5;
 }
 
-.role-result {
+.role-result,
+.note strong {
   font-weight: 600;
 }
 
@@ -74,7 +80,8 @@
   min-width: 0;
 }
 
-.hero-what > .role-body {
+.hero-what > .role-body,
+.note :is(p, li) {
   margin-top: 0;
 }
 
