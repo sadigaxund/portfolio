@@ -4,6 +4,10 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ## [Unreleased]
 
+## [2026.11.1] - 2026-11-15
+
+Content checkpoint. Professional holds real entries, and leaf pages render their notes through markii.
+
 ### Changed
 
 - New colors and type, including a dark look that follows the visitor's setting.
