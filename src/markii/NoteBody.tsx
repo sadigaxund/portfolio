@@ -11,7 +11,7 @@ export interface NoteProps {
 export default function NoteBody({ text, documentKey, routes }: NoteProps) {
   const { head, body } = renderNoteParts(text, documentKey, routes, defaultRegistry);
   return (
-    <div className="note">
+    <div className="note" data-mk-root="">
       {head}
       {body}
     </div>

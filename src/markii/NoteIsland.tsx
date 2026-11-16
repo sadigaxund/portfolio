@@ -53,7 +53,7 @@ export default function NoteIsland({ text, documentKey, routes, bakedStale, buil
 
   const { head, body } = renderNoteParts(text, documentKey, routes, registry, createValueStore(values));
   return (
-    <div className="note">
+    <div className="note" data-mk-root="">
       {head}
       <div className="note-run">
         <Button onClick={() => void run("manual")} disabled={running} aria-busy={running}>
