@@ -3,7 +3,8 @@ import { extractScripts, parse } from "@markii/core";
 import { renderMarkNode, type Registry } from "@markii/react";
 import type { ValueStore } from "@markii/runtime";
 import { CodeBlock } from "my-you-eye";
-import { makeResolveHref } from "./links";
+import type { RemoteNote } from "../notes/remote";
+import { makeRemoteResolvers, makeResolveHref } from "./links";
 
 /** True when the note holds a script fence, so only those notes ship markii's browser code. */
 export function hasScripts(text: string): boolean {
@@ -23,10 +24,13 @@ export function renderNoteParts(
   routes: Readonly<Record<string, string>>,
   registry: Registry,
   store?: ValueStore,
+  remote?: RemoteNote,
 ): NoteParts {
   const root = parse(text);
+  const away = remote === undefined ? undefined : makeRemoteResolvers(remote);
   const options = {
-    resolveHref: makeResolveHref(documentKey, routes),
+    resolveHref: away?.href ?? makeResolveHref(documentKey, routes),
+    ...(away && { resolveImageSrc: away.image }),
     renderCode: ({ lang, code }: { lang: string | undefined; code: string }) => <CodeBlock code={code} language={lang} />,
   };
   const at = root.children.findIndex((node) => node.type === "heading");

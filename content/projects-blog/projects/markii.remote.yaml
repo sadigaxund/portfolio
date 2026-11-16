@@ -1,0 +1,5 @@
+# This leaf's note lives in another repository. The build downloads it,
+# and fails if the file is missing or has moved.
+repo: markii-org/markii-vault
+ref: main
+path: examples/00-tour/note.mk.md
