@@ -4,6 +4,10 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ## [Unreleased]
 
+## [2026.11.4] - 2026-11-17
+
+Note spacing and the site icon.
+
 ### Fixed
 
 - Text after a component in a note gets the same gap as text after text.
