@@ -31,7 +31,7 @@ test("a note with scripts renders its empty state with JavaScript off", async ({
   await expect(page.locator("h1")).toHaveText("Markii");
   await expect(page.locator(".note")).toContainText("computed in your browser");
   // The build computed the value, so it is in the HTML and reads stale.
-  await expect(page.locator(TOTAL)).toContainText("55");
+  await expect(page.locator(TOTAL)).toContainText("204");
   await expect(page.locator(TOTAL)).toHaveClass(/mk-value--stale/);
   await expect(page.locator(".note-run")).toContainText(/Values as of [A-Z][a-z]{2} \d{4}/);
   await context.close();
@@ -39,13 +39,13 @@ test("a note with scripts renders its empty state with JavaScript off", async ({
 
 test("the script runs on open and the value is remembered on reload", async ({ page }) => {
   await page.goto(SCRIPTED);
-  await expect(page.locator(TOTAL)).toContainText("55");
+  await expect(page.locator(TOTAL)).toContainText("204");
   await expect(page.locator(TOTAL)).not.toHaveClass(/mk-value--stale/);
   await expect(page.locator(".note-run button")).toBeEnabled();
   // The remembered value shows from the first client render, before the new run lands.
   await page.route("**/*browser-worker*", (route) => route.abort());
   await page.reload();
-  await expect(page.locator(TOTAL)).toContainText("55");
+  await expect(page.locator(TOTAL)).toContainText("204");
 });
 
 test("the Run button sits directly under the first heading", async ({ page }) => {
@@ -60,6 +60,6 @@ test("the Run button sits directly under the first heading", async ({ page }) =>
 
 test("a run on open never shows a prompt", async ({ page }) => {
   await page.goto(SCRIPTED);
-  await expect(page.locator(TOTAL)).toContainText("55");
+  await expect(page.locator(TOTAL)).toContainText("204");
   await expect(page.getByRole("dialog")).toHaveCount(0);
 });

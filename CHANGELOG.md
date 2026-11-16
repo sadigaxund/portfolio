@@ -6,6 +6,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Added
 
+- The four project pages tell each project's story, with a GitHub panel that shows the last push, language, and stars as of the build.
 - A note with scripts shows the values from the last build, marked as of the build month, before its own run finishes.
 
 ### Fixed
