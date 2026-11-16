@@ -1,0 +1,19 @@
+/* Maps markii's Tier 1 palette onto site tokens. markii's docs/integration.md, "Theming a host". */
+[data-mk-root] {
+  --mk-bg: var(--color-bg);
+  --mk-raised: var(--color-doc-raised);
+  --mk-fg: var(--color-fg);
+  --mk-surface: var(--color-doc-surface);
+  --mk-surface-strong: var(--color-doc-surface-strong);
+  --mk-border: var(--color-border);
+  --mk-muted: var(--color-muted);
+  --mk-faint: var(--color-doc-faint);
+  --mk-accent: var(--color-route);
+  --mk-on-accent: var(--color-bg);
+  --mk-info: var(--color-doc-info);
+  --mk-success: var(--color-doc-success);
+  --mk-warning: var(--color-doc-warning);
+  --mk-danger: var(--color-doc-danger);
+  --mk-limit: var(--color-doc-limit);
+  font-family: inherit;
+}

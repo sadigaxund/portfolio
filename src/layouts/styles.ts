@@ -7,6 +7,8 @@ import "@fontsource-variable/geologica";
 import "@fontsource-variable/instrument-sans";
 import "../styles/seam.css";
 import "../styles/stops.css";
+import "@markii/react/doc.css";
+import "../styles/markii.css";
 import "../styles/tokens.css";
 import "../styles/roles.css";
 import "../styles/timeline.css";

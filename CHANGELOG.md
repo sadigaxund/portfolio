@@ -6,10 +6,12 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Added
 
+- The four project pages tell each project's story, with a GitHub panel that shows the last push, language, and stars as of the build.
 - A note with scripts shows the values from the last build, marked as of the build month, before its own run finishes.
 
 ### Fixed
 
+- Note components such as cards, stats, tabs, and charts follow the site's colors and font in light and dark.
 - Button labels stay readable in dark mode.
 
 ## [2026.11.1] - 2026-11-15
