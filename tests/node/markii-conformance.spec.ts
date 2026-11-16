@@ -66,7 +66,7 @@ test("a script that never ends is killed and the host answers", async () => {
   const adapter = adapterFor({ next: () => false });
   const host = createMarkiiHost(adapter);
   const text = "# Loop\n\n```lua {name=spin}\nwhile true do end\n```\n";
-  const outcome = await host.run({ documentKey: "content/loop.mk.md", text, trigger: "auto", timeoutMs: 1500 });
+  const outcome = await host.run({ documentKey: "content/loop.mk.md", text, trigger: "auto", timeoutMs: 5000 });
   expect(outcome.kind).toBe("ran");
   if (outcome.kind === "ran") expect(outcome.errorCount).toBe(1);
   const after = await host.run({ documentKey: "content/ok.mk.md", text: "```lua {name=a}\nreturn 1\n```\n", trigger: "auto" });

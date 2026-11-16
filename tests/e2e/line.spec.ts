@@ -145,7 +145,8 @@ test("back retraces the path, and an interrupted choice settles", async ({ page 
 
 test("every tree node has its own page", async ({ page }) => {
   for (const node of siteNodes()) {
-    const response = await page.goto(node.url);
+    // Status and heading only; note images load from GitHub and are not under test here.
+    const response = await page.goto(node.url, { waitUntil: "domcontentloaded" });
     expect(response?.status(), node.url).toBe(200);
     await expect(page.locator("h1")).toHaveText(node.label);
   }
