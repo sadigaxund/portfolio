@@ -4,6 +4,10 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ## [Unreleased]
 
+### Fixed
+
+- Text after a component in a note gets the same gap as text after text.
+
 ## [2026.11.3] - 2026-11-17
 
 The Markii page and note layout.

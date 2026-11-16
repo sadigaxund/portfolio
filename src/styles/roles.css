@@ -38,9 +38,13 @@
 .role-body,
 .note :is(p, li) {
   max-width: 34rem;
-  margin-top: 0.75rem;
   line-height: 1.55;
   text-wrap: pretty;
+}
+
+/* A note's blocks take markii's rhythm instead, so text after a component gets the same gap as text after text. */
+.role-body {
+  margin-top: 0.75rem;
 }
 
 .role-detail {
@@ -80,8 +84,7 @@
   min-width: 0;
 }
 
-.hero-what > .role-body,
-.note :is(p, li) {
+.hero-what > .role-body {
   margin-top: 0;
 }
 

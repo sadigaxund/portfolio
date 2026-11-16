@@ -222,6 +222,7 @@ Each row is a mistake a reasonable agent would repeat. One line, then where to l
 | Undo a planted defect with `cp` | `cp` prompts on this machine, so the restore silently did nothing and the defect stayed. Commit first, then use `git restore`, and rerun the gate. |
 | Override a `my-you-eye` color token without its paired `-fg` token | The site's dark theme turned `--color-primary` light and left the library's white `--color-primary-fg`, so the Run button's label vanished in dark mode. Override both in `src/styles/tokens.css`, and screenshot the change in both color schemes. |
 | Plant a defect and run Playwright without rebuilding | `playwright.config.ts` serves the existing `dist/` with `astro preview`, so a planted change in source or settings never reached the page and the test stayed green. Run `npm run build` after planting and after restoring. |
+| Set a vertical margin on blocks inside `[data-mk-root]` | markii spaces every top-level block with one `> * + *` rule at zero specificity. A site rule that zeroed `.note p` made text touch the component above it. Leave note block spacing to markii. |
 
 ---
 
