@@ -6,7 +6,7 @@ import { mergeArrivingValue } from "../../src/markii/merge";
 import { bundlePacks } from "../../src/markii/packs";
 import { parseSettings } from "../../src/markii/settings";
 
-const good = { allowedOrigins: ["https://api.github.com"], runOnOpen: true };
+const good = { allowedOrigins: ["https://api.github.com"], runOnOpen: true, hideScriptBlocks: true };
 
 test.describe("settings", () => {
   test("accepts the shipped shape", () => {
@@ -17,6 +17,7 @@ test.describe("settings", () => {
   });
   test("names a wrong type", () => {
     expect(() => parseSettings({ ...good, runOnOpen: "yes" })).toThrow("runOnOpen must be true or false");
+    expect(() => parseSettings({ ...good, hideScriptBlocks: 1 })).toThrow("hideScriptBlocks must be true or false");
     expect(() => parseSettings({ ...good, allowedOrigins: "https://api.github.com" })).toThrow("allowedOrigins must be a list");
     expect(() => parseSettings({ ...good, allowedOrigins: [3] })).toThrow("allowedOrigins[0] must be a string");
   });

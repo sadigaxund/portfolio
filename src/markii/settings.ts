@@ -1,13 +1,15 @@
 import { asList, asRecord, fail } from "../tree/check";
 
 const FILE = "markii/settings.json";
-const KEYS = ["allowedOrigins", "runOnOpen"] as const;
+const KEYS = ["allowedOrigins", "runOnOpen", "hideScriptBlocks"] as const;
 
 export interface MarkiiSettings {
   /** The origins a script may fetch. Everything else is refused. */
   allowedOrigins: string[];
   /** Run a note's scripts when a visitor opens it. */
   runOnOpen: boolean;
+  /** Hide the collapsed script marker under each script, as VS Code's `markii.hideScriptBlocks` does. */
+  hideScriptBlocks: boolean;
 }
 
 /** Turns parsed JSON into settings, or throws naming the first bad key. */
@@ -27,5 +29,6 @@ export function parseSettings(data: unknown): MarkiiSettings {
     return origin;
   });
   if (typeof record.runOnOpen !== "boolean") fail(FILE, "runOnOpen", "must be true or false");
-  return { allowedOrigins: origins, runOnOpen: record.runOnOpen };
+  if (typeof record.hideScriptBlocks !== "boolean") fail(FILE, "hideScriptBlocks", "must be true or false");
+  return { allowedOrigins: origins, runOnOpen: record.runOnOpen, hideScriptBlocks: record.hideScriptBlocks };
 }
