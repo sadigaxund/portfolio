@@ -4,6 +4,10 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ## [Unreleased]
 
+## [2026.11.2] - 2026-11-17
+
+Project pages and markii components.
+
 ### Added
 
 - The four project pages tell each project's story, with a GitHub panel that shows the last push, language, and stars as of the build.
