@@ -24,28 +24,24 @@ test("a note with no scripts loads no markii script", async ({ page }) => {
   await expect(page.locator(".note-run")).toHaveCount(0);
 });
 
-test("a note with scripts renders its empty state with JavaScript off", async ({ browser }) => {
+test("a note with scripts carries the build's values with JavaScript off", async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   await page.goto(SCRIPTED);
-  await expect(page.locator("h1")).toHaveText("Markii");
-  await expect(page.locator(".note")).toContainText("computed in your browser");
-  // The build computed the value, so it is in the HTML and reads stale.
-  await expect(page.locator(TOTAL)).toContainText("204");
-  await expect(page.locator(TOTAL)).toHaveClass(/mk-value--stale/);
+  // The build ran the note, so the value is in the HTML and reads stale.
+  await expect(page.locator(TOTAL).first()).toHaveClass(/mk-value--stale/);
   await expect(page.locator(".note-run")).toContainText(/Values as of [A-Z][a-z]{2} \d{4}/);
   await context.close();
 });
 
-test("the script runs on open and the value is remembered on reload", async ({ page }) => {
+test("a first visit's run on open keeps the build's values", async ({ page }) => {
   await page.goto(SCRIPTED);
-  await expect(page.locator(TOTAL)).toContainText("204");
-  await expect(page.locator(TOTAL)).not.toHaveClass(/mk-value--stale/);
+  const before = await page.locator(TOTAL).first().textContent();
+  // The run has no network grant, so each network value fails and the build's value stays.
+  await expect(page.locator(".note-run")).toHaveAttribute("data-runs", "1", { timeout: 15000 });
+  await expect(page.locator(TOTAL).first()).toHaveText(before ?? "");
+  await expect(page.locator(TOTAL).first()).toHaveClass(/mk-value--stale/);
   await expect(page.locator(".note-run button")).toBeEnabled();
-  // The remembered value shows from the first client render, before the new run lands.
-  await page.route("**/*browser-worker*", (route) => route.abort());
-  await page.reload();
-  await expect(page.locator(TOTAL)).toContainText("204");
 });
 
 test("the Run button sits directly under the first heading", async ({ page }) => {
@@ -60,7 +56,7 @@ test("the Run button sits directly under the first heading", async ({ page }) =>
 
 test("a run on open never shows a prompt", async ({ page }) => {
   await page.goto(SCRIPTED);
-  await expect(page.locator(TOTAL)).toContainText("204");
+  await expect(page.locator(".note-run")).toHaveAttribute("data-runs", "1", { timeout: 15000 });
   await expect(page.getByRole("dialog")).toHaveCount(0);
 });
 

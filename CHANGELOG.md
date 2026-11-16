@@ -6,6 +6,10 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Changed
 
+- The Markii page shows the Markii format tour, taken from the markii-vault repository at each build.
+
+### Changed
+
 - Notes sit in one centered column, and the script markers under live values are hidden.
 
 ## [2026.11.2] - 2026-11-17
