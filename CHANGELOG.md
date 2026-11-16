@@ -4,6 +4,14 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ## [Unreleased]
 
+### Added
+
+- A note with scripts shows the values from the last build, marked as of the build month, before its own run finishes.
+
+### Fixed
+
+- Button labels stay readable in dark mode.
+
 ## [2026.11.1] - 2026-11-15
 
 Content checkpoint. Professional holds real entries, and leaf pages render their notes through markii.

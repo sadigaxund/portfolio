@@ -6,6 +6,7 @@
   --color-fg: #12151c;
   --color-muted: #565d6b;
   --color-primary: #12151c;
+  --color-primary-fg: var(--color-bg);
   --color-border: #cfd5de;
   --color-route: #1d3fd8;
   --line-trunk-top: 20rem;
@@ -19,6 +20,7 @@
     --color-fg: #eef1f6;
     --color-muted: #9aa3b2;
     --color-primary: #eef1f6;
+    --color-primary-fg: var(--color-bg);
     --color-border: #2d3543;
     --color-route: #8199ff;
     color-scheme: dark;
