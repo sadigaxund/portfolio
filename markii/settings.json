@@ -1,4 +1,7 @@
 {
-  "allowedOrigins": ["https://api.github.com"],
-  "runOnOpen": true
+  "allowedOrigins": [
+    "https://api.github.com"
+  ],
+  "runOnOpen": true,
+  "hideScriptBlocks": true
 }

@@ -4,6 +4,10 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ## [Unreleased]
 
+### Changed
+
+- Notes sit in one centered column, and the script markers under live values are hidden.
+
 ## [2026.11.2] - 2026-11-17
 
 Project pages and markii components.

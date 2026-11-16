@@ -221,6 +221,7 @@ Each row is a mistake a reasonable agent would repeat. One line, then where to l
 | Import stylesheets directly from a new page | The bundle keeps import order across pages, so an unbuilt dev page moved `line.css` after `tokens.css` and the line crossed the hero in production. Import `src/layouts/styles.ts`. |
 | Undo a planted defect with `cp` | `cp` prompts on this machine, so the restore silently did nothing and the defect stayed. Commit first, then use `git restore`, and rerun the gate. |
 | Override a `my-you-eye` color token without its paired `-fg` token | The site's dark theme turned `--color-primary` light and left the library's white `--color-primary-fg`, so the Run button's label vanished in dark mode. Override both in `src/styles/tokens.css`, and screenshot the change in both color schemes. |
+| Plant a defect and run Playwright without rebuilding | `playwright.config.ts` serves the existing `dist/` with `astro preview`, so a planted change in source or settings never reached the page and the test stayed green. Run `npm run build` after planting and after restoring. |
 
 ---
 

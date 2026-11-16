@@ -8,6 +8,7 @@ Host settings and packs for the notes in `content/`. This folder is app config t
 |---|---|---|
 | `allowedOrigins` | list of strings | The only origins a script may fetch, such as `https://api.github.com`. Any other origin is refused. |
 | `runOnOpen` | boolean | When true, a note with scripts runs once as soon as a visitor opens it. When false, scripts run only from the Run button. |
+| `hideScriptBlocks` | boolean | When true, the collapsed script marker under each script is hidden. A failed value still shows its own marker. |
 
 An unknown key or a wrong type fails the build with the key named.
 

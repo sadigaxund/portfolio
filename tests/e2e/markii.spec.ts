@@ -63,3 +63,9 @@ test("a run on open never shows a prompt", async ({ page }) => {
   await expect(page.locator(TOTAL)).toContainText("204");
   await expect(page.getByRole("dialog")).toHaveCount(0);
 });
+
+test("script markers stay hidden while the note renders", async ({ page }) => {
+  await page.goto(SCRIPTED);
+  await expect(page.locator(".mk-script").first()).toBeAttached();
+  await expect(page.locator(".mk-script").first()).toBeHidden();
+});
