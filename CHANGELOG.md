@@ -7,6 +7,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 ### Fixed
 
 - Text after a component in a note gets the same gap as text after text.
+- The site icon loads on the published site.
 
 ## [2026.11.3] - 2026-11-17
 
