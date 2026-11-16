@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test";
 import type { StoredValue } from "@markii/runtime";
 import { createReadOnlyFiles } from "../../src/markii/files";
-import { makeResolveHref } from "../../src/markii/links";
+import { makeRemoteResolvers, makeResolveHref } from "../../src/markii/links";
+import { fetchRemoteNote, parseRemoteNote } from "../../src/notes/remote";
 import { mergeArrivingValue } from "../../src/markii/merge";
 import { bundlePacks } from "../../src/markii/packs";
 import { parseSettings } from "../../src/markii/settings";
@@ -98,5 +99,35 @@ test.describe("read-only files", () => {
     expect(await files.listFolder("/packs")).toEqual([{ name: "demo", isDirectory: true }]);
     expect(await files.listFolder("/nowhere")).toEqual([]);
     await expect(files.writeFile("/packs/x", new Uint8Array())).rejects.toThrow("read-only");
+  });
+});
+
+test.describe("remote notes", () => {
+  const good = { repo: "markii-org/markii-vault", ref: "main", path: "examples/00-tour/note.mk.md" };
+  const FILE = "content/x.remote.yaml";
+
+  test("a reference names a repo, a ref, and a note path", () => {
+    expect(parseRemoteNote(FILE, good)).toEqual(good);
+    expect(() => parseRemoteNote(FILE, { ...good, repo: "markii" })).toThrow("repo must be owner/name");
+    expect(() => parseRemoteNote(FILE, { ...good, path: "../secret.md" })).toThrow("path must be relative");
+    expect(() => parseRemoteNote(FILE, { ...good, path: "notes.txt" })).toThrow("path must end in .md or .mk.md");
+    expect(() => parseRemoteNote(FILE, { ...good, branch: "x" })).toThrow("branch is not a known key");
+  });
+
+  test("a missing file fails with its URL, and a found one returns its text", async () => {
+    const answer = (status: number) => (async () => new Response("# Note", { status })) as typeof fetch;
+    await expect(fetchRemoteNote(FILE, good, answer(404))).rejects.toThrow(
+      "https://raw.githubusercontent.com/markii-org/markii-vault/main/examples/00-tour/note.mk.md answered 404",
+    );
+    await expect(fetchRemoteNote(FILE, good, answer(200))).resolves.toBe("# Note");
+  });
+
+  test("relative links open on GitHub and relative images load raw", () => {
+    const resolve = makeRemoteResolvers(good);
+    expect(resolve.href("../01-baku-weather/note.mk.md#top")).toBe(
+      "https://github.com/markii-org/markii-vault/blob/main/examples/01-baku-weather/note.mk.md#top",
+    );
+    expect(resolve.image("pic.png")).toBe("https://raw.githubusercontent.com/markii-org/markii-vault/main/examples/00-tour/pic.png");
+    expect(resolve.href("https://example.com")).toBeUndefined();
   });
 });

@@ -19,12 +19,13 @@ export interface IslandProps extends NoteProps {
 }
 
 /** A note with scripts. It renders on the server, then runs its scripts in the visitor's browser. */
-export default function NoteIsland({ text, documentKey, routes, bakedStale, builtLabel }: IslandProps) {
+export default function NoteIsland({ text, documentKey, routes, remote, bakedStale, builtLabel }: IslandProps) {
   const prompts = useMemo<PromptBridge>(() => ({ ask: undefined }), []);
   const host = useMemo(() => createBrowserHost(prompts), [prompts]);
   const [values, setValues] = useState<Record<string, StoredValue>>(bakedStale);
   const [registry, setRegistry] = useState<Registry>(defaultRegistry);
   const [running, setRunning] = useState(false);
+  const [runs, setRuns] = useState(0);
   const started = useRef(false);
 
   const run = useCallback(
@@ -38,6 +39,7 @@ export default function NoteIsland({ text, documentKey, routes, bakedStale, buil
       });
       if (outcome.kind !== "ran") console.info(`Run of ${documentKey} ended: ${outcome.kind}`);
       setRunning(false);
+      setRuns((count) => count + 1);
     },
     [host, documentKey, text],
   );
@@ -51,11 +53,11 @@ export default function NoteIsland({ text, documentKey, routes, bakedStale, buil
     if (SETTINGS.runOnOpen) void run("auto");
   }, [host, documentKey, run]);
 
-  const { head, body } = renderNoteParts(text, documentKey, routes, registry, createValueStore(values));
+  const { head, body } = renderNoteParts(text, documentKey, routes, registry, createValueStore(values), remote);
   return (
     <div className="note" data-mk-root="" data-hide-scripts={SETTINGS.hideScriptBlocks || undefined}>
       {head}
-      <div className="note-run">
+      <div className="note-run" data-runs={runs}>
         <Button onClick={() => void run("manual")} disabled={running} aria-busy={running}>
           Run
         </Button>

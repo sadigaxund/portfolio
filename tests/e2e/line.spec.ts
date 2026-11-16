@@ -148,7 +148,8 @@ test("every tree node has its own page", async ({ page }) => {
     // Status and heading only; note images load from GitHub and are not under test here.
     const response = await page.goto(node.url, { waitUntil: "domcontentloaded" });
     expect(response?.status(), node.url).toBe(200);
-    await expect(page.locator("h1")).toHaveText(node.label);
+    if (node.remote) await expect(page.locator("h1")).not.toBeEmpty();
+    else await expect(page.locator("h1")).toHaveText(node.label);
   }
 });
 
