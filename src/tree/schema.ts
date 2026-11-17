@@ -5,6 +5,8 @@ const FILE = "content/site.yaml";
 const SLUG = /^[a-z0-9-]+$/;
 const NODE_KEYS = ["slug", "label", "summary", "preview", "children"] as const;
 const SIDES: readonly Side[] = ["left", "straight", "right"];
+/** Three lines of a stop hold about 100 characters on a 360px phone, so a legal preview is never cut off. */
+const PREVIEW_MAX = 90;
 
 function parseNode(value: unknown, path: string, keys: readonly string[] = NODE_KEYS): NodeSpec {
   const record = asRecord(FILE, path, value, keys);
@@ -19,6 +21,9 @@ function parseNode(value: unknown, path: string, keys: readonly string[] = NODE_
   if (record.preview !== undefined) {
     if (hasChildren) fail(FILE, `${path}.preview`, "is only allowed on a leaf, which has no children");
     node.preview = asString(FILE, `${path}.preview`, record.preview);
+    if (node.preview.length > PREVIEW_MAX) {
+      fail(FILE, `${path}.preview`, `is ${node.preview.length} characters; keep it to ${PREVIEW_MAX} so a phone shows it whole`);
+    }
   }
   if (hasChildren) {
     const list = asList(FILE, `${path}.children`, record.children);

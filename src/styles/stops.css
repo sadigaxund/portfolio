@@ -2,7 +2,8 @@
 :root {
   --stop-reach: min(12vw, 8rem);
   --stop-drop: 1.5rem;
-  --stop-gap: 7rem;
+  --stop-gap: 8rem;
+  --stop-end: 0.75rem;
   --line-x: calc(var(--line-center) + var(--line-rest));
 }
 
@@ -21,15 +22,25 @@
 
 .stop-text {
   min-width: 0;
+  max-width: 22rem;
   padding: 0.5rem 0.75rem;
 }
 
+/* The title link is a 44px target without moving the text off its branch. */
+.stop-text .role-item a {
+  display: inline-block;
+  margin-block: calc((var(--target-min) - 1.2em) / -2);
+  padding-block: calc((var(--target-min) - 1.2em) / 2);
+}
+
+/* Previews are capped at 90 characters by the build, so three lines always hold them. */
 .stop-text .role-detail {
   display: -webkit-box;
   margin-top: 0.25rem;
   overflow: hidden;
+  text-wrap: pretty;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
 }
 
 .stop-branch {
@@ -42,16 +53,18 @@
   border-bottom-left-radius: var(--stop-drop);
 }
 
-/* A leaf ends in a dot. */
+/* A leaf ends in an open ring, the same stop the thread inside a leaf uses. */
 .stop[data-kind="leaf"] .stop-branch::after {
   content: "";
   position: absolute;
-  right: -0.25rem;
-  bottom: -0.3rem;
-  width: 0.5rem;
-  height: 0.5rem;
+  right: calc(var(--stop-end) / -2);
+  bottom: calc((var(--stop-end) + var(--line-width)) / -2);
+  box-sizing: border-box;
+  width: var(--stop-end);
+  height: var(--stop-end);
+  border: var(--line-width) solid var(--color-primary);
   border-radius: 50%;
-  background: var(--color-primary);
+  background: var(--color-bg);
 }
 
 /* A subsection's branch bends on down, like the fork's branches, because the line continues into it. */
@@ -88,7 +101,7 @@
 
   .stop[data-side="start"][data-kind="leaf"] .stop-branch::after {
     right: auto;
-    left: -0.25rem;
+    left: calc(var(--stop-end) / -2);
   }
 
   .stop[data-side="start"][data-kind="section"] .stop-branch::after {
@@ -103,5 +116,24 @@
   .stop[data-side="start"][data-kind="section"] .stop-text {
     margin-left: 0;
     margin-right: var(--stop-drop);
+  }
+}
+
+/* Pointing at or focusing a stop draws its branch in the route color, the color it turns once walked. */
+.stop:has(.stop-text a:is(:hover, :focus-visible)) .stop-branch,
+.stop:has(.stop-text a:is(:hover, :focus-visible)) .stop-branch::after {
+  border-color: var(--color-route);
+}
+
+.stop[data-kind="leaf"]:has(.stop-text a:is(:hover, :focus-visible)) .stop-branch::after {
+  background: var(--color-route);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .stop-branch,
+  .stop-branch::after {
+    transition:
+      border-color 150ms ease-out,
+      background-color 150ms ease-out;
   }
 }

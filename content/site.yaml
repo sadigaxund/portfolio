@@ -8,7 +8,7 @@
 #   side      on the root's children only: left, straight, or right.
 #             One road per side for now. Scrolling continues down the straight road.
 #   summary   one line, on a section only (a node with children).
-#   preview   one line, on a leaf only (a node without children).
+#   preview   one line of at most 90 characters, on a leaf only (a node without children).
 #   children  nodes below this one, in display order.
 
 # The root is the landing page. Its label is the name shown there.

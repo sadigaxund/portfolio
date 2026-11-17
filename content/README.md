@@ -27,6 +27,7 @@ A section has no note.
 - A field that is missing, misspelled, or the wrong type in `site.yaml` or `profile.yaml`. The error names the field path.
 - A slug that is not lowercase letters, digits, and hyphens, or that repeats among siblings.
 - A `summary` on a leaf, a `preview` on a section, or an empty `children` list.
+- A `preview` over 90 characters. Three lines on a phone hold 90, so the map never cuts one off.
 - A `side` that is missing on a root child, not one of `left`, `straight`, or `right`, or present below the root's children.
 - Zero or more than one road for any side.
 - A leaf with no note.
