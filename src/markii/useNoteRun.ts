@@ -3,7 +3,7 @@ import type { MarkiiHost, RunOutcome } from "@markii/host";
 import type { RunTrigger, StoredValue } from "@markii/runtime";
 import type { PromptBridge } from "./browser";
 import { SETTINGS } from "./config";
-import { mergeArrivingValue } from "./merge";
+import { mergeRunValue } from "@markii/host";
 import { hasRunHere, markRunHere } from "./ranHere";
 
 export interface NoteRun {
@@ -36,9 +36,10 @@ export function useNoteRun(documentKey: string, text: string, bakedStale: Record
         documentKey,
         text,
         trigger,
-        onValue: (name, value) => setValues((current) => mergeArrivingValue(current, name, value)),
+        onValue: (name, value) => setValues((current) => mergeRunValue(current, name, value)),
       });
       if (outcome.kind !== "ran") console.info(`Run of ${documentKey} ended: ${outcome.kind}`);
+      else if (outcome.failures.some((failure) => failure.kind === "network")) console.warn(`markii: ${documentKey} could not reach the network`);
       if (outcome.kind === "ran" && outcome.freshCount > 0) setRanAt(Date.now());
       if (trigger === "manual") markRunHere(documentKey);
       setRunning(false);

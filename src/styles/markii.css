@@ -15,6 +15,12 @@
   --mk-warning: var(--color-doc-warning);
   --mk-danger: var(--color-doc-danger);
   --mk-limit: var(--color-doc-limit);
+  --mk-stat-value-size: var(--text-item);
+  --mk-stat-value-weight: 600;
+  --mk-callout-accent-width: 1px;
+  --mk-card-border-width: 1px;
+  --mk-stale-opacity: 1;
+  --mk-control-min-size: var(--target-min);
   font-family: inherit;
 }
 

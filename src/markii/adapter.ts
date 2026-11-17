@@ -6,6 +6,7 @@ const LABELS: HostLabels = {
   previewNoun: "this page",
   diagnosticsSurface: "the browser console",
   deviceNoun: "this browser",
+  noteNoun: "page",
 };
 
 export interface AdapterParts {

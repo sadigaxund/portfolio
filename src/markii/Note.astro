@@ -4,8 +4,7 @@ import NoteBody from "./NoteBody";
 import NoteIsland from "./NoteIsland";
 import { bakeNote } from "./bake";
 import { SETTINGS } from "./config";
-import { hasScripts } from "./render";
-import { stale } from "./stale";
+import { noteHasScripts, staleValuesForRehydration } from "@markii/host";
 import { fetchRemoteNote, parseRemoteNote } from "../notes/remote";
 
 interface Props {
@@ -24,9 +23,9 @@ const documentKey = path.slice(1);
 const remote = path in REMOTE ? parseRemoteNote(documentKey, REMOTE[path]) : undefined;
 const text = remote ? await fetchRemoteNote(documentKey, remote) : LOCAL[path];
 const routes = Object.fromEntries(ALL_NODES.filter(isLeaf).map((leaf) => [`content/${routeParam(leaf)}`, leaf.url]));
-const scripted = hasScripts(text);
+const scripted = noteHasScripts(text);
 const baked = scripted
-  ? stale(await bakeNote({ documentKey, text, allowedOrigins: SETTINGS.allowedOrigins, log: (line) => console.warn(line) }))
+  ? staleValuesForRehydration(await bakeNote({ documentKey, text, allowedOrigins: SETTINGS.allowedOrigins, log: (line) => console.warn(line) }))
   : {};
 const builtLabel = new Intl.DateTimeFormat("en", { month: "short", year: "numeric", timeZone: "UTC" }).format(new Date());
 ---
