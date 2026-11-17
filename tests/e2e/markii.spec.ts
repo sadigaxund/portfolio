@@ -128,3 +128,13 @@ test.describe("project notes without JavaScript", () => {
     await expect(page.locator(".note")).not.toContainText("nav_link");
   });
 });
+
+test("an update that gets an error status says so and keeps the values", async ({ page }) => {
+  await page.route("https://api.github.com/**", (route) => route.fulfill({ status: 403, contentType: "application/json", body: '{"message":"API rate limit exceeded"}' }));
+  await page.goto(SCRIPTED);
+  const before = await page.locator(TOTAL).first().textContent();
+  await page.getByRole("button", { name: "Update" }).click();
+  await page.getByRole("dialog").getByRole("button", { name: "Allow", exact: true }).click();
+  await expect(page.getByText(/^Could not update\. Showing data from [A-Z][a-z]{2} \d{4}\.$/)).toBeVisible({ timeout: 15000 });
+  await expect(page.locator(TOTAL).first()).toHaveText(before ?? "");
+});

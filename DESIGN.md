@@ -48,9 +48,9 @@ Each role has one implementation. A variant needs a row here first.
 | Role | Implementation | Rule |
 |---|---|---|
 | Text link | `Link` from `my-you-eye`, or an anchor in `.hero-links`, `.line-option`, `.line-back`, `.stop` | Always underlined. |
-| Back link | `.line-back` | Names its destination, as in "Back to Professional". The first control after the skip link on every page below the root, inside a `nav` landmark. Fixed at the top left on sections; on a leaf it sits in the leaf header and scrolls away with it. |
+| Back link | `.line-back` | Names its destination, as in "Back to Professional" or "Back to Start". Page names are capitalized. The first control after the skip link on every page below the root, inside a `nav` landmark. Fixed at the top left on sections; on a leaf it sits in the leaf header and scrolls away with it. |
 | Skip link | `.skip-link` in `src/styles/chrome.css` | "Skip to content", first on every page below the root, shown only while focused. |
-| Site foot | `src/discovery/SiteFoot.astro` | The one foot of every leaf, a full-width band in `--color-doc-surface` below a hairline: the owner's name and role in `role-detail` with the contact links on the left, the Markii credit on the right. Its left edge lines up with Back's text and its right edge with Update. Stacked on a phone. |
+| Site foot | `src/discovery/SiteFoot.astro` | The one foot of every leaf, a full-width band in `--color-doc-surface` below a hairline: the owner's name and role in `role-detail` with the contact links on the left, the Markii credit on the right. Its left edge lines up with Back's text and its right edge with Update. On a short note it sits at the bottom of the window. Stacked on a phone. |
 | Contact links | `src/discovery/ContactLinks.astro` | The profile links from `content/profile.yaml`, in the hero and the site foot. Each is at least 44px in both directions. |
 | Hero | `src/discovery/Hero.astro` | Name and role line on the left, summary and contact links on the right. One column on a phone. Appears only on the landing page. |
 | Signpost | `.line-option` in `src/line/LineStage.tsx` | Road name in `role-item`, with its children's names in `role-detail`. On a phone three roads share about 108px each, so the name uses the body face at 1rem, weight 500, which keeps "Professional" on one line. |
@@ -60,7 +60,7 @@ Each role has one implementation. A variant needs a row here first.
 | Note bar | `src/markii/NoteBar.tsx` | Only on a note with a script fence, at the right end of the leaf header. The data's age in `role-detail` ("Updated Nov 2026", "Updated 10 minutes ago"; a phone drops "Updated") and a secondary 48px "Update" button. |
 | Markii credit | `src/discovery/MarkiiCredit.astro` | In the site foot, one bordered link to markii-org/markii: the Markii logo at 48px, "Powered by" over "Markii", a divider, then the GitHub mark and "GitHub". The border turns route color on hover. |
 | Grant dialog | `src/markii/GrantDialog.tsx`, from my-you-eye `ConfirmDialog` | Opens only after Update. The title is "Update from <host>?", the body is markii's own sentence, and the buttons are markii's two labels. No danger styling. Closing it any way but Allow answers no. |
-| Toast | my-you-eye `Toaster` | One per update, on the result only, default solid tone, bottom center, one at a time for 5 seconds. The button's loading state shows that an update started. |
+| Toast | my-you-eye `Toaster` | One per update, on the result only, default solid tone, bottom right (bottom center on a phone), one at a time for 5 seconds. An update that gets an error status reports "Could not update" and keeps the shown values. The button's loading state shows that an update started. |
 | Step path | Built with the first project leaf | Steps on a route-colored line, each with a short label. A project draws its own idea this way. |
 
 ## Leaves

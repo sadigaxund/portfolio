@@ -10,11 +10,18 @@ export interface PromptBridge {
   ask: ((request: HostPromptRequest) => Promise<boolean>) | undefined;
 }
 
+/** `fetch` that fails on an error status, so a 403 or 500 counts as a failed update and the shown values stay. */
+async function fetchOk(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+  const response = await fetch(input, init);
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response;
+}
+
 /** The host a visitor's browser runs. Scripts reach only the origins in markii/settings.json. */
 export function createBrowserHost(prompts: PromptBridge): MarkiiHost {
   return createMarkiiHost(
     createAdapter({
-      isolate: createBrowserHostIsolate({ netProvider: createFetchNetProvider({ allowedOrigins: SETTINGS.allowedOrigins }) }),
+      isolate: createBrowserHostIsolate({ netProvider: createFetchNetProvider({ allowedOrigins: SETTINGS.allowedOrigins, fetch: fetchOk }) }),
       memento: createLocalStorageMemento(),
       packs: BUNDLED,
       prompt: (request) => prompts.ask?.(request) ?? Promise.resolve(false),

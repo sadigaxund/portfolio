@@ -43,7 +43,7 @@ function ScriptedNote({ text, documentKey, routes, remote, bakedStale, builtLabe
 /** A note with scripts. It renders on the server, then refreshes its values in the visitor's browser on request. */
 export default function NoteIsland(props: IslandProps) {
   return (
-    <Toaster placement="bottom-center" mobilePlacement="bottom-center" limit={1} duration={5000}>
+    <Toaster mobilePlacement="bottom-center" limit={1} duration={5000}>
       <ScriptedNote {...props} />
     </Toaster>
   );
