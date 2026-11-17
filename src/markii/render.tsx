@@ -1,31 +1,26 @@
-import type { ReactElement } from "react";
+import { Fragment, type ReactElement } from "react";
 import { extractScripts, parse } from "@markii/core";
 import { renderMarkNode, type Registry } from "@markii/react";
 import type { ValueStore } from "@markii/runtime";
 import { CodeBlock } from "my-you-eye";
 import type { RemoteNote } from "../notes/remote";
 import { makeRemoteResolvers, makeResolveHref } from "./links";
+import { segmentNote } from "./segments";
 
 /** True when the note holds a script fence, so only those notes ship markii's browser code. */
 export function hasScripts(text: string): boolean {
   return extractScripts(parse(text)).length > 0;
 }
 
-export interface NoteParts {
-  /** The first heading alone, or nothing when the note has none. */
-  head: ReactElement | undefined;
-  body: ReactElement;
-}
-
-/** Renders a note in two parts, so the Run button can sit directly under the first heading. */
-export function renderNoteParts(
+/** Renders a note's blocks with markii, and its detail lines as `role-detail` paragraphs. */
+export function renderNote(
   text: string,
   documentKey: string,
   routes: Readonly<Record<string, string>>,
   registry: Registry,
   store?: ValueStore,
   remote?: RemoteNote,
-): NoteParts {
+): ReactElement {
   const root = parse(text);
   const away = remote === undefined ? undefined : makeRemoteResolvers(remote);
   const options = {
@@ -33,8 +28,19 @@ export function renderNoteParts(
     ...(away && { resolveImageSrc: away.image }),
     renderCode: ({ lang, code }: { lang: string | undefined; code: string }) => <CodeBlock code={code} language={lang} />,
   };
-  const at = root.children.findIndex((node) => node.type === "heading");
-  const render = (children: typeof root.children) => renderMarkNode({ ...root, children }, registry, store, undefined, options);
-  if (at === -1) return { head: undefined, body: render(root.children) };
-  return { head: render(root.children.slice(0, at + 1)), body: render(root.children.slice(at + 1)) };
+  const render = (children: unknown[]) =>
+    renderMarkNode({ ...root, children: children as typeof root.children }, registry, store, undefined, options);
+  return (
+    <>
+      {segmentNote(root.children).map((segment, index) =>
+        segment.kind === "detail" ? (
+          <p key={index} className="note-detail">
+            {render(segment.nodes)}
+          </p>
+        ) : (
+          <Fragment key={index}>{render(segment.nodes)}</Fragment>
+        ),
+      )}
+    </>
+  );
 }

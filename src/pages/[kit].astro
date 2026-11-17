@@ -2,7 +2,6 @@
 import { Link } from "my-you-eye";
 import "../layouts/styles";
 import Hero from "../discovery/Hero.astro";
-import Timeline from "../ui/Timeline.astro";
 
 // Returning no paths keeps this page out of a production build.
 export function getStaticPaths() {
@@ -65,6 +64,8 @@ const swatch = (name: string) => `background: var(--color-${name}); border: 1px 
         <p class="role-name">role-name</p>
         <p class="role-heading">role-heading</p>
         <p class="role-item">role-item</p>
+        <p class="role-subitem">role-subitem</p>
+        <p class="role-lead">role-lead. {SENTENCE}</p>
         <p class="role-body">role-body. {SENTENCE} Cut triage to <span class="role-result">role-result</span>.</p>
         <p class="role-detail">role-detail</p>
       </section>
@@ -82,29 +83,13 @@ const swatch = (name: string) => `background: var(--color-${name}); border: 1px 
         <Hero name="PLACEHOLDER name" />
       </section>
       <section>
-        <h2 class="role-item">Timeline entry</h2>
-        <Timeline
-          entries={[
-            {
-              when: "PLACEHOLDER dates",
-              title: "PLACEHOLDER employer",
-              role: "PLACEHOLDER role",
-              results: [{ before: "Cut a thing to ", result: "a measured result", after: "." }, { before: LONG_WORD }],
-              stack: "PLACEHOLDER stack",
-            },
-            { when: "PLACEHOLDER dates", title: LONG_WORD },
-          ]}
-        />
-        <p class="role-detail">With no entries:</p>
-        <Timeline entries={[]} />
-      </section>
-      <section>
         <h2 class="role-item">Roles placed by the line</h2>
         <p class="role-body">Signpost, stop, and Back link take their position from the line, so they show on real pages.</p>
         <ul>
           <li><a href="/">Signposts on the landing page</a></li>
           <li><a href="/professional">Stops on a section</a></li>
-          <li><a href="/professional/career">Back link on a leaf</a></li>
+          <li><a href="/professional/career">Back link, leaf frame, and leaf foot on a leaf</a></li>
+          <li><a href="/projects-blog/projects/git-resume">Note bar and grant dialog on a note with scripts</a></li>
         </ul>
       </section>
     </main>

@@ -1,17 +1,9 @@
-/* A rendered note takes its text roles from roles.css. This file only spaces the blocks. */
-/* One centered column, about 72 characters, shared by prose and components. */
-.note {
-  max-width: 46rem;
-  margin-inline: auto;
-}
-
-.note :is(p, li) {
-  max-width: none;
-}
-
-.note ul {
+/* A rendered note takes its text roles from roles.css. Prose keeps the measure, and components use the whole column. */
+.note :is(ul, ol) {
+  max-width: var(--measure);
   margin-top: 0.5rem;
   padding-inline-start: 1.25rem;
+  font-size: var(--text-body);
   list-style: disc;
 }
 
@@ -19,6 +11,6 @@
   margin-top: 3rem;
 }
 
-.note-run {
-  margin-top: 1rem;
+.note .note-detail em {
+  font-style: normal;
 }

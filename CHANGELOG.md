@@ -4,6 +4,22 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ## [Unreleased]
 
+### Changed
+
+- Text is larger and grows with the window, and running text keeps to about 70 characters a line.
+- Leaf pages draw a blue thread down the left with a stop at each section, and on wide screens section titles sit beside the thread.
+- Career, Education, and Certifications show role and date lines as quieter detail text.
+- Each leaf ends with a link to the next page in its section.
+- Notes with live values end in a bar that says how old the values are, with a "Refresh values" button and a Markii credit.
+- Refreshing asks before contacting GitHub in a plain dialog, and a short message reports the result.
+- Section pages show their summary in a larger lead size.
+- Pages with live values load the script runner only when a visitor refreshes, which saves about 300 KB on a first visit.
+
+### Fixed
+
+- Dark mode now colors buttons, toasts, and dialogs from the site palette.
+- Faint text in markii components meets the 4.5:1 contrast minimum in both color schemes.
+
 ## [2026.11.4] - 2026-11-17
 
 Note spacing and the site icon.

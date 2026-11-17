@@ -15,12 +15,37 @@
   --color-doc-raised: #ffffff;
   --color-doc-surface: #f1f3f6;
   --color-doc-surface-strong: #e5e9ef;
-  --color-doc-faint: #8a92a0;
+  --color-doc-faint: #6a7280;
   --color-doc-info: #1d3fd8;
   --color-doc-success: #1f7a4d;
   --color-doc-warning: #9a5b00;
   --color-doc-danger: #b42318;
   --color-doc-limit: #6d44c9;
+  /* my-you-eye's surface and status colors, drawn from the site palette so they follow the color scheme. */
+  --color-secondary: var(--color-doc-surface-strong);
+  --color-secondary-fg: var(--color-fg);
+  --color-surface: var(--color-doc-raised);
+  --color-surface-elevated: var(--color-doc-raised);
+  --color-surface-hover: var(--color-doc-surface);
+  --color-surface-active: var(--color-doc-surface-strong);
+  --color-ring: var(--color-route);
+  --color-success: var(--color-doc-success);
+  --color-success-fg: var(--color-bg);
+  --color-danger: var(--color-doc-danger);
+  --color-danger-fg: var(--color-bg);
+  --color-warning: var(--color-doc-warning);
+  --color-warning-fg: var(--color-bg);
+  /* Text sizes grow from a 360px to a 1920px viewport. The root size stays 16px, so the line's rem geometry never moves. */
+  --text-name: clamp(3rem, 2.4rem + 3vw, 4.5rem);
+  --text-heading: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+  --text-item: clamp(1.5rem, 1.41rem + 0.39vw, 1.875rem);
+  --text-subitem: clamp(1.1875rem, 1.16rem + 0.13vw, 1.3125rem);
+  --text-lead: clamp(1.1875rem, 1.14rem + 0.19vw, 1.375rem);
+  --text-body: clamp(1.0625rem, 1.034rem + 0.128vw, 1.1875rem);
+  --text-detail: clamp(0.9375rem, 0.92rem + 0.08vw, 1rem);
+  /* Running text stops at about 70 characters. */
+  --measure: 55ch;
+  --target-min: 2.75rem;
   --line-trunk-top: 20rem;
   --hero-width: 72rem;
   --hero-top: 3.5rem;
@@ -41,7 +66,7 @@
     --color-doc-raised: #181d27;
     --color-doc-surface: #171c26;
     --color-doc-surface-strong: #222a37;
-    --color-doc-faint: #6b7484;
+    --color-doc-faint: #7f8898;
     --color-doc-info: #8199ff;
     --color-doc-success: #5cc596;
     --color-doc-warning: #f0b44c;

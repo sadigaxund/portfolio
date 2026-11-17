@@ -33,7 +33,7 @@ const builtLabel = new Intl.DateTimeFormat("en", { month: "short", year: "numeri
 
 {
   scripted ? (
-    <NoteIsland client:load text={text} documentKey={documentKey} routes={routes} remote={remote} bakedStale={baked} builtLabel={builtLabel} />
+    <NoteIsland client:idle text={text} documentKey={documentKey} routes={routes} remote={remote} bakedStale={baked} builtLabel={builtLabel} />
   ) : (
     <NoteBody text={text} documentKey={documentKey} routes={routes} remote={remote} />
   )

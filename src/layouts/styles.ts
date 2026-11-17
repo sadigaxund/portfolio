@@ -11,5 +11,5 @@ import "@markii/react/doc.css";
 import "../styles/markii.css";
 import "../styles/tokens.css";
 import "../styles/roles.css";
-import "../styles/timeline.css";
 import "../styles/note.css";
+import "../styles/leaf.css";

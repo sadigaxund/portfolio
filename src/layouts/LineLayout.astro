@@ -5,6 +5,7 @@ import "./styles";
 import Hero from "../discovery/Hero.astro";
 import LineStage from "../line/LineStage";
 import Note from "../markii/Note.astro";
+import LeafFoot from "../ui/LeafFoot.astro";
 import { previewOf, summaryOf } from "../sections/previews";
 import { isLeaf, type TreeNode } from "../tree/walk";
 
@@ -32,7 +33,12 @@ const leaf = isLeaf(node);
     {
       leaf ? (
         <main class="leaf-surface">
-          <Note node={node} />
+          <article class="leaf-frame">
+            <div class="leaf-thread">
+              <Note node={node} />
+            </div>
+            <LeafFoot node={node} />
+          </article>
         </main>
       ) : (
         <main class={atRoot ? "line-section line-landing" : "line-section"}>
@@ -41,7 +47,7 @@ const leaf = isLeaf(node);
           ) : (
             <div class="line-content">
               <h1 class="role-heading">{node.label}</h1>
-              {summaryOf(node) && <p class="role-body">{summaryOf(node)}</p>}
+              {summaryOf(node) && <p class="role-lead">{summaryOf(node)}</p>}
             </div>
           )}
           {!atRoot && (

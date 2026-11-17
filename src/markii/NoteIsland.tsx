@@ -1,15 +1,17 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Button } from "my-you-eye";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Toaster, useToast } from "my-you-eye";
 import { defaultRegistry } from "@markii/react/components";
 import type { Registry } from "@markii/react";
 import { createValueStore, type StoredValue } from "@markii/runtime";
-import type { RunTrigger } from "@markii/runtime";
-import { createBrowserHost, type PromptBridge } from "./browser";
+import type { PromptBridge } from "./browser";
 import { SETTINGS } from "./config";
-import { mergeArrivingValue } from "./merge";
-import { loadBundledRegistry } from "./registry";
-import { renderNoteParts } from "./render";
+import { GrantDialog } from "./GrantDialog";
+import { NoteBar } from "./NoteBar";
 import type { NoteProps } from "./NoteBody";
+import { loadBundledRegistry } from "./registry";
+import { renderNote } from "./render";
+import { runNotice } from "./runText";
+import { useNoteRun } from "./useNoteRun";
 
 export interface IslandProps extends NoteProps {
   /** The values the build computed, already stale. */
@@ -18,52 +20,37 @@ export interface IslandProps extends NoteProps {
   builtLabel: string;
 }
 
-/** A note with scripts. It renders on the server, then runs its scripts in the visitor's browser. */
-export default function NoteIsland({ text, documentKey, routes, remote, bakedStale, builtLabel }: IslandProps) {
+function ScriptedNote({ text, documentKey, routes, remote, bakedStale, builtLabel }: IslandProps) {
   const prompts = useMemo<PromptBridge>(() => ({ ask: undefined }), []);
-  const host = useMemo(() => createBrowserHost(prompts), [prompts]);
-  const [values, setValues] = useState<Record<string, StoredValue>>(bakedStale);
+  const { values, running, ranAt, runs, run } = useNoteRun(documentKey, text, bakedStale, prompts);
   const [registry, setRegistry] = useState<Registry>(defaultRegistry);
-  const [running, setRunning] = useState(false);
-  const [runs, setRuns] = useState(0);
-  const started = useRef(false);
-
-  const run = useCallback(
-    async (trigger: RunTrigger) => {
-      setRunning(true);
-      const outcome = await host.run({
-        documentKey,
-        text,
-        trigger,
-        onValue: (name, value) => setValues((current) => mergeArrivingValue(current, name, value)),
-      });
-      if (outcome.kind !== "ran") console.info(`Run of ${documentKey} ended: ${outcome.kind}`);
-      setRunning(false);
-      setRuns((count) => count + 1);
-    },
-    [host, documentKey, text],
-  );
+  const { toast } = useToast();
 
   useEffect(() => {
-    if (started.current) return;
-    started.current = true;
     void loadBundledRegistry(defaultRegistry, (line) => console.info(line)).then(setRegistry);
-    const remembered = host.lastRun(documentKey).values;
-    setValues((current) => ({ ...current, ...remembered }));
-    if (SETTINGS.runOnOpen) void run("auto");
-  }, [host, documentKey, run]);
+  }, []);
 
-  const { head, body } = renderNoteParts(text, documentKey, routes, registry, createValueStore(values), remote);
+  const refresh = useCallback(async () => {
+    const notice = runNotice(await run("manual"), builtLabel);
+    toast({ title: notice.title, variant: notice.variant, tone: "soft" });
+  }, [run, builtLabel, toast]);
+
   return (
-    <div className="note" data-mk-root="" data-hide-scripts={SETTINGS.hideScriptBlocks || undefined}>
-      {head}
-      <div className="note-run" data-runs={runs}>
-        <Button onClick={() => void run("manual")} disabled={running} aria-busy={running}>
-          Run
-        </Button>
-        <p className="role-detail">Values as of {builtLabel}</p>
+    <>
+      <div className="note" data-mk-root="" data-hide-scripts={SETTINGS.hideScriptBlocks || undefined}>
+        {renderNote(text, documentKey, routes, registry, createValueStore(values), remote)}
       </div>
-      {body}
-    </div>
+      <NoteBar ranAt={ranAt} builtLabel={builtLabel} running={running} runs={runs} onRefresh={() => void refresh()} />
+      <GrantDialog bridge={prompts} />
+    </>
+  );
+}
+
+/** A note with scripts. It renders on the server, then refreshes its values in the visitor's browser on request. */
+export default function NoteIsland(props: IslandProps) {
+  return (
+    <Toaster>
+      <ScriptedNote {...props} />
+    </Toaster>
   );
 }
