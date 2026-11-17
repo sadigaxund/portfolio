@@ -57,9 +57,9 @@ Each role has one implementation. A variant needs a row here first.
 | Stop | `.stop` in `src/ui/SectionBody.astro` | Title in `role-item` with a 44px target, then a preview in `role-detail`, at most 22rem wide and three lines, wrapped without orphans. A section previews its children's names, and a leaf's `preview` comes from `content/site.yaml`, where the build caps it at 90 characters so it is never cut off. A leaf's branch ends in an open ring, and a section's bends on down. Pointing at or focusing a stop draws its branch in the route color, and a leaf's ring fills. Text hangs directly off its branch, with no card. |
 | Leaf frame | `.leaf-frame` in `src/styles/leaf.css` | A static route-colored thread down the left. A filled stop marks the title, an open stop marks each `h2`, and the last stop is the leaf foot. Prose keeps the measure, and components use the whole 56rem column. From 72rem wide, `h2` hangs in a 13rem label column left of the thread. On a phone the thread sits where the line rests, 1.5rem from the edge, with a 1.25rem right gutter. |
 | Leaf foot | `src/ui/LeafFoot.astro` | "Next: <sibling>" in `role-item`, then Back in `role-detail`. The last leaf of a section shows Back only. |
-| Note bar | `src/markii/NoteBar.tsx` | Only on a note with a script fence, at its foot, between hairlines. The age of the values in `role-detail` ("Values as of Nov 2026", "Updated 10 minutes ago"), a secondary 48px "Refresh values" button, and the Markii credit. |
-| Grant dialog | `src/markii/GrantDialog.tsx`, from my-you-eye `Dialog` parts | Opens only after Refresh values. A plain title and sentence from the site, then markii's own question quoted unchanged, then markii's two labels at equal size. No danger styling. Closing it any way but Allow answers no. |
-| Toast | my-you-eye `Toaster` | One per refresh, on the result only, soft tone. The button's loading state shows that a refresh started. |
+| Note bar | `src/markii/NoteBar.tsx` | Only on a note with a script fence, at its foot, between hairlines. The age of the values in `role-detail` ("Updated Nov 2026", "Updated 10 minutes ago"), a secondary 48px "Update" button, and the Markii credit. |
+| Grant dialog | `src/markii/GrantDialog.tsx`, from my-you-eye `ConfirmDialog` | Opens only after Update. The title is "Update from <host>?", the body is markii's own sentence, and the buttons are markii's two labels. No danger styling. Closing it any way but Allow answers no. |
+| Toast | my-you-eye `Toaster` | One per update, on the result only, default solid tone, bottom center, one at a time for 5 seconds. The button's loading state shows that an update started. |
 | Step path | Built with the first project leaf | Steps on a route-colored line, each with a short label. A project draws its own idea this way. |
 
 ## Leaves
@@ -94,7 +94,7 @@ The line is the one authored motion. It lives in one world with one camera, and 
 | Back | The control that returns one level | Return, go up |
 | Values | What a note's scripts produce | Stats, figures, data |
 | Contact | The owner's links in the hero and the site foot | Get in touch, reach out |
-| Refresh values | The control that runs a note's scripts again | Run, update, reload |
+| Update | The control that runs a note's scripts again | Refresh, run, reload |
 | Start | The landing page, as Back names it | Home, top |
 
 ## Review

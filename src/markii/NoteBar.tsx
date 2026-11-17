@@ -41,7 +41,7 @@ export function NoteBar({ ranAt, builtLabel, running, runs, onRefresh }: NoteBar
         {lastRunText(ranAt, now, builtLabel)}
       </p>
       <Button className="note-bar-refresh" variant="secondary" size="lg" loading={running} disabled={!hydrated || running} onClick={onRefresh}>
-        Refresh values
+        Update
       </Button>
       <p className="role-detail note-bar-credit">
         Written in Markii. <Link href={MARKII_REPO}>Markii on GitHub</Link>

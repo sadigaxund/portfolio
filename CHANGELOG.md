@@ -6,6 +6,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Changed
 
+- The update control is now labeled Update, its messages say what data is shown, and the update question is one short sentence from Markii.
 - Pages below the start no longer show a Contact link at the top right, and only leaf pages end in the site foot with the contact links.
 - The refresh question now says "this page" where it said "this note", and images in remote notes load as they near the screen.
 
@@ -19,6 +20,7 @@ The design pass for leaves, contact, and the map.
 
 ### Changed
 
+- The update control is now labeled Update, its messages say what data is shown, and the update question is one short sentence from Markii.
 - Text is larger and grows with the window, and running text keeps to about 70 characters a line.
 - Leaf pages draw a blue thread down the left with a stop at each section, and on wide screens section titles sit beside the thread.
 - Career, Education, and Certifications show role and date lines as quieter detail text.
@@ -54,6 +56,7 @@ The Markii page and note layout.
 
 ### Changed
 
+- The update control is now labeled Update, its messages say what data is shown, and the update question is one short sentence from Markii.
 - The Markii page shows the Markii format tour, taken from the markii-vault repository at each build.
 - Notes sit in one centered column, and the script markers under live values are hidden.
 
@@ -77,6 +80,7 @@ Content checkpoint. Professional holds real entries, and leaf pages render their
 
 ### Changed
 
+- The update control is now labeled Update, its messages say what data is shown, and the update question is one short sentence from Markii.
 - New colors and type, including a dark look that follows the visitor's setting.
 - Every leaf page now shows its note from the content folder. Career reads as a plain list of roles instead of a timeline.
 - The landing hero spans the page in two columns.
