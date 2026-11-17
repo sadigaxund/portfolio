@@ -4,6 +4,7 @@ A small release pipeline for a resume written in LaTeX.
 
 ```lua {name=repo permissions=api.github.com}
 local r = net.fetch_json("https://api.github.com/repos/AS-FOSS/git-resume")
+if r.stargazers_count == nil then error(r.message or "GitHub returned no repository data") end
 return {
   stars = r.stargazers_count,
   language = r.language,

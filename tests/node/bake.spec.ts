@@ -53,8 +53,20 @@ test.describe("bakeNote", () => {
     expect(values.total.value).toBe(42);
   });
   test("a Lua error fails the build with the note path and script name", async () => {
-    const promise = bakeNote({ ...base, text: note("broken", 'error("boom")'), log: () => {} });
+    const promise = bakeNote({ ...base, text: note("broken", 'error("boom")'), log: () => {}, retryDelaysMs: [], strict: true });
     await expect(promise).rejects.toThrow(/content\/x\/note\.mk\.md script "broken" script-error/);
+  });
+  test("a strict bake tries again after each delay, then fails", async () => {
+    const lines: string[] = [];
+    const promise = bakeNote({ ...base, text: note("broken", 'error("boom")'), log: (line) => lines.push(line), retryDelaysMs: [1, 1], strict: true });
+    await expect(promise).rejects.toThrow(/script "broken" script-error/);
+    expect(lines.filter((line) => line.includes("trying again"))).toHaveLength(2);
+  });
+  test("a local bake logs a failure and returns no values", async () => {
+    const lines: string[] = [];
+    const values = await bakeNote({ ...base, text: note("broken", 'error("boom")'), log: (line) => lines.push(line), retryDelaysMs: [], strict: false });
+    expect(values).toEqual({});
+    expect(lines.at(-1)).toContain("empty state in this local build");
   });
   test("a denied network call logs one line and leaves the value empty", async () => {
     const lines: string[] = [];
