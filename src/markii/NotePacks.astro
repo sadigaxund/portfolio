@@ -1,0 +1,12 @@
+---
+import { PACKS } from "./packRegistry";
+
+interface Props {
+  /** Pack namespaces the note names. Only their stylesheets are emitted. */
+  names: string[];
+}
+
+const { names } = Astro.props;
+---
+
+{names.map((name) => PACKS.styles[name] && <style data-pack={name} set:html={PACKS.styles[name]} />)}

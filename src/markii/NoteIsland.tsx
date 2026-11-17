@@ -1,14 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { Toaster, useToast } from "my-you-eye";
 import { defaultRegistry } from "@markii/react/components";
-import type { Registry } from "@markii/react";
 import { createValueStore, type StoredValue } from "@markii/runtime";
 import type { PromptBridge } from "./browser";
 import { SETTINGS } from "./config";
 import { GrantDialog } from "./GrantDialog";
 import { NoteBar } from "./NoteBar";
 import type { NoteProps } from "./NoteBody";
-import { loadBundledRegistry } from "./registry";
 import { renderNote } from "./render";
 import { runNotice } from "./runText";
 import { useNoteRun } from "./useNoteRun";
@@ -20,15 +18,10 @@ export interface IslandProps extends NoteProps {
   builtLabel: string;
 }
 
-function ScriptedNote({ text, documentKey, routes, remote, bakedStale, builtLabel }: IslandProps) {
+function ScriptedNote({ text, documentKey, routes, remote, bakedStale, builtLabel, registry = defaultRegistry }: IslandProps) {
   const prompts = useMemo<PromptBridge>(() => ({ ask: undefined }), []);
   const { values, running, ranAt, runs, run } = useNoteRun(documentKey, text, bakedStale, prompts);
-  const [registry, setRegistry] = useState<Registry>(defaultRegistry);
   const { toast } = useToast();
-
-  useEffect(() => {
-    void loadBundledRegistry(defaultRegistry, (line) => console.info(line)).then(setRegistry);
-  }, []);
 
   const refresh = useCallback(async () => {
     const notice = runNotice(await run("manual"), builtLabel);

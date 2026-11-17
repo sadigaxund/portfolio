@@ -1,0 +1,79 @@
+{
+  "name": "nav",
+  "version": "1.0.0",
+  "engine": "react",
+  "components": {
+    "index": {
+      "source": "./index.tsx",
+      "description": "A command-style index frame: an optional filter field over grouped and loose nav_link rows.",
+      "kind": "container",
+      "attributes": [
+        {
+          "name": "search",
+          "description": "Shows the filter field, using this text as its placeholder. Written bare (no value), the field appears with the default placeholder \"Search\". Left out entirely, no field is shown.",
+          "default": "Search"
+        },
+        {
+          "name": "hint",
+          "description": "A key-cap chip shown at the end of the search field. A label only; this pack binds no keyboard shortcut."
+        }
+      ]
+    },
+    "group": {
+      "source": "./group.tsx",
+      "description": "A card grouping nav_link rows under a heading with a tone-tinted icon tile.",
+      "kind": "container",
+      "attributes": [
+        {
+          "name": "title",
+          "description": "The heading shown at the top of the card."
+        },
+        {
+          "name": "desc",
+          "description": "A muted line under the title."
+        },
+        {
+          "name": "icon",
+          "description": "The glyph shown in the heading's icon tile.",
+          "values": ["home", "doc", "book", "folder", "grid", "chart", "check", "star", "arrow", "none"],
+          "default": "none"
+        },
+        {
+          "name": "tone",
+          "description": "The color tint applied to the icon tile.",
+          "values": ["accent", "info", "success", "warning", "danger", "neutral"],
+          "default": "accent"
+        }
+      ]
+    },
+    "link": {
+      "source": "./link.tsx",
+      "description": "One row: an icon, a label, an optional description, an optional key-cap hint, and an optional link.",
+      "kind": "leaf",
+      "attributes": [
+        {
+          "name": "label",
+          "description": "The row's label, used when the directive has no bracket content."
+        },
+        {
+          "name": "desc",
+          "description": "A muted description shown under the label."
+        },
+        {
+          "name": "href",
+          "description": "The row's destination. Only http(s), mailto, and relative/fragment addresses are accepted; anything else is left out and the row renders without a link."
+        },
+        {
+          "name": "key",
+          "description": "A key-cap hint shown at the end of the row. A label only; this pack binds no keyboard shortcut."
+        },
+        {
+          "name": "icon",
+          "description": "The glyph shown at the start of the row.",
+          "values": ["home", "doc", "book", "folder", "grid", "chart", "check", "star", "arrow", "none"],
+          "default": "none"
+        }
+      ]
+    }
+  }
+}
