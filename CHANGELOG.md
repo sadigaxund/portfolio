@@ -6,6 +6,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Changed
 
+- The role line reads Software, DevOps, and Data Engineer.
 - Back to the landing page reads Back to Start, and update messages appear at the bottom right.
 - Project pages list their links as one group of rows, each with its address, and show light stills in place of the 8 MB demo GIFs, with a link to watch the demo.
 - Every leaf page sits in one frame: a header bar with Back and the update control, the note in a centered column, Next and Back boxes, and one foot with the contact links and a Powered by Markii badge.
