@@ -6,7 +6,7 @@ test("a leaf renders its note on the surface", async ({ page }) => {
   await expect(page.locator("h1")).toHaveText("Career");
   await expect(page.locator(".leaf-surface .note h2")).toHaveCount(3);
   await expect(page.locator(".leaf-surface .note strong")).toHaveCount(0);
-  await page.getByRole("link", { name: "Back" }).click();
+  await page.locator("[data-back]").getByRole("link").click();
   await expect(page.locator("h1")).toHaveText("Professional");
 });
 

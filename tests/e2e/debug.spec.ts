@@ -41,7 +41,7 @@ test("?debug=line shows the overlay, and it survives a route change", async ({ p
   expect(first.rafFrames).toBeGreaterThan(20);
   expect(first.browser).toMatch(/Chrome/);
 
-  await page.getByRole("link", { name: "Back" }).click();
+  await page.locator("[data-back]").getByRole("link").click();
   await expect(page.locator("h1")).toHaveText("Sadig Akhund");
   await expect.poll(async () => (await result(page)).to).toBe(0);
   await expect(overlay(page)).toHaveCount(1);
