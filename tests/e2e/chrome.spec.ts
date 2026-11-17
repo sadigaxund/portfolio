@@ -16,7 +16,7 @@ test("the landing page reaches the contact links before the roads", async ({ pag
 
 test("a page below the start offers skip and then Back first", async ({ page }) => {
   await page.goto("/professional");
-  expect(await tabOrder(page, 2)).toEqual(["Skip to content", "Back to start"]);
+  expect(await tabOrder(page, 2)).toEqual(["Skip to content", "Back to Start"]);
 });
 
 test("only leaves have a site foot", async ({ page }) => {
@@ -40,5 +40,13 @@ test("after a walk, focus starts at the new page's heading", async ({ page }) =>
 
 test("Back sits in a navigation landmark", async ({ page }) => {
   await page.goto("/professional");
-  await expect(page.getByRole("navigation", { name: "Back" }).getByRole("link")).toHaveText("Back to start");
+  await expect(page.getByRole("navigation", { name: "Back" }).getByRole("link")).toHaveText("Back to Start");
+});
+
+test("a short leaf keeps its foot in the window", async ({ page }) => {
+  await page.goto("/personal/instagram");
+  const foot = await page.locator("footer.site-foot").boundingBox();
+  const height = page.viewportSize()!.height;
+  expect(foot!.y + foot!.height).toBeLessThanOrEqual(height + 1);
+  expect(foot!.y + foot!.height).toBeGreaterThanOrEqual(height - 1);
 });

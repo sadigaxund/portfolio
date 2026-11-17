@@ -6,6 +6,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Changed
 
+- Back to the landing page reads Back to Start, and update messages appear at the bottom right.
 - Project pages list their links as one group of rows, each with its address, and show light stills in place of the 8 MB demo GIFs, with a link to watch the demo.
 - Every leaf page sits in one frame: a header bar with Back and the update control, the note in a centered column, Next and Back boxes, and one foot with the contact links and a Powered by Markii badge.
 - The update control is now labeled Update, its messages say what data is shown, and the update question is one short sentence from Markii.
@@ -14,6 +15,8 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Fixed
 
+- An update that GitHub refuses, such as for a rate limit, now says Could not update and keeps the shown values, where it said Updated and blanked them.
+- On a short leaf page the foot sits at the bottom of the window instead of below it.
 - On a tall window, the site foot no longer shows mid-screen during a walk.
 
 ## [2026.11.5] - 2026-11-17

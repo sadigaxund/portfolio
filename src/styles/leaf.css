@@ -8,9 +8,16 @@
   --leaf-edge: 1rem;
 }
 
+/* A leaf fills at least the window, and a short note keeps its foot at the window's bottom edge. */
+[data-view="leaf"] body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .leaf-surface {
   position: relative;
-  min-height: 100vh;
+  flex: 1 0 auto;
   background: var(--color-bg);
 }
 
