@@ -14,7 +14,8 @@
     "guard:tree": "node scripts/tree-guard.mjs",
     "validate": "npm run check && npm run lint && npm run guard:shape && npm run guard:design && npm run guard:tree && npm run build",
     "test:e2e": "playwright test",
-    "placeholders": "node scripts/placeholders.mjs"
+    "placeholders": "node scripts/placeholders.mjs",
+    "test:base": "playwright test -c playwright.base.config.ts"
   },
   "dependencies": {
     "@astrojs/react": "^7.1.0",
