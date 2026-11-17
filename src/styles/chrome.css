@@ -1,4 +1,4 @@
-/* Site chrome below the root: the skip link, the Contact link opposite Back, and the site foot. DESIGN.md, "Component roles". */
+/* Site chrome below the root: the skip link and the site foot. DESIGN.md, "Component roles". */
 .contact-links {
   display: flex;
   flex-wrap: wrap;
@@ -35,30 +35,15 @@ main h1[tabindex="-1"]:focus {
   transform: none;
 }
 
-/* Contact keeps one fixed spot opposite Back on every page below the root. */
-.site-contact {
-  position: fixed;
-  z-index: 2;
-  top: 0.25rem;
-  right: var(--line-back-left);
-  border-radius: var(--radius-ui);
-  background: var(--color-bg);
-}
-
-.site-contact a {
-  display: block;
-  padding: 0.75rem;
-}
-
-[data-line-reveal] .site-contact {
-  visibility: hidden;
-}
-
-/* The foot covers the line, so the line ends where the page does. */
+/* The foot sits on leaves only and covers the line, so the line ends where the page does. */
 .site-foot {
   position: relative;
   border-top: 1px solid var(--color-border);
   background: var(--color-bg);
+}
+
+[data-line-reveal] .site-foot {
+  visibility: hidden;
 }
 
 .site-foot-inner {

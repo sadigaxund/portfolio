@@ -57,11 +57,8 @@ const canonical = Astro.site ? new URL(node.url, Astro.site).href : undefined;
         <>
           <a class="skip-link" href="#content">Skip to content</a>
           <LineStage client:load transition:persist="line" transition:persist-props initialPath={node.url} />
-          <header class="site-contact">
-            <a href="#contact">Contact</a>
-          </header>
           {leaf ? <LeafBody node={node} /> : <SectionBody node={node} />}
-          <SiteFoot />
+          {leaf && <SiteFoot />}
         </>
       )
     }

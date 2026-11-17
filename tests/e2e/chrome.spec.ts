@@ -14,22 +14,17 @@ test("the landing page reaches the contact links before the roads", async ({ pag
   expect(await tabOrder(page, 5)).toEqual(["Resume", "Email", "GitHub", "LinkedIn", "Personal"]);
 });
 
-test("a page below the start offers skip, Back, and Contact first", async ({ page }) => {
+test("a page below the start offers skip and then Back first", async ({ page }) => {
   await page.goto("/professional");
-  expect(await tabOrder(page, 3)).toEqual(["Skip to content", "Back to start", "Contact"]);
+  expect(await tabOrder(page, 2)).toEqual(["Skip to content", "Back to start"]);
 });
 
-test("Contact leads to the site foot's links", async ({ page }) => {
-  await page.goto("/professional/career");
-  await page.locator(".site-contact a").click();
-  await expect(page).toHaveURL(/#contact$/);
-  await expect(page.locator("#contact").getByRole("link", { name: "Email" })).toBeInViewport();
-});
-
-test("the start page has no site foot, and every other page has one", async ({ page }) => {
-  await page.goto("/");
-  await expect(page.locator(".site-foot")).toHaveCount(0);
-  for (const path of ["/professional", "/professional/career", "/projects-blog/projects/git-resume"]) {
+test("only leaves have a site foot", async ({ page }) => {
+  for (const path of ["/", "/professional"]) {
+    await page.goto(path);
+    await expect(page.locator(".site-foot")).toHaveCount(0);
+  }
+  for (const path of ["/professional/career", "/projects-blog/projects/git-resume"]) {
     await page.goto(path);
     await expect(page.locator("footer.site-foot .contact-links a")).toHaveCount(4);
   }

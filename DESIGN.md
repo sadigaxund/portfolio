@@ -50,8 +50,7 @@ Each role has one implementation. A variant needs a row here first.
 | Text link | `Link` from `my-you-eye`, or an anchor in `.hero-links`, `.line-option`, `.line-back`, `.stop` | Always underlined. |
 | Back link | `.line-back` | Names its destination, as in "Back to Professional". The first control after the skip link on every page below the root, inside a `nav` landmark. |
 | Skip link | `.skip-link` in `src/styles/chrome.css` | "Skip to content", first on every page below the root, shown only while focused. |
-| Contact link | `.site-contact` | "Contact", fixed opposite Back on every page below the root, inside the page's `header`. It jumps to the site foot. |
-| Site foot | `src/discovery/SiteFoot.astro` | On every page below the root, below a hairline: the owner's name and role in `role-detail`, then the same contact links as the hero. It covers the line, so the line ends where the page does. |
+| Site foot | `src/discovery/SiteFoot.astro` | On every leaf page, below a hairline: the owner's name and role in `role-detail`, then the same contact links as the hero. It covers the line, so the line ends where the page does. |
 | Contact links | `src/discovery/ContactLinks.astro` | The profile links from `content/profile.yaml`, in the hero and the site foot. Each is at least 44px in both directions. |
 | Hero | `src/discovery/Hero.astro` | Name and role line on the left, summary and contact links on the right. One column on a phone. Appears only on the landing page. |
 | Signpost | `.line-option` in `src/line/LineStage.tsx` | Road name in `role-item`, with its children's names in `role-detail`. On a phone three roads share about 108px each, so the name uses the body face at 1rem, weight 500, which keeps "Professional" on one line. |
@@ -94,7 +93,7 @@ The line is the one authored motion. It lives in one world with one camera, and 
 | Education | Degrees | Academics, studies |
 | Back | The control that returns one level | Return, go up |
 | Values | What a note's scripts produce | Stats, figures, data |
-| Contact | The owner's links in the site foot, and the link that jumps there | Get in touch, reach out |
+| Contact | The owner's links in the hero and the site foot | Get in touch, reach out |
 | Refresh values | The control that runs a note's scripts again | Run, update, reload |
 | Start | The landing page, as Back names it | Home, top |
 

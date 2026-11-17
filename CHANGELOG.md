@@ -4,6 +4,14 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ## [Unreleased]
 
+### Changed
+
+- Pages below the start no longer show a Contact link at the top right, and only leaf pages end in the site foot with the contact links.
+
+### Fixed
+
+- On a tall window, the site foot no longer shows mid-screen during a walk.
+
 ## [2026.11.5] - 2026-11-17
 
 The design pass for leaves, contact, and the map.
