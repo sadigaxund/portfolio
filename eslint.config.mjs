@@ -3,7 +3,7 @@ import tseslint from "typescript-eslint";
 import astro from "eslint-plugin-astro";
 
 export default tseslint.config(
-  { ignores: ["dist/", ".astro/", "node_modules/", "test-results/", "playwright-report/", "markii/packs/"] },
+  { ignores: ["dist/", "dist-base/", ".astro/", "node_modules/", "test-results/", "playwright-report/", "markii/packs/"] },
   js.configs.recommended,
   tseslint.configs.recommended,
   astro.configs.recommended,

@@ -1,18 +1,31 @@
 import { expect, test } from "@playwright/test";
 
 const BASE = "/portfolio";
-const PAGES = ["/", "/professional/", "/professional/career/", "/projects-blog/projects/git-resume/"];
+const PAGES = ["/", "/professional", "/professional/career", "/projects-blog/projects/mandible"];
 
 for (const path of PAGES) {
-  test(`${path} loads every file it asks the site for under the base path`, async ({ page }) => {
-    const missing: string[] = [];
-    page.on("response", (res) => {
-      const url = new URL(res.url());
-      if (url.host === new URL(page.url() || "http://localhost").host && res.status() >= 400) missing.push(`${res.status()} ${url.pathname}`);
-    });
+  test(`${path} serves every file it references under the base path`, async ({ page }) => {
     await page.goto(BASE + path);
     await page.waitForLoadState("networkidle");
-    expect(missing).toEqual([]);
+    const urls = await page.evaluate(() => {
+      const found = new Set<string>();
+      const add = (raw: string | null) => {
+        if (!raw) return;
+        const url = new URL(raw, document.baseURI);
+        if (url.origin === location.origin) found.add(url.pathname + url.search);
+      };
+      document.querySelectorAll("link[href]").forEach((el) => add(el.getAttribute("href")));
+      document.querySelectorAll("script[src], img[src]").forEach((el) => add(el.getAttribute("src")));
+      document.querySelectorAll("source[srcset]").forEach((el) => {
+        (el.getAttribute("srcset") ?? "").split(",").forEach((part) => add(part.trim().split(/\s+/)[0] ?? null));
+      });
+      return [...found];
+    });
+    expect(urls.length, "no same-origin files found").toBeGreaterThan(0);
+    for (const url of urls) {
+      const res = await page.request.get(url);
+      expect(res.status(), `GET ${url} on ${path}`).toBe(200);
+    }
   });
 }
 
@@ -21,7 +34,7 @@ test("every link inside the site stays under the base path", async ({ page }) =>
     await page.goto(BASE + path);
     const outside = await page.evaluate(
       (base) =>
-        [...document.querySelectorAll<HTMLAnchorElement>("a[href^='/']")].map((a) => a.getAttribute("href") ?? "").filter((href) => !href.startsWith(base)),
+        [...document.querySelectorAll<HTMLAnchorElement>("a[href^='/']")].map((a) => a.getAttribute("href") ?? "").filter((href) => !href.startsWith(base + "/")),
       BASE,
     );
     expect(outside, path).toEqual([]);
