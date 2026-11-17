@@ -32,7 +32,7 @@ function ScriptedNote({ text, documentKey, routes, remote, bakedStale, builtLabe
 
   const refresh = useCallback(async () => {
     const notice = runNotice(await run("manual"), builtLabel);
-    toast({ title: notice.title, variant: notice.variant, tone: "soft" });
+    toast({ title: notice.title, variant: notice.variant });
   }, [run, builtLabel, toast]);
 
   return (
@@ -49,7 +49,7 @@ function ScriptedNote({ text, documentKey, routes, remote, bakedStale, builtLabe
 /** A note with scripts. It renders on the server, then refreshes its values in the visitor's browser on request. */
 export default function NoteIsland(props: IslandProps) {
   return (
-    <Toaster>
+    <Toaster placement="bottom-center" mobilePlacement="bottom-center" limit={1} duration={5000}>
       <ScriptedNote {...props} />
     </Toaster>
   );

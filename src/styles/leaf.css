@@ -142,14 +142,6 @@
   }
 }
 
-/* Markii's own question, quoted in the grant dialog. */
-.grant-quote {
-  margin: 0;
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius-ui);
-  background: var(--color-doc-surface-strong);
-}
-
 /* Wide screens: section headings hang in a label column left of the thread, level with their first block. */
 @media (min-width: 72rem) {
   :root {

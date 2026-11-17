@@ -44,14 +44,14 @@ test("a note with scripts carries the build's values with JavaScript off", async
   await page.goto(SCRIPTED);
   // The build ran the note, so the value is in the HTML and reads stale.
   await expect(page.locator(TOTAL).first()).toHaveClass(/mk-value--stale/);
-  await expect(page.locator(".note-bar")).toContainText(/Values as of [A-Z][a-z]{2} \d{4}/);
+  await expect(page.locator(".note-bar")).toContainText(/Updated [A-Z][a-z]{2} \d{4}/);
   await context.close();
 });
 
 test("a first visit loads no host and keeps the build's values", async ({ page }) => {
   const scripts = collectScripts(page);
   await page.goto(SCRIPTED);
-  await expect(page.getByRole("button", { name: "Refresh values" })).toBeEnabled();
+  await expect(page.getByRole("button", { name: "Update" })).toBeEnabled();
   await page.waitForLoadState("networkidle");
   expect(scripts.filter((url) => HOST_CODE.test(url))).toEqual([]);
   await expect(page.locator(".note-bar")).toHaveAttribute("data-runs", "0");
@@ -71,21 +71,22 @@ test("the note bar follows the note and comes before the leaf foot", async ({ pa
 test("refreshing asks with markii's own words, and a no keeps the values", async ({ page }) => {
   await page.goto(SCRIPTED);
   const before = await page.locator(TOTAL).first().textContent();
-  await page.getByRole("button", { name: "Refresh values" }).click();
+  await page.getByRole("button", { name: "Update" }).click();
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
-  await expect(dialog.locator(".grant-quote")).toHaveText(/^This page's scripts can send data to api\.github\.com\./);
+  await expect(dialog.getByRole("heading")).toHaveText("Update from api.github.com?");
+  await expect(dialog.getByText(/^This page's scripts can send data to api\.github\.com\./)).toBeVisible();
   await dialog.getByRole("button", { name: "Don't allow" }).click();
   await expect(dialog).toHaveCount(0);
   await expect(page.locator(".note-bar")).toHaveAttribute("data-runs", "1", { timeout: 15000 });
-  await expect(page.getByText(/^Not allowed\. Values stay as of [A-Z][a-z]{2} \d{4}\.$/)).toBeVisible();
+  await expect(page.getByText(/^Not allowed\. Showing data from [A-Z][a-z]{2} \d{4}\.$/)).toBeVisible();
   await expect(page.locator(TOTAL).first()).toHaveText(before ?? "");
   await expect(page.locator(TOTAL).first()).toHaveClass(/mk-value--stale/);
 });
 
 test("after a refresh, opening the note runs it without a prompt", async ({ page }) => {
   await page.goto(SCRIPTED);
-  await page.getByRole("button", { name: "Refresh values" }).click();
+  await page.getByRole("button", { name: "Update" }).click();
   await page.getByRole("dialog").getByRole("button", { name: "Don't allow" }).click();
   await expect(page.locator(".note-bar")).toHaveAttribute("data-runs", "1", { timeout: 15000 });
   await page.reload();

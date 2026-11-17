@@ -8,7 +8,7 @@ const NOW = Date.UTC(2026, 10, 17, 12, 0, 0);
 
 test.describe("lastRunText", () => {
   test("names the build month until this browser refreshes", () => {
-    expect(lastRunText(undefined, NOW, "Nov 2026")).toBe("Values as of Nov 2026");
+    expect(lastRunText(undefined, NOW, "Nov 2026")).toBe("Updated Nov 2026");
   });
   test("words the age of a refresh", () => {
     expect(lastRunText(NOW - 20_000, NOW, "Nov 2026")).toBe("Updated just now");
@@ -23,12 +23,12 @@ const ran = (fields: Partial<Extract<RunOutcome, { kind: "ran" }>>): RunOutcome 
 
 test.describe("runNotice", () => {
   test("reports fresh values", () => {
-    expect(runNotice(ran({ freshCount: 1 }), "Nov 2026")).toEqual({ title: "Updated 1 value.", variant: "success" });
-    expect(runNotice(ran({ freshCount: 3 }), "Nov 2026")).toEqual({ title: "Updated 3 values.", variant: "success" });
+    expect(runNotice(ran({ freshCount: 1 }), "Nov 2026")).toEqual({ title: "Updated.", variant: "success" });
+    expect(runNotice(ran({ freshCount: 3 }), "Nov 2026")).toEqual({ title: "Updated.", variant: "success" });
   });
   test("reports a declined grant without alarm", () => {
     const outcome = ran({ errorCount: 1, failures: [{ name: "repo", kind: "capability-denied" }] as never });
-    expect(runNotice(outcome, "Nov 2026")).toEqual({ title: "Not allowed. Values stay as of Nov 2026.", variant: "default" });
+    expect(runNotice(outcome, "Nov 2026")).toEqual({ title: "Not allowed. Showing data from Nov 2026.", variant: "default" });
   });
   test("reports a failure", () => {
     const outcome = ran({ errorCount: 1, failures: [{ name: "repo", kind: "script-error" }] as never });
@@ -36,7 +36,7 @@ test.describe("runNotice", () => {
     expect(runNotice({ kind: "failed", reason: "boom" }, "Nov 2026").variant).toBe("danger");
   });
   test("reports a run with nothing new", () => {
-    expect(runNotice(ran({}), "Nov 2026").title).toBe("No changes. Values are current.");
+    expect(runNotice(ran({}), "Nov 2026").title).toBe("Already up to date.");
   });
 });
 

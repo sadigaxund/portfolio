@@ -8,10 +8,7 @@
 }
 
 .contact-links a {
-  display: inline-flex;
-  align-items: center;
   min-width: var(--target-min);
-  min-height: var(--target-min);
 }
 
 /* A heading that receives focus after a walk shows no ring, because it is not a control. */
