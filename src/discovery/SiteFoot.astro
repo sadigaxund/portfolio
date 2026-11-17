@@ -1,12 +1,14 @@
 ---
 import { ROOT } from "../tree/walk";
 import ContactLinks from "./ContactLinks.astro";
+import MarkiiCredit from "./MarkiiCredit.astro";
 import { PROFILE } from "./profile";
 ---
 
 <footer class="site-foot" id="contact">
-  <div class="site-foot-inner">
+  <div class="site-foot-owner">
     <p class="role-detail">{ROOT.label}. {PROFILE.role}</p>
     <ContactLinks />
   </div>
+  <MarkiiCredit />
 </footer>

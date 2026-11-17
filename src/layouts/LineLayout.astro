@@ -4,7 +4,6 @@ import geologica from "@fontsource-variable/geologica/files/geologica-latin-wght
 import instrumentSans from "@fontsource-variable/instrument-sans/files/instrument-sans-latin-wght-normal.woff2?url";
 import "./styles";
 import Hero from "../discovery/Hero.astro";
-import SiteFoot from "../discovery/SiteFoot.astro";
 import { PROFILE } from "../discovery/profile";
 import LineStage from "../line/LineStage";
 import { summaryOf } from "../sections/previews";
@@ -58,7 +57,6 @@ const canonical = Astro.site ? new URL(node.url, Astro.site).href : undefined;
           <a class="skip-link" href="#content">Skip to content</a>
           <LineStage client:load transition:persist="line" transition:persist-props initialPath={node.url} />
           {leaf ? <LeafBody node={node} /> : <SectionBody node={node} />}
-          {leaf && <SiteFoot />}
         </>
       )
     }

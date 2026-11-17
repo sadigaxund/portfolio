@@ -13,7 +13,7 @@ const seamIdle = (page: Page) =>
     )
     .toBe(true);
 
-test("a leaf owns the whole screen, with no line and Back still in reach", async ({ page }) => {
+test("a leaf owns the whole screen, with no line, and Back sits in its header", async ({ page }) => {
   await page.goto("/personal/instagram");
   await whenReady(page);
   const view = await page.evaluate(() => {
@@ -29,17 +29,22 @@ test("a leaf owns the whole screen, with no line and Back still in reach", async
   expect(view.left).toBe(0);
   expect(view.width).toBe(view.space);
 
+  // Back is clickable inside the header bar, and it scrolls away with the header.
+  const back = page.locator("[data-back]").getByRole("link");
+  const head = await page.locator(".leaf-head").boundingBox();
+  const box = await back.boundingBox();
+  expect(box!.y).toBeGreaterThanOrEqual(head!.y);
+  expect(box!.y + box!.height).toBeLessThanOrEqual(head!.y + head!.height);
+  const hit = await back.evaluate((link) => {
+    const rect = link.getBoundingClientRect();
+    return document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2) === link;
+  });
+  expect(hit).toBe(true);
   await page.evaluate(() => {
     document.querySelector("main")!.style.height = "300vh";
     scrollTo(0, 800);
   });
-  const back = page.locator("[data-back]").getByRole("link");
-  await expect(back).toBeInViewport();
-  const hit = await back.evaluate((link) => {
-    const box = link.getBoundingClientRect();
-    return document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2) === link;
-  });
-  expect(hit).toBe(true);
+  await expect(back).not.toBeInViewport();
 });
 
 test("the seam shuts before the swap, then parts to both edges", async ({ page }) => {

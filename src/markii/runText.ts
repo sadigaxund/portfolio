@@ -6,14 +6,14 @@ const DAY = 24 * HOUR;
 const relative = new Intl.RelativeTimeFormat("en", { numeric: "always" });
 const day = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric" });
 
-/** When the data was last updated, in words: just now, minutes or hours ago, then the date. */
+/** When the data was last updated, in words that follow "Updated": just now, minutes or hours ago, then the date. */
 export function lastRunText(ranAt: number | undefined, now: number, builtLabel: string): string {
-  if (ranAt === undefined) return `Updated ${builtLabel}`;
+  if (ranAt === undefined) return builtLabel;
   const age = Math.max(0, now - ranAt);
-  if (age < MINUTE) return "Updated just now";
-  if (age < HOUR) return `Updated ${relative.format(-Math.floor(age / MINUTE), "minute")}`;
-  if (age < DAY) return `Updated ${relative.format(-Math.floor(age / HOUR), "hour")}`;
-  return `Updated ${day.format(ranAt)}`;
+  if (age < MINUTE) return "just now";
+  if (age < HOUR) return `${relative.format(-Math.floor(age / MINUTE), "minute")}`;
+  if (age < DAY) return `${relative.format(-Math.floor(age / HOUR), "hour")}`;
+  return `${day.format(ranAt)}`;
 }
 
 export interface RunNotice {

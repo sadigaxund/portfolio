@@ -58,14 +58,14 @@ test("a first visit loads no host and keeps the build's values", async ({ page }
   await expect(page.locator(TOTAL).first()).toHaveClass(/mk-value--stale/);
 });
 
-test("the note bar follows the note and comes before the leaf foot", async ({ page }) => {
+test("the update controls sit in the leaf header, above the note", async ({ page }) => {
   await page.goto(SCRIPTED);
-  const order = await page.evaluate(() =>
-    [".note", ".note-bar", ".leaf-foot"].map((selector) => document.querySelector(selector)?.getBoundingClientRect().top ?? -1),
+  const [head, bar, note] = await page.evaluate(() =>
+    [".leaf-head", ".note-bar", ".note"].map((selector) => document.querySelector(selector)!.getBoundingClientRect()),
   );
-  expect(order[0]).toBeGreaterThanOrEqual(0);
-  expect(order[1]).toBeGreaterThan(order[0]);
-  expect(order[2]).toBeGreaterThan(order[1]);
+  expect(bar.top).toBeGreaterThanOrEqual(head.top);
+  expect(bar.bottom).toBeLessThanOrEqual(head.bottom + 1);
+  expect(note.top).toBeGreaterThan(head.bottom);
 });
 
 test("refreshing asks with markii's own words, and a no keeps the values", async ({ page }) => {
@@ -102,7 +102,14 @@ test("script markers stay hidden while the note renders", async ({ page }) => {
 
 test("a leaf foot links to the next leaf, and the last leaf links only back", async ({ page }) => {
   await page.goto("/professional/career");
-  await expect(page.locator(".leaf-foot a")).toHaveText(["Next: Education", "Back to Professional"]);
+  await expect(page.locator(".leaf-foot a")).toHaveText(["Next Education", "Back to Professional"]);
   await page.goto("/professional/certifications");
   await expect(page.locator(".leaf-foot a")).toHaveText(["Back to Professional"]);
+});
+
+test("every leaf ends in one foot with the contact links and the Markii credit", async ({ page }) => {
+  await page.goto("/professional/career");
+  await expect(page.locator("footer")).toHaveCount(1);
+  await expect(page.locator("footer .markii-credit")).toHaveAttribute("href", "https://github.com/markii-org/markii");
+  await expect(page.locator("footer .markii-credit")).toHaveAccessibleName("Powered by Markii GitHub");
 });
