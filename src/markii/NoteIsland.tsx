@@ -7,6 +7,7 @@ import { SETTINGS } from "./config";
 import { GrantDialog } from "./GrantDialog";
 import { NoteBar } from "./NoteBar";
 import type { NoteProps } from "./NoteBody";
+import { LOCAL_IMAGES } from "./localImages";
 import { renderNote } from "./render";
 import { runNotice } from "./runText";
 import { useNoteRun } from "./useNoteRun";
@@ -32,7 +33,7 @@ function ScriptedNote({ text, documentKey, routes, remote, bakedStale, builtLabe
     <>
       <NoteBar ranAt={ranAt} builtLabel={builtLabel} running={running} runs={runs} onRefresh={() => void refresh()} />
       <div className="note" data-mk-root="" data-hide-scripts={SETTINGS.hideScriptBlocks || undefined}>
-        {renderNote(text, documentKey, routes, registry, createValueStore(values), remote)}
+        {renderNote(text, documentKey, routes, registry, createValueStore(values), remote, LOCAL_IMAGES)}
       </div>
       <GrantDialog bridge={prompts} />
     </>

@@ -45,4 +45,8 @@ Point a coding agent such as opencode at the repo and ask it to update the resum
 :::
 ::::
 
-Links: [repository](https://github.com/AS-FOSS/git-resume), [live demo](https://as-foss.github.io/git-resume/), [demo video](https://www.youtube.com/watch?v=CiZllBuUCZ4).
+:::nav_group{title="Links"}
+::nav_link[Repository]{href="https://github.com/AS-FOSS/git-resume" desc="github.com/AS-FOSS/git-resume" icon="arrow"}
+::nav_link[Live demo]{href="https://as-foss.github.io/git-resume/" desc="as-foss.github.io/git-resume" icon="arrow"}
+::nav_link[Demo video]{href="https://www.youtube.com/watch?v=CiZllBuUCZ4" desc="youtube.com" icon="arrow"}
+:::

@@ -4,7 +4,7 @@ import { renderMarkNode, type Registry } from "@markii/react";
 import type { ValueStore } from "@markii/runtime";
 import { CodeBlock } from "my-you-eye";
 import type { RemoteNote } from "../notes/remote";
-import { makeRemoteResolvers, makeResolveHref } from "./links";
+import { makeLocalImageResolver, makeRemoteResolvers, makeResolveHref } from "./links";
 import { segmentNote } from "./segments";
 
 /** Renders a note's blocks with markii, and its detail lines as `role-detail` paragraphs. */
@@ -15,12 +15,13 @@ export function renderNote(
   registry: Registry,
   store?: ValueStore,
   remote?: RemoteNote,
+  images: Readonly<Record<string, string>> = {},
 ): ReactElement {
   const root = parse(text);
   const away = remote === undefined ? undefined : makeRemoteResolvers(remote);
   const options = {
     resolveHref: away?.href ?? makeResolveHref(documentKey, routes),
-    ...(away && { resolveImageSrc: away.image }),
+    resolveImageSrc: away?.image ?? makeLocalImageResolver(documentKey, images),
     renderCode: ({ lang, code }: { lang: string | undefined; code: string }) => <CodeBlock code={code} language={lang} />,
   };
   const render = (children: unknown[]) =>

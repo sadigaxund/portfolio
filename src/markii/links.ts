@@ -32,6 +32,16 @@ export function makeResolveHref(documentKey: string, routes: Readonly<Record<str
 
 const ABSOLUTE = /^([a-z][a-z0-9+.-]*:|\/|#|\?)/i;
 
+/** Resolves a relative image in a local note to its built URL in `images`, keyed like `/content/...`. Absolute sources stay as written. */
+export function makeLocalImageResolver(documentKey: string, images: Readonly<Record<string, string>>): (src: string) => string | undefined {
+  const folder = documentKey.slice(0, documentKey.lastIndexOf("/") + 1);
+  return (src) => {
+    if (ABSOLUTE.test(src)) return undefined;
+    const path = collapse(folder + src);
+    return path === undefined ? undefined : images[`/${path}`];
+  };
+}
+
 /** Resolvers for a note downloaded from GitHub: a relative link opens on GitHub, and a relative image loads raw. */
 export function makeRemoteResolvers(note: RemoteNote): { href: (href: string) => string | undefined; image: (src: string) => string | undefined } {
   const folder = note.path.slice(0, note.path.lastIndexOf("/") + 1);

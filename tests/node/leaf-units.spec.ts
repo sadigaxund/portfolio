@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import type { RunOutcome } from "@markii/host";
 import { parse } from "@markii/core";
+import { makeLocalImageResolver } from "../../src/markii/links";
 import { lastRunText, runNotice } from "../../src/markii/runText";
 import { segmentNote } from "../../src/markii/segments";
 
@@ -48,5 +49,18 @@ test.describe("segmentNote", () => {
       ["detail", 1],
       ["blocks", 2],
     ]);
+  });
+});
+
+test.describe("makeLocalImageResolver", () => {
+  const images = { "/content/projects/images/demo.webp": "/_astro/demo.abc.webp" };
+  const resolve = makeLocalImageResolver("content/projects/tool.mk.md", images);
+  test("maps a relative image beside the note to its built file", () => {
+    expect(resolve("images/demo.webp")).toBe("/_astro/demo.abc.webp");
+  });
+  test("leaves absolute sources and unknown files alone", () => {
+    expect(resolve("https://example.com/a.png")).toBeUndefined();
+    expect(resolve("images/missing.webp")).toBeUndefined();
+    expect(resolve("../../../escape.webp")).toBeUndefined();
   });
 });

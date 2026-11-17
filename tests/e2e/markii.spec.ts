@@ -113,3 +113,18 @@ test("every leaf ends in one foot with the contact links and the Markii credit",
   await expect(page.locator("footer .markii-credit")).toHaveAttribute("href", "https://github.com/markii-org/markii");
   await expect(page.locator("footer .markii-credit")).toHaveAccessibleName("Powered by Markii GitHub");
 });
+
+test.describe("project notes without JavaScript", () => {
+  test.use({ javaScriptEnabled: false });
+
+  test("a project shows its local still and its links as a pack group", async ({ page }) => {
+    await page.goto("/projects-blog/projects/mandible");
+    const still = page.locator(".note img").first();
+    await expect(still).toHaveAttribute("src", /mandible-demo\.[\w-]+\.webp$/);
+    await expect(still).toHaveAttribute("alt", /^Mandible in a terminal/);
+    await expect(page.getByRole("link", { name: "Watch the demo" })).toBeVisible();
+    const links = page.locator(".note a[href='https://github.com/AS-FOSS/mandible']");
+    await expect(links).toHaveCount(1);
+    await expect(page.locator(".note")).not.toContainText("nav_link");
+  });
+});

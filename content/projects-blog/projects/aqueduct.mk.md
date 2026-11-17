@@ -22,8 +22,8 @@ return {
 
 A pipeline fails at 3 a.m. over a column rename upstream. Somebody gets paged, scrolls a four-kilobyte stack trace, and hand-writes a one-line fix. Aqueduct turns that night into a pull request waiting for review in the morning.
 
-::::figure{src="https://github.com/user-attachments/assets/92acb8fb-80ad-4cac-b5bd-e00a114d22cb" alt="A failed run producing a pending patch"}
-Wake up to a reviewable fix instead of a wall of errors.
+::::figure{src="images/aqueduct-demo.webp" alt="Aqueduct in a terminal: the classify_priority module fails on an unresolved SQL column, and the agent answers with a JSON patch that renames the column."}
+Wake up to a reviewable fix instead of a wall of errors. [Watch the demo](https://github.com/user-attachments/assets/92acb8fb-80ad-4cac-b5bd-e00a114d22cb).
 ::::
 
 ## What it does
@@ -60,7 +60,7 @@ A patch clears four gates and a compile-check before it touches the blueprint. T
 guardrails → compile-check → lineage → sandbox → resolvability → patch applied
 ```
 
-::::figure{src="https://github.com/user-attachments/assets/29bd3782-ec31-4666-9cb3-3ee8690b38b2" alt="Figure 1: The Healing Flow"}
+::::figure{src="images/aqueduct-healing-flow.webp" alt="Flowchart of the healing flow: a run failure passes through capture, memory, prune, generate, reprompt, gates, and confirm and write. A patch that passes lands in patches/applied; anything else waits in patches/pending for review."}
 The healing flow.
 ::::
 
@@ -86,4 +86,9 @@ Low-confidence patches and any guardrail violation escalate to human review.
 - CI tests every release from Spark 3.5 through 4.1.
 - Apache 2.0, with no telemetry and no lock-in.
 
-Links: [repository](https://github.com/sadigaxund/aqueduct), [PyPI](https://pypi.org/project/aqueduct-core/), [threat model](https://github.com/sadigaxund/aqueduct/blob/main/docs/threat_model.md), [blueprint and engine spec](https://github.com/sadigaxund/aqueduct/blob/main/docs/specs.md).
+:::nav_group{title="Links"}
+::nav_link[Repository]{href="https://github.com/sadigaxund/aqueduct" desc="github.com/sadigaxund/aqueduct" icon="arrow"}
+::nav_link[PyPI]{href="https://pypi.org/project/aqueduct-core/" desc="pypi.org/project/aqueduct-core" icon="arrow"}
+::nav_link[Threat model]{href="https://github.com/sadigaxund/aqueduct/blob/main/docs/threat_model.md" desc="docs/threat_model.md on GitHub" icon="arrow"}
+::nav_link[Blueprint and engine spec]{href="https://github.com/sadigaxund/aqueduct/blob/main/docs/specs.md" desc="docs/specs.md on GitHub" icon="arrow"}
+:::
