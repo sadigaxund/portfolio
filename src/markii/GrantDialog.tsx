@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import type { HostPromptRequest } from "@markii/host";
 import { Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "my-you-eye";
 import type { PromptBridge } from "./browser";
-import { askedHost } from "./promptHost";
 
 interface Pending {
   request: HostPromptRequest;
@@ -27,7 +26,7 @@ export function GrantDialog({ bridge }: { bridge: PromptBridge }) {
     pending?.answer(allowed);
     setPending(undefined);
   };
-  const host = pending && askedHost(pending.request);
+  const host = pending?.request.kind === "grant-host" ? pending.request.host : undefined;
 
   return (
     <Dialog open={pending !== undefined} onOpenChange={(open) => open || answer(false)}>

@@ -1,7 +1,6 @@
 import { expect, test } from "@playwright/test";
-import type { HostPromptRequest, RunOutcome } from "@markii/host";
+import type { RunOutcome } from "@markii/host";
 import { parse } from "@markii/core";
-import { askedHost } from "../../src/markii/promptHost";
 import { lastRunText, runNotice } from "../../src/markii/runText";
 import { segmentNote } from "../../src/markii/segments";
 
@@ -51,15 +50,3 @@ test.describe("segmentNote", () => {
     ]);
   });
 });
-
-test.describe("askedHost", () => {
-  const request = (kind: HostPromptRequest["kind"], message: string) =>
-    ({ kind, message, allowLabel: "Allow", denyLabel: "Don't allow", consequential: true }) as HostPromptRequest;
-  test("reads the host of a grant-host question", () => {
-    expect(askedHost(request("grant-host", "This note's scripts can send data to api.github.com. Allow?"))).toBe("api.github.com");
-  });
-  test("reads nothing from any other question", () => {
-    expect(askedHost(request("grant-many-hosts", "This note's scripts can send data to api.github.com. Allow?"))).toBeUndefined();
-  });
-});
-

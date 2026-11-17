@@ -2,19 +2,12 @@ import { expect, test } from "@playwright/test";
 import type { HostPromptRequest } from "@markii/host";
 import { bakeNote } from "../../src/markii/bake";
 import { createBuildPrompt } from "../../src/markii/buildPrompt";
-import { stale } from "../../src/markii/stale";
+import { staleValuesForRehydration as stale } from "@markii/host";
 
 const ORIGINS = ["https://api.github.com"];
 const ask = createBuildPrompt(ORIGINS);
-const request = (kind: HostPromptRequest["kind"], message: string): HostPromptRequest => ({
-  kind,
-  message,
-  allowLabel: "Allow",
-  denyLabel: "Don't allow",
-  consequential: true,
-});
-const grant = (host: string, declared = "") =>
-  request("grant-host", `This note's scripts can send data to ${host}. ${declared}Allow?`);
+const base = { message: "Allow?", allowLabel: "Allow", denyLabel: "Don't allow", consequential: true };
+const grant = (host: string, declaredHosts: string[] = []): HostPromptRequest => ({ ...base, kind: "grant-host", host, declaredHosts });
 
 test.describe("the build prompt", () => {
   test("allows a listed host", async () => {
@@ -25,16 +18,16 @@ test.describe("the build prompt", () => {
     expect(await ask(grant("api.github.com.evil.test"))).toBe(false);
   });
   test("a note cannot talk its way in through its declared hosts", async () => {
-    expect(await ask(grant("example.com", "The note declares api.github.com. "))).toBe(false);
+    expect(await ask(grant("example.com", ["api.github.com"]))).toBe(false);
   });
   test("refuses every other kind, even with a listed host in the message", async () => {
-    const message = grant("api.github.com").message;
-    for (const kind of ["grant-unknown-hosts", "grant-many-hosts", "pack-install-consent", "pack-replace", "pack-overwrite-export", "enable-scripts"] as const) {
-      expect(await ask(request(kind, message))).toBe(false);
-    }
-  });
-  test("refuses a message it cannot read", async () => {
-    expect(await ask(request("grant-host", "Allow api.github.com?"))).toBe(false);
+    const hosts = ["api.github.com"];
+    const others: HostPromptRequest[] = [
+      { ...base, kind: "grant-unknown-hosts", hosts },
+      { ...base, kind: "grant-many-hosts", hosts },
+      ...(["pack-install-consent", "pack-replace", "pack-overwrite-export", "enable-scripts"] as const).map((kind) => ({ ...base, kind })),
+    ];
+    for (const request of others) expect(await ask(request)).toBe(false);
   });
 });
 

@@ -7,6 +7,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 ### Changed
 
 - Pages below the start no longer show a Contact link at the top right, and only leaf pages end in the site foot with the contact links.
+- The refresh question now says "this page" where it said "this note", and images in remote notes load as they near the screen.
 
 ### Fixed
 

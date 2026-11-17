@@ -1,9 +1,7 @@
 import { expect, test } from "@playwright/test";
-import type { StoredValue } from "@markii/runtime";
 import { createReadOnlyFiles } from "../../src/markii/files";
 import { makeRemoteResolvers, makeResolveHref } from "../../src/markii/links";
 import { fetchRemoteNote, parseRemoteNote } from "../../src/notes/remote";
-import { mergeArrivingValue } from "../../src/markii/merge";
 import { bundlePacks } from "../../src/markii/packs";
 import { parseSettings } from "../../src/markii/settings";
 
@@ -24,35 +22,6 @@ test.describe("settings", () => {
   });
   test("refuses an origin with a path", () => {
     expect(() => parseSettings({ ...good, allowedOrigins: ["https://api.github.com/repos"] })).toThrow("allowedOrigins[0]");
-  });
-});
-
-test.describe("mergeArrivingValue", () => {
-  const fresh = (value: unknown): StoredValue => ({ value, status: "fresh" });
-  const failed: StoredValue = { value: undefined, status: "error", error: "boom" };
-
-  test("adds a new name and replaces an old one in place", () => {
-    const first = mergeArrivingValue({ a: fresh(1) }, "b", fresh(2));
-    expect(Object.keys(first)).toEqual(["a", "b"]);
-    expect(mergeArrivingValue(first, "a", fresh(9)).a.value).toBe(9);
-  });
-  test("an error keeps the good value and marks it stale", () => {
-    const next = mergeArrivingValue({ a: fresh(1) }, "a", failed);
-    expect(next.a).toEqual({ value: 1, status: "stale" });
-  });
-  test("an error with no good value is kept", () => {
-    expect(mergeArrivingValue({}, "a", failed).a).toEqual(failed);
-    expect(mergeArrivingValue({ a: failed }, "a", failed).a).toEqual(failed);
-  });
-  test("a value named __proto__ lands as an own key", () => {
-    const next = mergeArrivingValue({}, "__proto__", fresh(1));
-    expect(Object.hasOwn(next, "__proto__")).toBe(true);
-    expect(Object.getPrototypeOf(next)).toBe(Object.prototype);
-  });
-  test("never changes its input", () => {
-    const input = { a: fresh(1) };
-    mergeArrivingValue(input, "a", failed);
-    expect(input.a.status).toBe("fresh");
   });
 });
 

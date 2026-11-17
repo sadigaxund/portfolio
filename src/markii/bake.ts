@@ -6,8 +6,8 @@ import { createBuildPrompt } from "./buildPrompt";
 import { createMemoryMemento } from "./memento";
 import { bundlePacks } from "./packs";
 
-// Until markii-org/markii#79 gives a transport failure its own kind, only a denial is treated as the network.
-const NETWORK_KINDS: readonly string[] = ["capability-denied", "tier-blocked"];
+// A denied or failed network call leaves the value empty and logs one line. Any other failure fails the build.
+const NETWORK_KINDS: readonly string[] = ["capability-denied", "tier-blocked", "network"];
 
 export interface BakeRequest {
   documentKey: string;
@@ -42,7 +42,7 @@ export async function bakeNote(request: BakeRequest): Promise<Record<string, Sto
   for (const failure of outcome.failureDetails) {
     empty.add(failure.name);
     if (NETWORK_KINDS.includes(failure.kind)) {
-      request.log(`markii: ${request.documentKey} script "${failure.name}" was denied network access (${failure.kind}); the note shows its empty state`);
+      request.log(`markii: ${request.documentKey} script "${failure.name}" had no network access (${failure.kind}); the note shows its empty state`);
     } else {
       problems.push(`${request.documentKey} script "${failure.name}" ${failure.kind}: ${failure.message}`);
     }

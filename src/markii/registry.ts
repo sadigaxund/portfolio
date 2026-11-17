@@ -7,18 +7,24 @@ const decoder = new TextDecoder();
 export async function loadBundledRegistry(base: Registry, report: (line: string) => void): Promise<Registry> {
   for (const reason of BUNDLED.reasons) report(reason);
   if (BUNDLED.packs.length === 0) return base;
-  const scripts: string[] = [];
+  const scripts: { namespace: string; source: string }[] = [];
   for (const pack of BUNDLED.packs) {
-    scripts.push(decoder.decode(await BUNDLED.files.readFile(pack.scriptPath)));
+    scripts.push({ namespace: pack.manifest.name, source: decoder.decode(await BUNDLED.files.readFile(pack.scriptPath)) });
     if (pack.stylesheetPath !== undefined) {
       const style = document.head.appendChild(document.createElement("style"));
       style.dataset.pack = pack.manifest.name;
       style.textContent = decoder.decode(await BUNDLED.files.readFile(pack.stylesheetPath));
     }
   }
-  // The pack runtime pulls in markii's host, so it loads only when a pack ships.
-  const { registryFromPackScripts } = await import("./pack-runtime");
-  const built = registryFromPackScripts(scripts, base);
-  for (const reason of built.reasons) report(reason);
+  // Pack evaluation pulls in markii's host, so it loads only when a pack ships. It needs 'unsafe-eval'; the site sets no CSP.
+  const [React, { evaluatePackScripts, reactPackEngine }, { buildRenderRegistry }] = await Promise.all([
+    import("react"),
+    import("@markii/react"),
+    import("@markii/host"),
+  ]);
+  const evaluated = evaluatePackScripts(scripts, { react: React });
+  for (const failure of evaluated.failures) report(`pack ${failure.namespace}: ${failure.reason}`);
+  const built = buildRenderRegistry(evaluated.registrations, base, reactPackEngine);
+  for (const reason of built.invalidReasons) report(reason);
   return built.registry;
 }

@@ -74,7 +74,7 @@ test("refreshing asks with markii's own words, and a no keeps the values", async
   await page.getByRole("button", { name: "Refresh values" }).click();
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
-  await expect(dialog.locator(".grant-quote")).toHaveText(/^This note's scripts can send data to api\.github\.com\./);
+  await expect(dialog.locator(".grant-quote")).toHaveText(/^This page's scripts can send data to api\.github\.com\./);
   await dialog.getByRole("button", { name: "Don't allow" }).click();
   await expect(dialog).toHaveCount(0);
   await expect(page.locator(".note-bar")).toHaveAttribute("data-runs", "1", { timeout: 15000 });

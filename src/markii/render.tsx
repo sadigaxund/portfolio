@@ -1,16 +1,11 @@
 import { Fragment, type ReactElement } from "react";
-import { extractScripts, parse } from "@markii/core";
+import { parse } from "@markii/core";
 import { renderMarkNode, type Registry } from "@markii/react";
 import type { ValueStore } from "@markii/runtime";
 import { CodeBlock } from "my-you-eye";
 import type { RemoteNote } from "../notes/remote";
 import { makeRemoteResolvers, makeResolveHref } from "./links";
 import { segmentNote } from "./segments";
-
-/** True when the note holds a script fence, so only those notes ship markii's browser code. */
-export function hasScripts(text: string): boolean {
-  return extractScripts(parse(text)).length > 0;
-}
 
 /** Renders a note's blocks with markii, and its detail lines as `role-detail` paragraphs. */
 export function renderNote(
