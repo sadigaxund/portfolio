@@ -13,7 +13,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 - Notes with live values end in a bar that says how old the values are, with a "Refresh values" button and a Markii credit.
 - Refreshing asks before contacting GitHub in a plain dialog, and a short message reports the result.
 - Section pages show their summary in a larger lead size.
-- Pages with live values load the script runner only when a visitor refreshes, which saves about 300 KB on a first visit.
+- Pages with live values load the script runner only when a visitor refreshes, so a first visit downloads about 150 KB less.
 
 ### Fixed
 
