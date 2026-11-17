@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import { Button, Link } from "my-you-eye";
+import { Button } from "my-you-eye";
 import { lastRunText } from "./runText";
-
-const MARKII_REPO = "https://github.com/markii-org/markii";
 
 interface NoteBarProps {
   ranAt: number | undefined;
@@ -31,21 +29,19 @@ function useHydrated(): boolean {
   return hydrated;
 }
 
-/** The foot of a note with scripts: how old its values are, the refresh control, and the Markii credit. */
+/** A note's update controls in the leaf header: how old its data is, and Update. A phone drops the leading "Updated". */
 export function NoteBar({ ranAt, builtLabel, running, runs, onRefresh }: NoteBarProps) {
   const now = useMinuteClock();
   const hydrated = useHydrated();
   return (
     <div className="note-bar" data-runs={runs}>
       <p className="role-detail note-bar-age" role="status">
+        <span className="note-bar-lead">Updated </span>
         {lastRunText(ranAt, now, builtLabel)}
       </p>
       <Button className="note-bar-refresh" variant="secondary" size="lg" loading={running} disabled={!hydrated || running} onClick={onRefresh}>
         Update
       </Button>
-      <p className="role-detail note-bar-credit">
-        Written in Markii. <Link href={MARKII_REPO}>Markii on GitHub</Link>
-      </p>
     </div>
   );
 }

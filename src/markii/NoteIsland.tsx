@@ -37,10 +37,10 @@ function ScriptedNote({ text, documentKey, routes, remote, bakedStale, builtLabe
 
   return (
     <>
+      <NoteBar ranAt={ranAt} builtLabel={builtLabel} running={running} runs={runs} onRefresh={() => void refresh()} />
       <div className="note" data-mk-root="" data-hide-scripts={SETTINGS.hideScriptBlocks || undefined}>
         {renderNote(text, documentKey, routes, registry, createValueStore(values), remote)}
       </div>
-      <NoteBar ranAt={ranAt} builtLabel={builtLabel} running={running} runs={runs} onRefresh={() => void refresh()} />
       <GrantDialog bridge={prompts} />
     </>
   );

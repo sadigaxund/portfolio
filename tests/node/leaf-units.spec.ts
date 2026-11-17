@@ -8,13 +8,13 @@ const NOW = Date.UTC(2026, 10, 17, 12, 0, 0);
 
 test.describe("lastRunText", () => {
   test("names the build month until this browser refreshes", () => {
-    expect(lastRunText(undefined, NOW, "Nov 2026")).toBe("Updated Nov 2026");
+    expect(lastRunText(undefined, NOW, "Nov 2026")).toBe("Nov 2026");
   });
   test("words the age of a refresh", () => {
-    expect(lastRunText(NOW - 20_000, NOW, "Nov 2026")).toBe("Updated just now");
-    expect(lastRunText(NOW - 10 * 60_000, NOW, "Nov 2026")).toBe("Updated 10 minutes ago");
-    expect(lastRunText(NOW - 3 * 3_600_000, NOW, "Nov 2026")).toBe("Updated 3 hours ago");
-    expect(lastRunText(Date.UTC(2026, 10, 12, 9), NOW, "Nov 2026")).toBe("Updated 12 Nov 2026");
+    expect(lastRunText(NOW - 20_000, NOW, "Nov 2026")).toBe("just now");
+    expect(lastRunText(NOW - 10 * 60_000, NOW, "Nov 2026")).toBe("10 minutes ago");
+    expect(lastRunText(NOW - 3 * 3_600_000, NOW, "Nov 2026")).toBe("3 hours ago");
+    expect(lastRunText(Date.UTC(2026, 10, 12, 9), NOW, "Nov 2026")).toBe("12 Nov 2026");
   });
 });
 

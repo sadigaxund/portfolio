@@ -1,0 +1,13 @@
+---
+import githubMark from "../assets/github-mark.svg?raw";
+import logo from "../assets/markii-logo.webp";
+---
+
+<a class="markii-credit" href="https://github.com/markii-org/markii">
+  <img src={logo.src} width="48" height="48" alt="" />
+  <span class="markii-credit-name">
+    <span class="role-detail">Powered by</span>{" "}
+    <span class="role-item">Markii</span>
+  </span>{" "}
+  <span class="markii-credit-repo role-detail"><Fragment set:html={githubMark} />GitHub</span>
+</a>

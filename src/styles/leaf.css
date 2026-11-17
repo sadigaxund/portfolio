@@ -1,21 +1,11 @@
 /*
- * The leaf frame: a static route-colored thread down the left, a filled stop at the title,
- * an open stop at each section heading, and a last stop at the leaf foot. Prose keeps the
- * measure; components use the whole column. DESIGN.md, "Leaf frame".
+ * The leaf frame: a full-width header bar with Back and, for a note with scripts, its update
+ * controls; the note in one centered column; the pager; then the site foot. DESIGN.md, "Leaf frame".
  */
 :root {
-  --leaf-column: 56rem;
-  --leaf-gutter: 3rem;
-  --leaf-end: 1.5rem;
-  --thread-stop: 0.75rem;
-  --foot-link-pad: 0.625rem;
-  --thread-x: calc(var(--leaf-gutter) / -2 - var(--line-width) / 2);
-}
-
-@media (max-width: 40rem) {
-  :root {
-    --leaf-end: 1.25rem;
-  }
+  --leaf-column: 50rem;
+  --leaf-head: 3.5rem;
+  --leaf-edge: 1rem;
 }
 
 .leaf-surface {
@@ -24,168 +14,105 @@
   background: var(--color-bg);
 }
 
-.leaf-frame {
-  box-sizing: border-box;
-  max-width: calc(var(--leaf-gutter) + var(--leaf-column) + var(--leaf-end));
+/* Back keeps its place but scrolls away with the header on a leaf. */
+[data-view="leaf"] .line-back {
+  position: absolute;
+}
+
+.leaf-head {
+  height: var(--leaf-head);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.leaf-column {
+  width: min(var(--leaf-column), 100% - 2.5rem);
   margin-inline: auto;
-  padding: 4rem var(--leaf-end) 2rem var(--leaf-gutter);
+  padding-block: 3.5rem 4.5rem;
 }
 
-.leaf-thread {
-  position: relative;
+.leaf-column .note :is(h2, h3, blockquote) {
+  max-width: var(--measure);
 }
 
-.leaf-thread::before {
-  content: "";
-  position: absolute;
-  top: calc(var(--text-heading) * 0.525);
-  bottom: 0;
-  left: var(--thread-x);
-  width: var(--line-width);
-  background: var(--color-route);
-}
-
-/* Stops sit on the thread, centered on their heading's first line. */
-.leaf-thread .note > h1:first-child::before,
-.leaf-thread .note > h2::before,
-.leaf-foot > :first-child::before {
-  content: "";
-  position: absolute;
-  left: calc(var(--thread-x) + var(--line-width) / 2 - var(--thread-stop) / 2);
-  box-sizing: border-box;
-  width: var(--thread-stop);
-  height: var(--thread-stop);
-  border: var(--line-width) solid var(--color-route);
-  border-radius: 50%;
-  background: var(--color-bg);
-}
-
-.leaf-thread .note > h1:first-child,
-.leaf-thread .note > h2,
-.leaf-foot > :first-child {
-  position: relative;
-}
-
-.leaf-thread .note > h1:first-child::before {
-  top: calc(0.525em - var(--thread-stop) / 2);
-  background: var(--color-route);
-}
-
-.leaf-thread .note > h2::before {
-  top: calc(0.6em - var(--thread-stop) / 2);
-}
-
-.leaf-foot {
-  position: relative;
-  padding-top: 4rem;
-}
-
-/* The thread runs on from the note to the foot's stop. */
-.leaf-foot::before {
-  content: "";
+/* A note's update controls sit at the right end of the header bar. */
+.note-bar {
   position: absolute;
   top: 0;
-  left: var(--thread-x);
-  width: var(--line-width);
-  height: calc(4rem + var(--foot-link-pad) + var(--text-item) * 0.6);
-  background: var(--color-route);
-}
-
-.leaf-foot > :first-child::before {
-  top: calc(var(--foot-link-pad) + 0.6 * var(--text-item) - var(--thread-stop) / 2);
-}
-
-.leaf-foot > .role-detail::before {
-  top: calc(var(--foot-link-pad) + 0.75em - var(--thread-stop) / 2);
-}
-
-.leaf-foot .role-item {
-  margin-top: 0;
-}
-
-.leaf-foot a,
-.note-bar a {
-  display: inline-block;
-  padding-block: var(--foot-link-pad);
-}
-
-/* A note with scripts ends in its bar: value age, the refresh control, and the Markii credit. */
-.note-bar {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  right: var(--leaf-edge);
+  display: flex;
   align-items: center;
-  gap: 0 1.5rem;
-  margin-top: 4rem;
-  padding-block: 0.75rem;
-  border-block: 1px solid var(--color-border);
+  gap: 1rem;
+  height: var(--leaf-head);
 }
 
-.note-bar > .role-detail {
+.note-bar .role-detail {
   margin-top: 0;
 }
 
-.note-bar-refresh {
-  grid-row: 1 / 3;
+/* Next and Back, each one whole-box link. */
+.leaf-foot {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 4rem;
+}
+
+.leaf-foot a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 4.5rem;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-ui);
+  color: var(--color-fg);
+  text-decoration: none;
+}
+
+.leaf-foot a:hover {
+  border-color: var(--color-route);
+}
+
+.leaf-foot .leaf-foot-back {
+  grid-row: 1;
+  grid-column: 1;
+}
+
+.leaf-foot .leaf-foot-next {
+  grid-row: 1;
   grid-column: 2;
+  text-align: right;
+}
+
+.leaf-foot .role-detail {
+  margin-top: 0;
+  color: var(--color-muted);
 }
 
 @media (max-width: 40rem) {
+  .leaf-column {
+    width: auto;
+    margin-inline: 3rem 1.25rem;
+  }
+
   .note-bar {
+    right: 0.75rem;
+    gap: 0.75rem;
+  }
+
+  .note-bar-lead {
+    display: none;
+  }
+
+  .leaf-foot {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .note-bar-refresh {
-    grid-row: auto;
-    grid-column: auto;
-    justify-self: start;
-    margin-block: 0.5rem;
-  }
-}
-
-/* Wide screens: section headings hang in a label column left of the thread, level with their first block. */
-@media (min-width: 72rem) {
-  :root {
-    --leaf-label: 13rem;
-    --leaf-content-x: calc(var(--leaf-label) + var(--leaf-gutter));
+  .leaf-foot .leaf-foot-back {
+    grid-row: 2;
   }
 
-  .leaf-frame {
-    max-width: calc(var(--leaf-content-x) + var(--leaf-column) + var(--leaf-end));
-    padding-left: var(--leaf-end);
-  }
-
-  .leaf-thread::before {
-    left: calc(var(--leaf-content-x) - var(--leaf-gutter) / 2 - var(--line-width) / 2);
-  }
-
-  .leaf-thread .note {
-    display: grid;
-    grid-template-columns: var(--leaf-label) var(--leaf-gutter) minmax(0, 1fr);
-  }
-
-  .leaf-thread .note > * {
-    min-width: 0;
-    grid-column: 3;
-  }
-
-  /* Spanning two rows lets a two-line label sit beside two blocks instead of pushing the second down. */
-  .leaf-thread .note > h2 {
-    grid-row: span 2;
+  .leaf-foot .leaf-foot-next {
     grid-column: 1;
-    text-align: right;
-  }
-
-  /* The heading has left the column, so its first block takes over the section gap. */
-  .leaf-thread .note > h2 + * {
-    margin-top: 3rem;
-  }
-
-  .leaf-thread .note > h2::before {
-    left: calc(100% + var(--leaf-gutter) / 2 - var(--thread-stop) / 2);
-  }
-
-  .note-bar,
-  .leaf-foot {
-    margin-left: var(--leaf-content-x);
   }
 }
