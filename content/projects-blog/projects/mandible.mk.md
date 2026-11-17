@@ -26,8 +26,8 @@ return {
 
 Run `mandible docker` and it opens a tree of every command, subcommand and flag, with the selected one's documentation beside it. It runs on Linux and macOS, on x86_64 and arm64.
 
-::::figure{src="https://github.com/user-attachments/assets/bf9e3d32-f8f2-4e33-a82b-a537cea87f55" alt="mandible-0 9 0-demo"}
-A tree of every command, subcommand and flag on the left. The selected one's documentation on the right.
+::::figure{src="images/mandible-demo.webp" alt="Mandible in a terminal, showing git: the tree of its 158 commands on the left, and the usage, positionals, and flags of the selected command on the right."}
+A tree of every command, subcommand and flag on the left. The selected one's documentation on the right. [Watch the demo](https://github.com/user-attachments/assets/bf9e3d32-f8f2-4e33-a82b-a537cea87f55).
 ::::
 
 ## How it works
@@ -57,4 +57,9 @@ The goal. Accuracy rose from 19% in 0.1.7 to 61% in 0.9.0, on the same tools.
 :::
 ::::
 
-Links: [repository](https://github.com/AS-FOSS/mandible), [crates.io](https://crates.io/crates/mandible), [how the accuracy numbers are made](https://github.com/AS-FOSS/mandible/blob/main/docs/accuracy.md), [design document](https://github.com/AS-FOSS/mandible/blob/main/docs/design.md).
+:::nav_group{title="Links"}
+::nav_link[Repository]{href="https://github.com/AS-FOSS/mandible" desc="github.com/AS-FOSS/mandible" icon="arrow"}
+::nav_link[crates.io]{href="https://crates.io/crates/mandible" desc="crates.io/crates/mandible" icon="arrow"}
+::nav_link[How the accuracy numbers are made]{href="https://github.com/AS-FOSS/mandible/blob/main/docs/accuracy.md" desc="docs/accuracy.md on GitHub" icon="arrow"}
+::nav_link[Design document]{href="https://github.com/AS-FOSS/mandible/blob/main/docs/design.md" desc="docs/design.md on GitHub" icon="arrow"}
+:::

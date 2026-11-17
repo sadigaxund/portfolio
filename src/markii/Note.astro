@@ -2,7 +2,12 @@
 import { ALL_NODES, isLeaf, routeParam, type TreeNode } from "../tree/walk";
 import NoteBody from "./NoteBody";
 import NoteIsland from "./NoteIsland";
+import NoteIslandPacks from "./NoteIslandPacks";
+import NotePacks from "./NotePacks.astro";
+import { BUNDLED } from "./bundled";
+import { PACKS } from "./packRegistry";
 import { bakeNote } from "./bake";
+import { packNamespacesUsed } from "./registry";
 import { SETTINGS } from "./config";
 import { noteHasScripts, staleValuesForRehydration } from "@markii/host";
 import { fetchRemoteNote, parseRemoteNote } from "../notes/remote";
@@ -24,16 +29,21 @@ const remote = path in REMOTE ? parseRemoteNote(documentKey, REMOTE[path]) : und
 const text = remote ? await fetchRemoteNote(documentKey, remote) : LOCAL[path];
 const routes = Object.fromEntries(ALL_NODES.filter(isLeaf).map((leaf) => [`content/${routeParam(leaf)}`, leaf.url]));
 const scripted = noteHasScripts(text);
+const packNames = packNamespacesUsed(BUNDLED, text);
+const usesPacks = packNames.length > 0;
 const baked = scripted
   ? staleValuesForRehydration(await bakeNote({ documentKey, text, allowedOrigins: SETTINGS.allowedOrigins, log: (line) => console.warn(line) }))
   : {};
 const builtLabel = new Intl.DateTimeFormat("en", { month: "short", year: "numeric", timeZone: "UTC" }).format(new Date());
 ---
 
+<NotePacks names={packNames} />
 {
-  scripted ? (
+  scripted && usesPacks ? (
+    <NoteIslandPacks client:idle text={text} documentKey={documentKey} routes={routes} remote={remote} bakedStale={baked} builtLabel={builtLabel} />
+  ) : scripted ? (
     <NoteIsland client:idle text={text} documentKey={documentKey} routes={routes} remote={remote} bakedStale={baked} builtLabel={builtLabel} />
   ) : (
-    <NoteBody text={text} documentKey={documentKey} routes={routes} remote={remote} />
+    <NoteBody text={text} documentKey={documentKey} routes={routes} remote={remote} registry={PACKS.registry} />
   )
 }

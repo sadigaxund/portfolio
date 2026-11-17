@@ -34,9 +34,11 @@ A section has no note.
 - A note with no leaf, including a note for a section.
 - Two notes for one leaf, such as both `career.md` and `career.mk.md`.
 
-## Not yet
+## Images and links
 
-Notes are not rendered on the site. Professional still shows its `Leaf.astro` pages until Markii rendering lands, and other leaves show a placeholder.
+- Put an image in an `images/` folder beside its note and name it relative to the note, as in `::::figure{src="images/mandible-demo.webp" alt="..."}`. The build copies and fingerprints it.
+- Prefer a still WebP over an animated GIF, and link the GIF from the caption as "Watch the demo".
+- Write a note's outside links as one `nav_group` from the bundled `nav` pack, one `nav_link` per destination, with the address as `desc`. The git-resume note shows the form.
 
 ## YAML tip
 

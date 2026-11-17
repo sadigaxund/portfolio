@@ -6,6 +6,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Changed
 
+- Project pages list their links as one group of rows, each with its address, and show light stills in place of the 8 MB demo GIFs, with a link to watch the demo.
 - Every leaf page sits in one frame: a header bar with Back and the update control, the note in a centered column, Next and Back boxes, and one foot with the contact links and a Powered by Markii badge.
 - The update control is now labeled Update, its messages say what data is shown, and the update question is one short sentence from Markii.
 - Pages below the start no longer show a Contact link at the top right, and only leaf pages end in the site foot with the contact links.

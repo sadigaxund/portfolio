@@ -16,4 +16,6 @@ A visitor allows each origin once, from the Run button. A run on open never asks
 
 ## packs
 
-`packs/<namespace>/` holds one prebuilt pack: `pack.json`, `webview.js`, and an optional `webview.css`. The build bundles every folder here. The folder starts empty.
+`packs/<namespace>/` holds one prebuilt pack: `pack.json`, `webview.js`, and an optional `webview.css`. The build bundles every folder here, and evaluates them in Node so a pack component renders in the static HTML.
+
+`nav` 1.0.0, from markii-org/markii-packs release v2026.09.12 (commit 986efe8f37ccb0882d14a2ab2cd95acb55d41aad), the prebuilt files from `nav-1.0.0.mkp`.
