@@ -24,15 +24,23 @@ function useMinuteClock(): number {
   return now;
 }
 
+/** False in the server's HTML and until the island hydrates, so an early click never lands on a dead button. */
+function useHydrated(): boolean {
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+  return hydrated;
+}
+
 /** The foot of a note with scripts: how old its values are, the refresh control, and the Markii credit. */
 export function NoteBar({ ranAt, builtLabel, running, runs, onRefresh }: NoteBarProps) {
   const now = useMinuteClock();
+  const hydrated = useHydrated();
   return (
     <div className="note-bar" data-runs={runs}>
       <p className="role-detail note-bar-age" role="status">
         {lastRunText(ranAt, now, builtLabel)}
       </p>
-      <Button className="note-bar-refresh" variant="secondary" size="lg" loading={running} disabled={running} onClick={onRefresh}>
+      <Button className="note-bar-refresh" variant="secondary" size="lg" loading={running} disabled={!hydrated || running} onClick={onRefresh}>
         Refresh values
       </Button>
       <p className="role-detail note-bar-credit">
