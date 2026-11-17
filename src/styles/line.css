@@ -7,7 +7,7 @@
   --line-inset: 12vh;
   --line-lift: calc(var(--line-fork-y) - var(--line-inset));
   --line-width: 2px;
-  --section-head: 12rem;
+  --section-head: 8.5rem;
   --line-trunk-top: 16rem;
   --line-stub: calc(var(--line-stem) * 1.5);
   /* Where the main line rests after a choice, measured from the page center. */
@@ -28,6 +28,11 @@
     --line-content-top: 4rem;
     --line-back-left: 2.25rem;
   }
+}
+
+/* A section with a summary reserves room for two lines of it. */
+:root:has(.line-content > .role-lead) {
+  --section-head: 12rem;
 }
 
 /* An always-present scrollbar keeps the line's center from shifting between short and long pages. */

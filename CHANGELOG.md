@@ -17,6 +17,8 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 - On the start page, the keyboard reaches the contact links before the three roads.
 - After moving to a new page, keyboard focus starts at its heading, and a skip link leads past Back.
 - Shared links carry a description and title for previews in chat apps and email.
+- On the map, a page's branch ends in a ring and a section's branch bends on, and pointing at a stop draws its branch in blue.
+- Map previews wrap within a bounded width and always show whole, never cut off mid-sentence.
 - Pages with live values load the script runner only when a visitor refreshes, so a first visit downloads about 150 KB less.
 
 ### Fixed
