@@ -1,5 +1,5 @@
 ---
-import { Link } from "my-you-eye";
+import ContactLinks from "./ContactLinks.astro";
 import { PROFILE } from "./profile";
 
 interface Props {
@@ -16,14 +16,6 @@ const { name } = Astro.props;
   </div>
   <div class="hero-what">
     <p class="role-body">{PROFILE.summary}</p>
-    <ul class="hero-links">
-    {
-      PROFILE.links.map((link) => (
-        <li>
-          <Link href={link.href}>{link.label}</Link>
-        </li>
-      ))
-    }
-    </ul>
+    <ContactLinks />
   </div>
 </header>

@@ -1,0 +1,93 @@
+/* Site chrome below the root: the skip link, the Contact link opposite Back, and the site foot. DESIGN.md, "Component roles". */
+.contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  margin-top: 1rem;
+  list-style: none;
+}
+
+.contact-links a {
+  display: inline-flex;
+  align-items: center;
+  min-width: var(--target-min);
+  min-height: var(--target-min);
+}
+
+/* A heading that receives focus after a walk shows no ring, because it is not a control. */
+main h1[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* Visible only while it has keyboard focus. */
+.skip-link {
+  position: fixed;
+  z-index: 3;
+  top: 0.25rem;
+  left: var(--line-back-left);
+  padding: 0.75rem;
+  border-radius: var(--radius-ui);
+  background: var(--color-bg);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+/* Contact keeps one fixed spot opposite Back on every page below the root. */
+.site-contact {
+  position: fixed;
+  z-index: 2;
+  top: 0.25rem;
+  right: var(--line-back-left);
+  border-radius: var(--radius-ui);
+  background: var(--color-bg);
+}
+
+.site-contact a {
+  display: block;
+  padding: 0.75rem;
+}
+
+[data-line-reveal] .site-contact {
+  visibility: hidden;
+}
+
+/* The foot covers the line, so the line ends where the page does. */
+.site-foot {
+  position: relative;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+
+.site-foot-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0 2rem;
+  width: min(var(--hero-width), 100% - 3rem);
+  margin-inline: auto;
+  padding-block: 1.5rem 2rem;
+}
+
+.site-foot-inner > * {
+  min-width: 0;
+}
+
+.site-foot .contact-links {
+  margin-top: 0;
+}
+
+.site-foot-inner > .role-detail {
+  margin-top: 0;
+}
+
+/* On a phone the foot lines up with the page's text, right of where the line rests. */
+@media (max-width: 40rem) {
+  .site-foot-inner {
+    width: auto;
+    margin-inline: 3rem 1.25rem;
+  }
+}

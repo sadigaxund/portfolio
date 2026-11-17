@@ -1,0 +1,20 @@
+---
+import Note from "../markii/Note.astro";
+import type { TreeNode } from "../tree/walk";
+import LeafFoot from "./LeafFoot.astro";
+
+interface Props {
+  node: TreeNode;
+}
+
+const { node } = Astro.props;
+---
+
+<main id="content" class="leaf-surface">
+  <article class="leaf-frame">
+    <div class="leaf-thread">
+      <Note node={node} />
+    </div>
+    <LeafFoot node={node} />
+  </article>
+</main>

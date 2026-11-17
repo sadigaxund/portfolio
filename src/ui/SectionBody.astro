@@ -1,0 +1,39 @@
+---
+import { Link } from "my-you-eye";
+import { previewOf, summaryOf } from "../sections/previews";
+import { isLeaf, type TreeNode } from "../tree/walk";
+
+interface Props {
+  node: TreeNode;
+}
+
+const { node } = Astro.props;
+---
+
+<main id="content" class="line-section">
+  <div class="line-content">
+    <h1 class="role-heading">{node.label}</h1>
+    {summaryOf(node) && <p class="role-lead">{summaryOf(node)}</p>}
+  </div>
+  <ol class="stops">
+    {
+      node.children.map((child, index) => (
+        <li
+          class="stop"
+          data-stop-url={child.url}
+          data-side={index % 2 === 0 ? "end" : "start"}
+          data-kind={isLeaf(child) ? "leaf" : "section"}
+          style={`--stop-index: ${index}`}
+        >
+          <span class="stop-branch" aria-hidden="true" />
+          <div class="stop-text">
+            <h2 class="role-item">
+              <Link href={child.url}>{child.label}</Link>
+            </h2>
+            {previewOf(child) && <p class="role-detail">{previewOf(child)}</p>}
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</main>

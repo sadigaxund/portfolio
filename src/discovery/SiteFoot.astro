@@ -1,0 +1,12 @@
+---
+import { ROOT } from "../tree/walk";
+import ContactLinks from "./ContactLinks.astro";
+import { PROFILE } from "./profile";
+---
+
+<footer class="site-foot" id="contact">
+  <div class="site-foot-inner">
+    <p class="role-detail">{ROOT.label}. {PROFILE.role}</p>
+    <ContactLinks />
+  </div>
+</footer>

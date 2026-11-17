@@ -1,0 +1,14 @@
+---
+import { Link } from "my-you-eye";
+import { PROFILE } from "./profile";
+---
+
+<ul class="contact-links">
+  {
+    PROFILE.links.map((link) => (
+      <li>
+        <Link href={link.href}>{link.label}</Link>
+      </li>
+    ))
+  }
+</ul>
