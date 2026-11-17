@@ -4,6 +4,10 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ## [Unreleased]
 
+## [2026.11.5] - 2026-11-17
+
+The design pass for leaves, contact, and the map.
+
 ### Changed
 
 - Text is larger and grows with the window, and running text keeps to about 70 characters a line.
