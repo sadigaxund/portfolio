@@ -13,6 +13,10 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 - Notes with live values end in a bar that says how old the values are, with a "Refresh values" button and a Markii credit.
 - Refreshing asks before contacting GitHub in a plain dialog, and a short message reports the result.
 - Section pages show their summary in a larger lead size.
+- Every page below the start has a Contact link opposite Back and a foot with the contact links, so contact is one step away.
+- On the start page, the keyboard reaches the contact links before the three roads.
+- After moving to a new page, keyboard focus starts at its heading, and a skip link leads past Back.
+- Shared links carry a description and title for previews in chat apps and email.
 - Pages with live values load the script runner only when a visitor refreshes, so a first visit downloads about 150 KB less.
 
 ### Fixed

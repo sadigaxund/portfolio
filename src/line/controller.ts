@@ -1,4 +1,5 @@
 import { backLabelOf, isLeafPath, nodeAt, ROOT } from "../tree/walk";
+import { focusArrival } from "./arrival";
 import { clearContent, revealContent } from "./content";
 import { chooseEase } from "./ease";
 import { createRunner } from "./runner";
@@ -37,6 +38,7 @@ export function mountLine(stage: HTMLElement, probe: HTMLElement, initialPath: s
     if (id !== walkId) return;
     stage.dataset.settled = "true";
     holdScroll("line", false);
+    focusArrival();
     announce(stage, "line:transition-end", { reduced: false });
   };
 
@@ -122,7 +124,10 @@ export function mountLine(stage: HTMLElement, probe: HTMLElement, initialPath: s
       jumpTo(jumpAtSwap);
       jumpAtSwap = null;
     }
-    if (!pending) return;
+    if (!pending) {
+      focusArrival();
+      return;
+    }
     const { steps, speed, returned } = pending;
     pending = null;
     scene.aim();

@@ -1,13 +1,16 @@
 ---
 import { ClientRouter } from "astro:transitions";
-import { Link } from "my-you-eye";
+import geologica from "@fontsource-variable/geologica/files/geologica-latin-wght-normal.woff2?url";
+import instrumentSans from "@fontsource-variable/instrument-sans/files/instrument-sans-latin-wght-normal.woff2?url";
 import "./styles";
 import Hero from "../discovery/Hero.astro";
+import SiteFoot from "../discovery/SiteFoot.astro";
+import { PROFILE } from "../discovery/profile";
 import LineStage from "../line/LineStage";
-import Note from "../markii/Note.astro";
-import LeafFoot from "../ui/LeafFoot.astro";
-import { previewOf, summaryOf } from "../sections/previews";
-import { isLeaf, type TreeNode } from "../tree/walk";
+import { summaryOf } from "../sections/previews";
+import { isLeaf, ROOT, type TreeNode } from "../tree/walk";
+import LeafBody from "../ui/LeafBody.astro";
+import SectionBody from "../ui/SectionBody.astro";
 
 interface Props {
   node: TreeNode;
@@ -16,6 +19,9 @@ interface Props {
 const { node } = Astro.props;
 const atRoot = node.parent === null;
 const leaf = isLeaf(node);
+const shareTitle = atRoot ? node.label : `${node.label}, ${ROOT.label}`;
+const description = summaryOf(node) ?? node.preview ?? PROFILE.summary;
+const canonical = Astro.site ? new URL(node.url, Astro.site).href : undefined;
 ---
 
 <!doctype html>
@@ -25,53 +31,38 @@ const leaf = isLeaf(node);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
     <title>{node.label}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={shareTitle} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta name="twitter:card" content="summary" />
     <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/favicon.svg`} />
+    <link rel="preload" as="font" type="font/woff2" href={geologica} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={instrumentSans} crossorigin />
     <ClientRouter />
   </head>
   <body>
-    <LineStage client:load transition:persist="line" transition:persist-props initialPath={node.url} />
     {
-      leaf ? (
-        <main class="leaf-surface">
-          <article class="leaf-frame">
-            <div class="leaf-thread">
-              <Note node={node} />
-            </div>
-            <LeafFoot node={node} />
-          </article>
-        </main>
-      ) : (
-        <main class={atRoot ? "line-section line-landing" : "line-section"}>
-          {atRoot ? (
+      atRoot ? (
+        <>
+          {/* The hero comes first, so keyboard and screen reader order matches what a visitor sees. */}
+          <main id="content" class="line-section line-landing">
             <Hero name={node.label} />
-          ) : (
-            <div class="line-content">
-              <h1 class="role-heading">{node.label}</h1>
-              {summaryOf(node) && <p class="role-lead">{summaryOf(node)}</p>}
-            </div>
-          )}
-          {!atRoot && (
-            <ol class="stops">
-              {node.children.map((child, index) => (
-                <li
-                  class="stop"
-                  data-stop-url={child.url}
-                  data-side={index % 2 === 0 ? "end" : "start"}
-                  data-kind={isLeaf(child) ? "leaf" : "section"}
-                  style={`--stop-index: ${index}`}
-                >
-                  <span class="stop-branch" aria-hidden="true" />
-                  <div class="stop-text">
-                    <h2 class="role-item">
-                      <Link href={child.url}>{child.label}</Link>
-                    </h2>
-                    {previewOf(child) && <p class="role-detail">{previewOf(child)}</p>}
-                  </div>
-                </li>
-              ))}
-            </ol>
-          )}
-        </main>
+          </main>
+          <LineStage client:load transition:persist="line" transition:persist-props initialPath={node.url} />
+        </>
+      ) : (
+        <>
+          <a class="skip-link" href="#content">Skip to content</a>
+          <LineStage client:load transition:persist="line" transition:persist-props initialPath={node.url} />
+          <header class="site-contact">
+            <a href="#contact">Contact</a>
+          </header>
+          {leaf ? <LeafBody node={node} /> : <SectionBody node={node} />}
+          <SiteFoot />
+        </>
       )
     }
   </body>

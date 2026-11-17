@@ -79,13 +79,14 @@ export default function LineStage({ initialPath }: LineStageProps) {
       </div>
       <div data-seam className="line-seam line-seam-start" aria-hidden="true" />
       <div data-seam className="line-seam line-seam-end" aria-hidden="true" />
-      <div
+      <nav
         data-back
+        aria-label="Back"
         className="line-back"
         style={{ opacity: progress, visibility: progress > 0 ? "visible" : "hidden" }}
       >
         <Link href={(initialNode?.parent ?? ROOT).url}>{backLabelOf(initialNode)}</Link>
-      </div>
+      </nav>
     </div>
   );
 }

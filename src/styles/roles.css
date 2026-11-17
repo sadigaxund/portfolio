@@ -111,19 +111,6 @@
   margin-top: 0;
 }
 
-.hero-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 1.25rem;
-  margin-top: 1rem;
-  list-style: none;
-}
-
-.hero-links a {
-  display: inline-block;
-  padding-block: 0.625rem;
-}
-
 /* On a phone the hero stacks, then the line starts below it. */
 @media (max-width: 40rem) {
   :root {

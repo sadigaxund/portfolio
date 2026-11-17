@@ -172,6 +172,7 @@
   }
 
   .leaf-thread .note > * {
+    min-width: 0;
     grid-column: 3;
   }
 
