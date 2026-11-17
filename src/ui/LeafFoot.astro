@@ -1,0 +1,16 @@
+---
+import { Link } from "my-you-eye";
+import { backLabelOf, nextSibling, ROOT, type TreeNode } from "../tree/walk";
+
+interface Props {
+  node: TreeNode;
+}
+
+const { node } = Astro.props;
+const next = nextSibling(node);
+---
+
+<nav class="leaf-foot" aria-label="More">
+  {next && <p class="role-item"><Link href={next.url}>Next: {next.label}</Link></p>}
+  <p class={next ? "role-detail" : "role-item"}><Link href={(node.parent ?? ROOT).url}>{backLabelOf(node)}</Link></p>
+</nav>

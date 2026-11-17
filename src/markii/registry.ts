@@ -1,6 +1,5 @@
 import type { Registry } from "@markii/react";
 import { BUNDLED } from "./bundled";
-import { registryFromPackScripts } from "./pack-runtime";
 
 const decoder = new TextDecoder();
 
@@ -17,6 +16,8 @@ export async function loadBundledRegistry(base: Registry, report: (line: string)
       style.textContent = decoder.decode(await BUNDLED.files.readFile(pack.stylesheetPath));
     }
   }
+  // The pack runtime pulls in markii's host, so it loads only when a pack ships.
+  const { registryFromPackScripts } = await import("./pack-runtime");
   const built = registryFromPackScripts(scripts, base);
   for (const reason of built.reasons) report(reason);
   return built.registry;

@@ -33,7 +33,7 @@ test("a leaf owns the whole screen, with no line and Back still in reach", async
     document.querySelector("main")!.style.height = "300vh";
     scrollTo(0, 800);
   });
-  const back = page.getByRole("link", { name: "Back" });
+  const back = page.locator("[data-back]").getByRole("link");
   await expect(back).toBeInViewport();
   const hit = await back.evaluate((link) => {
     const box = link.getBoundingClientRect();
@@ -91,12 +91,12 @@ test("both sides of the seam meet exactly on the resting line", async ({ page })
 test("Back shuts the seam and returns to the line, one level at a time", async ({ page }) => {
   await page.goto("/personal/instagram");
   await whenReady(page);
-  await page.getByRole("link", { name: "Back" }).click();
+  await page.locator("[data-back]").getByRole("link").click();
   await expect(page).toHaveURL(/\/personal$/);
   await expect(page.locator("h1")).toHaveText("Personal");
   await seamIdle(page);
   await expect(page.locator(".line-tail")).toBeVisible();
-  await page.getByRole("link", { name: "Back" }).click();
+  await page.locator("[data-back]").getByRole("link").click();
   await expect(page).toHaveURL(/\/$/);
   await expect(page.getByRole("link", { name: "Personal" })).toBeVisible();
 });
@@ -137,7 +137,7 @@ test.describe("without JavaScript", () => {
     await page.getByRole("link", { name: "Instagram" }).click();
     await expect(page.locator("h1")).toHaveText("Instagram");
     await expect(page.locator(".line-tail")).toBeHidden();
-    await page.getByRole("link", { name: "Back" }).click();
+    await page.locator("[data-back]").getByRole("link").click();
     await expect(page.locator("h1")).toHaveText("Personal");
   });
 });
@@ -156,7 +156,7 @@ test("a level can mix leaves and subsections, at any depth", async ({ page }) =>
   await expect(page.locator(".line-world")).toBeHidden();
   await seamIdle(page);
   for (const label of ["PLACEHOLDER group", "Hobbies", "Personal"]) {
-    await page.getByRole("link", { name: "Back" }).click();
+    await page.locator("[data-back]").getByRole("link").click();
     await expect(page.locator("h1")).toHaveText(label);
   }
 });
@@ -224,7 +224,7 @@ test("going back up a level pans back too, and the stop returns where it left", 
   await page.goto("/personal/hobbies");
   await whenReady(page);
   await sampleWalk(page);
-  await page.getByRole("link", { name: "Back" }).click();
+  await page.locator("[data-back]").getByRole("link").click();
   await expect(page.locator("h1")).toHaveText("Personal");
   await page.waitForSelector('.line-stage[data-settled="true"]');
   await page.waitForTimeout(300);
@@ -251,7 +251,7 @@ test("going back to the landing page shows the hero only after the fork has retu
   await page.goto("/professional");
   await whenReady(page);
   await sampleWalk(page);
-  await page.getByRole("link", { name: "Back" }).click();
+  await page.locator("[data-back]").getByRole("link").click();
   await expect(page.locator(".hero")).toBeVisible();
   await page.waitForSelector('.line-stage[data-settled="true"]');
   await page.waitForTimeout(100);
@@ -320,7 +320,7 @@ test("a direct load and a return from a leaf show stops at once", async ({ page 
   await page.getByRole("link", { name: "Instagram" }).click();
   await expect(page.locator("h1")).toHaveText("Instagram");
   await seamIdle(page);
-  await page.getByRole("link", { name: "Back" }).click();
+  await page.locator("[data-back]").getByRole("link").click();
   await expect(page.locator("h1")).toHaveText("Personal");
   expect((await stopDelays(page)).flat()).toEqual([]);
 });

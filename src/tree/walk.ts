@@ -74,3 +74,9 @@ export function backLabelOf(node: TreeNode | undefined): string {
   const parent = node?.parent ?? ROOT;
   return `Back to ${parent === ROOT ? "start" : parent.label}`;
 }
+
+/** The node after this one among its siblings, in `content/site.yaml` order. */
+export function nextSibling(node: TreeNode): TreeNode | undefined {
+  const siblings = node.parent?.children ?? [];
+  return siblings[siblings.indexOf(node) + 1];
+}

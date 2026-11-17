@@ -121,7 +121,7 @@ test("a deep link draws the walked line with no animation", async ({ page }) => 
   await page.goto("/personal");
   await whenReady(page);
   expect(await progress(page)).toBe(1);
-  await expect(page.getByRole("link", { name: "Back" })).toBeVisible();
+  await expect(page.locator("[data-back]").getByRole("link")).toBeVisible();
 });
 
 test("back retraces the path, and an interrupted choice settles", async ({ page }) => {
@@ -158,9 +158,9 @@ test("a leaf deep link rests on its branch, and Back climbs one level at a time"
   await whenReady(page);
   expect(await progress(page)).toBe(1);
   expect(await chosen(page)).toBe("-1");
-  await page.getByRole("link", { name: "Back" }).click();
+  await page.locator("[data-back]").getByRole("link").click();
   await expect(page).toHaveURL(/\/personal$/);
-  await page.getByRole("link", { name: "Back" }).click();
+  await page.locator("[data-back]").getByRole("link").click();
   await expect(page).toHaveURL(/\/$/);
   await settledAt(page, 0);
   await expect(page.getByRole("link", { name: "Personal" })).toBeVisible();
@@ -184,7 +184,7 @@ test("opening a leaf and returning leaves the line still", async ({ page }) => {
 test("changing branch through history passes the fork and lands on the new branch", async ({ page }) => {
   await page.goto("/personal");
   await whenReady(page);
-  await page.getByRole("link", { name: "Back" }).click();
+  await page.locator("[data-back]").getByRole("link").click();
   await settledAt(page, 0);
   await page.getByRole("link", { name: "Projects and blog" }).click();
   await settledAt(page, 1);
@@ -198,7 +198,7 @@ test("changing branch through history passes the fork and lands on the new branc
   await expect.poll(() => page.evaluate(() => (window as unknown as { targets: number[] }).targets)).toEqual([0, 1]);
   await settledAt(page, 1);
   expect(await chosen(page)).toBe("-1");
-  await expect(page.getByRole("link", { name: "Back" })).toHaveAttribute("href", "/");
+  await expect(page.locator("[data-back]").getByRole("link")).toHaveAttribute("href", "/");
 });
 
 test("wheel past the page bottom at the fork continues straight on", async ({ page }) => {
@@ -319,7 +319,7 @@ test.describe("without JavaScript", () => {
     await page.goto("/");
     await page.getByRole("link", { name: "Personal" }).click();
     await expect(page.locator("h1")).toHaveText("Personal");
-    await page.getByRole("link", { name: "Back" }).click();
+    await page.locator("[data-back]").getByRole("link").click();
     await expect(page.locator("h1")).toHaveText("Sadig Akhund");
   });
 });

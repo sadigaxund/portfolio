@@ -7,7 +7,7 @@
   --line-inset: 12vh;
   --line-lift: calc(var(--line-fork-y) - var(--line-inset));
   --line-width: 2px;
-  --section-head: 8.5rem;
+  --section-head: 12rem;
   --line-trunk-top: 16rem;
   --line-stub: calc(var(--line-stem) * 1.5);
   /* Where the main line rests after a choice, measured from the page center. */
@@ -193,14 +193,6 @@ body {
 /* A leaf owns the screen, so the line stays out of it entirely. */
 [data-view="leaf"] .line-world {
   visibility: hidden;
-}
-
-.leaf-surface {
-  position: relative;
-  min-height: 100vh;
-  /* Lines the text up with the text of Back. */
-  padding: 4rem calc(var(--line-back-left) + 0.75rem) 2rem;
-  background: var(--color-bg);
 }
 
 .line-content {
