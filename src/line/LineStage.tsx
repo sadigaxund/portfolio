@@ -52,7 +52,7 @@ export default function LineStage({ initialPath }: LineStageProps) {
       <div className="line-world">
         <div className="line-trunk" aria-hidden="true" />
         <svg className="line-fork" aria-hidden="true">
-          {DIRECTIONS.map((direction) => (
+          {DIRECTIONS.filter((direction) => BRANCHES.some((branch) => branch.direction === direction)).map((direction) => (
             <path key={direction} data-branch={direction} pathLength={1} className="line-path" />
           ))}
         </svg>

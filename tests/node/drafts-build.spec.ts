@@ -19,6 +19,8 @@ test.describe("a build with drafts hidden", () => {
     const landing = readFileSync(join(out, "index.html"), "utf8");
     expect(landing).not.toMatch(/href="[^"]*\/personal/);
     expect(landing).not.toContain("Personal");
+    expect(landing).not.toContain(`data-branch="-1"`);
+    expect(landing).not.toContain(`data-option="-1"`);
     expect(readFileSync(join(out, "projects-blog/index.html"), "utf8")).not.toMatch(/\/blog"/);
     expect(readFileSync(join(out, "projects-blog/projects/aqueduct/index.html"), "utf8")).not.toMatch(/\/projects-blog\/blog/);
   });
