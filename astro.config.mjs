@@ -11,5 +11,7 @@ export default defineConfig({
   integrations: [react()],
   vite: {
     plugins: [tailwindcss(), yaml()],
+    // The line engine runs in the browser too, so the tree reads the draft setting as a constant.
+    define: { __SITE_DRAFTS__: JSON.stringify(process.env.SITE_DRAFTS ?? "") },
   },
 });

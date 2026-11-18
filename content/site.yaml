@@ -10,6 +10,8 @@
 #   summary   one line, on a section only (a node with children).
 #   preview   one line of at most 90 characters, on a leaf only (a node without children).
 #   children  nodes below this one, in display order.
+#   draft     true while the node holds placeholder content. A build with SITE_DRAFTS=hide
+#             leaves out the node, its subtree, and any section left with no children.
 
 # The root is the landing page. Its label is the name shown there.
 label: Sadig Akhund
@@ -23,13 +25,16 @@ children:
         children:
           - slug: placeholder-leaf
             label: PLACEHOLDER leaf
+            draft: true
           - slug: placeholder-group
             label: PLACEHOLDER group
+            draft: true
             children:
               - slug: placeholder-deep
                 label: PLACEHOLDER deep leaf
       - slug: instagram
         label: Instagram
+        draft: true
 
   - slug: professional
     label: Professional
@@ -67,3 +72,4 @@ children:
             preview: Declarative data pipelines on Spark or DuckDB that propose their own fix when a run fails.
       - slug: blog
         label: Blog
+        draft: true

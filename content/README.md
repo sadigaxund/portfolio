@@ -13,6 +13,8 @@ Everything the owner edits by hand lives here. A push to `main` redeploys the si
 
 Each node has a `slug` and a `label`. It may have a `summary` (sections only), a `preview` (leaves only), and `children`. A node with children is a section. A node without children is a leaf. Children nest without limit.
 
+`draft: true` marks a node with placeholder content. A build with `SITE_DRAFTS=hide` leaves out the node, its subtree, and any section left empty. Without that variable, drafts show.
+
 `side` appears only on the root's children, and its value is `left`, `straight`, or `right`. There is exactly one road per side until the line engine can draw more.
 
 ## Add a leaf
