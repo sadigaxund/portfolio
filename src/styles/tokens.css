@@ -45,6 +45,7 @@
   --text-detail: clamp(0.9375rem, 0.92rem + 0.08vw, 1rem);
   /* Running text stops at about 70 characters. */
   --measure: 55ch;
+  --link-hover-thickness: 2px;
   --target-min: 2.75rem;
   --line-trunk-top: 20rem;
   --hero-width: 72rem;
@@ -100,4 +101,9 @@ a {
   overflow-wrap: anywhere;
   text-decoration: underline;
   text-underline-offset: 0.2em;
+}
+
+/* Hover thickens the underline and leaves the color alone. */
+a:hover {
+  text-decoration-thickness: var(--link-hover-thickness);
 }

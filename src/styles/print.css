@@ -1,0 +1,53 @@
+/* Print: a leaf as plain black text on white. The line, the controls, and the foot cards stay on screen. DESIGN.md, "Print". */
+@media print {
+  :root {
+    --color-bg: white;
+    --color-fg: black;
+    --color-muted: black;
+    --color-primary: black;
+    --color-route: black;
+    --color-border: black;
+    color-scheme: light;
+  }
+
+  .line-stage,
+  .skip-link,
+  .leaf-head,
+  .note-bar,
+  .leaf-foot,
+  .markii-credit,
+  [role="region"][aria-label*="otification" i] {
+    display: none !important;
+  }
+
+  [data-view="leaf"] body {
+    display: block;
+    min-height: 0;
+  }
+
+  *,
+  *::before,
+  *::after {
+    background: none !important;
+    box-shadow: none !important;
+  }
+
+  .leaf-column {
+    width: auto;
+    margin: 0;
+    padding: 0;
+  }
+
+  .site-foot {
+    padding: 1.5rem 0 0;
+    border-top: 1px solid black;
+  }
+
+  /* A printed page cannot be clicked, so an outside link prints its address. A nav link already shows it. */
+  .leaf-column a[href^="http"]:not(.mk-nav_link)::after,
+  .site-foot a[href^="http"]::after {
+    content: "(" attr(href) ")";
+    margin-inline-start: 0.25em;
+    overflow-wrap: anywhere;
+  }
+}

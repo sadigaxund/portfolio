@@ -61,11 +61,11 @@ export function createScene(stage: HTMLElement, probe: HTMLElement, path: TreeNo
   const extras = required<HTMLElement>(stage, ".line-levels");
   const tail = required<HTMLElement>(stage, ".line-tail");
   const back = required<HTMLElement>(stage, "[data-back]");
-  const branches = DIRECTIONS.map((direction) => ({
-    direction,
-    path: required<SVGPathElement>(stage, `[data-branch="${direction}"]`),
-    label: stage.querySelector<HTMLElement>(`[data-option="${direction}"]`),
-  }));
+  // A direction with no road, such as a hidden draft, has no path in the stage.
+  const branches = DIRECTIONS.flatMap((direction) => {
+    const path = stage.querySelector<SVGPathElement>(`[data-branch="${direction}"]`);
+    return path ? [{ direction, path, label: stage.querySelector<HTMLElement>(`[data-option="${direction}"]`) }] : [];
+  });
   const parts = new Map<TreeNode, { run: HTMLElement; curve: SVGPathElement; holder: SVGSVGElement }>();
 
   const scene: Scene = {

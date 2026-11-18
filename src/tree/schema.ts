@@ -3,7 +3,7 @@ import type { NodeSpec, RoadSpec, Side, TreeSpec } from "./tree";
 
 const FILE = "content/site.yaml";
 const SLUG = /^[a-z0-9-]+$/;
-const NODE_KEYS = ["slug", "label", "summary", "preview", "children"] as const;
+const NODE_KEYS = ["slug", "label", "summary", "preview", "children", "draft"] as const;
 const SIDES: readonly Side[] = ["left", "straight", "right"];
 /** Three lines of a stop hold about 100 characters on a 360px phone, so a legal preview is never cut off. */
 const PREVIEW_MAX = 90;
@@ -13,6 +13,10 @@ function parseNode(value: unknown, path: string, keys: readonly string[] = NODE_
   const slug = asString(FILE, `${path}.slug`, record.slug);
   if (!SLUG.test(slug)) fail(FILE, `${path}.slug`, `must match ${SLUG} but is "${slug}"`);
   const node: NodeSpec = { slug, label: asString(FILE, `${path}.label`, record.label) };
+  if (record.draft !== undefined) {
+    if (typeof record.draft !== "boolean") fail(FILE, `${path}.draft`, "must be true or false");
+    if (record.draft) node.draft = true;
+  }
   const hasChildren = record.children !== undefined;
   if (record.summary !== undefined) {
     if (!hasChildren) fail(FILE, `${path}.summary`, "is only allowed on a section, which has children");

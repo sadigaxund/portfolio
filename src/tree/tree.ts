@@ -1,4 +1,5 @@
 import siteData from "../../content/site.yaml";
+import { hideDrafts, hidesDrafts, hiddenRoutes } from "./drafts";
 import { parseTree } from "./schema";
 
 /** Direction of a branch at the fork: left, straight on, or right. */
@@ -13,6 +14,8 @@ export interface NodeSpec {
   /** One line under a leaf's name on its parent. Leaves only. */
   preview?: string;
   children?: NodeSpec[];
+  /** True while the node holds placeholder content. A build with `SITE_DRAFTS=hide` leaves it out. */
+  draft?: true;
 }
 
 /** Where a road leaves the fork. Only the root's children carry one. */
@@ -29,4 +32,8 @@ export interface TreeSpec {
 }
 
 /** Every node of the site, read from `content/site.yaml`. A node's URL is its parent's URL plus its slug. */
-export const TREE: TreeSpec = parseTree(siteData);
+const FULL: TreeSpec = parseTree(siteData);
+const HIDE = hidesDrafts(__SITE_DRAFTS__);
+export const TREE: TreeSpec = HIDE ? hideDrafts(FULL) : FULL;
+/** Routes left out of this build, so their notes are not reported as orphans. */
+export const HIDDEN_ROUTES: readonly string[] = HIDE ? hiddenRoutes(FULL) : [];

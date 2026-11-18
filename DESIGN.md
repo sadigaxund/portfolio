@@ -47,7 +47,7 @@ Each role has one implementation. A variant needs a row here first.
 
 | Role | Implementation | Rule |
 |---|---|---|
-| Text link | `Link` from `my-you-eye`, or an anchor in `.hero-links`, `.line-option`, `.line-back`, `.stop` | Always underlined. |
+| Text link | `Link` from `my-you-eye`, or an anchor in `.hero-links`, `.line-option`, `.line-back`, `.stop` | Always underlined. On hover the underline thickens to `--link-hover-thickness` (2px) and the color stays. A box link has no underline. |
 | Back link | `.line-back` | Names its destination, as in "Back to Professional" or "Back to Start". Page names are capitalized. The first control after the skip link on every page below the root, inside a `nav` landmark. Fixed at the top left on sections; on a leaf it sits in the leaf header and scrolls away with it. |
 | Skip link | `.skip-link` in `src/styles/chrome.css` | "Skip to content", first on every page below the root, shown only while focused. |
 | Site foot | `src/discovery/SiteFoot.astro` | The one foot of every leaf, a full-width band in `--color-doc-surface` below a hairline: the owner's name and role in `role-detail` with the contact links on the left, the Markii credit on the right. Its left edge lines up with Back's text and its right edge with Update. On a short note it sits at the bottom of the window. Stacked on a phone. |
@@ -61,6 +61,7 @@ Each role has one implementation. A variant needs a row here first.
 | Markii credit | `src/discovery/MarkiiCredit.astro` | In the site foot, one bordered link to markii-org/markii: the Markii logo at 48px, "Powered by" over "Markii", a divider, then the GitHub mark and "GitHub". The border turns route color on hover. |
 | Grant dialog | `src/markii/GrantDialog.tsx`, from my-you-eye `ConfirmDialog` | Opens only after Update. The title is "Update from <host>?", the body is markii's own sentence, and the buttons are markii's two labels. No danger styling. Closing it any way but Allow answers no. |
 | Toast | my-you-eye `Toaster` | One per update, on the result only, default solid tone, bottom right (bottom center on a phone), one at a time for 5 seconds. An update that gets an error status reports "Could not update" and keeps the shown values. The button's loading state shows that an update started. |
+| Print | `src/styles/print.css` | A leaf prints as black text on white with no backgrounds. The line, skip link, header bar, note bar, leaf foot, Markii credit, and toasts are hidden. The site foot keeps the owner's name, role, and contact links. An outside link prints its address after the text, except a nav link, which already shows it. |
 | Step path | Built with the first project leaf | Steps on a route-colored line, each with a short label. A project draws its own idea this way. |
 
 ## Leaves

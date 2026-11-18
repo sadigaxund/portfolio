@@ -4,6 +4,11 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ## [Unreleased]
 
+### Added
+
+- A leaf prints as black text on white, with outside links followed by their address and the line, header bar, and Next and Back boxes left off.
+- Text links thicken their underline on hover.
+
 ### Changed
 
 - The role line reads Software, DevOps, and Data Engineer.
