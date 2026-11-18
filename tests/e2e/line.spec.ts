@@ -389,3 +389,41 @@ test.describe("scrolling back along the straight path", () => {
     await expect(page).toHaveURL(/\/$/);
   });
 });
+
+test("the whole stop is one link target, and its focus outline wraps the text", async ({ page }) => {
+  await page.goto("/professional");
+  const stop = page.locator(".stop").first();
+  const url = await stop.getAttribute("data-stop-url");
+  const branch = await stop.locator(".stop-branch").boundingBox();
+  await page.mouse.move(branch!.x + 4, branch!.y + 4);
+  const thickness = await stop.locator("a").evaluate((el) => getComputedStyle(el).textDecorationThickness);
+  expect(thickness).toBe("2px");
+  // The stretched link receives the click, so a real click point is used instead of an actionability check.
+  const detail = await stop.locator(".role-detail").boundingBox();
+  await page.mouse.click(detail!.x + 4, detail!.y + 4);
+  await expect(page).toHaveURL(new RegExp(`${url}/?$`));
+  await page.goBack();
+  const second = page.locator(".stop").nth(1);
+  const target = await second.getAttribute("data-stop-url");
+  const box = await second.locator(".stop-branch").boundingBox();
+  await page.mouse.click(box!.x + 4, box!.y + 4);
+  await expect(page).toHaveURL(new RegExp(`${target}/?$`));
+});
+
+test("keyboard focus on a stop outlines its text in the route color", async ({ page }) => {
+  await page.goto("/professional");
+  await page.locator(".stop a").first().focus();
+  await page.keyboard.press("Shift+Tab");
+  await page.keyboard.press("Tab");
+  const focus = await page.evaluate(() => {
+    const text = document.querySelector(".stop-text:has(a:focus-visible)");
+    const probe = document.createElement("div");
+    probe.style.color = "var(--color-route)";
+    document.body.append(probe);
+    const style = text ? getComputedStyle(text) : null;
+    return { found: !!text, kind: style?.outlineStyle, color: style?.outlineColor, token: getComputedStyle(probe).color };
+  });
+  expect(focus.found).toBe(true);
+  expect(focus.kind).toBe("solid");
+  expect(focus.color).toBe(focus.token);
+});

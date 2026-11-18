@@ -17,6 +17,9 @@
   align-items: flex-start;
   /* Fixed, because the engine places each curve one gap below the last. */
   height: var(--stop-gap);
+  /* Shrinks to its branch and text, so the stretched link covers only the stop. */
+  position: relative;
+  width: fit-content;
   margin-left: calc(var(--line-x) - var(--line-width) / 2);
 }
 
@@ -31,6 +34,24 @@
   display: inline-block;
   margin-block: calc((var(--target-min) - 1.2em) / -2);
   padding-block: calc((var(--target-min) - 1.2em) / 2);
+}
+
+/* The title link stretches over the whole stop, so the branch and the preview navigate too. */
+.stop-text .role-item a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+/* Focus is drawn around the text area, because the stretched link's own box is only the title. */
+.stop-text .role-item a:focus-visible {
+  outline: none;
+}
+
+.stop-text:has(a:focus-visible) {
+  border-radius: var(--radius-ui);
+  outline: 2px solid var(--color-route);
+  outline-offset: 2px;
 }
 
 /* Previews are capped at 90 characters by the build, so three lines always hold them. */
@@ -87,7 +108,7 @@
 @media (min-width: 40.01rem) {
   .stop[data-side="start"] {
     flex-direction: row-reverse;
-    margin-left: 0;
+    margin-left: auto;
     margin-right: calc(100% - var(--line-x) - var(--line-width) / 2);
     text-align: right;
   }
