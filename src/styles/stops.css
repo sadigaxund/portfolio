@@ -101,6 +101,18 @@
   border-top-right-radius: var(--stop-drop);
 }
 
+/* A subsection also ends in a filled dot, centered where the bend's stroke ends. */
+.stop[data-kind="section"] .stop-branch::before {
+  content: "";
+  position: absolute;
+  left: calc(100% + var(--stop-drop) - (var(--line-width) + var(--stop-end)) / 2);
+  bottom: calc(var(--stop-drop) * -1 - var(--stop-end) / 2);
+  width: var(--stop-end);
+  height: var(--stop-end);
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
 .stop[data-kind="section"] .stop-text {
   margin-left: var(--stop-drop);
 }
@@ -134,6 +146,11 @@
     border-top-left-radius: var(--stop-drop);
   }
 
+  .stop[data-side="start"][data-kind="section"] .stop-branch::before {
+    left: auto;
+    right: calc(100% + var(--stop-drop) - (var(--line-width) + var(--stop-end)) / 2);
+  }
+
   .stop[data-side="start"][data-kind="section"] .stop-text {
     margin-left: 0;
     margin-right: var(--stop-drop);
@@ -146,12 +163,14 @@
   border-color: var(--color-route);
 }
 
+.stop[data-kind="section"]:has(.stop-text a:is(:hover, :focus-visible)) .stop-branch::before,
 .stop[data-kind="leaf"]:has(.stop-text a:is(:hover, :focus-visible)) .stop-branch::after {
   background: var(--color-route);
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .stop-branch,
+  .stop-branch::before,
   .stop-branch::after {
     transition:
       border-color 150ms ease-out,

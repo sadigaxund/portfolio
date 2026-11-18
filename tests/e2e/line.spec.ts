@@ -427,3 +427,28 @@ test("keyboard focus on a stop outlines its text in the route color", async ({ p
   expect(focus.kind).toBe("solid");
   expect(focus.color).toBe(focus.token);
 });
+
+test("a section stop ends in a filled dot that takes the route color on hover, and a leaf keeps its ring", async ({ page }) => {
+  await page.goto("/personal");
+  const read = (selector: string) =>
+    page.evaluate((sel) => {
+      const probe = (token: string) => {
+        const el = document.createElement("div");
+        el.style.color = `var(${token})`;
+        document.body.append(el);
+        const color = getComputedStyle(el).color;
+        el.remove();
+        return color;
+      };
+      const style = getComputedStyle(document.querySelector(sel)!, "::before");
+      return { content: style.content, width: style.width, background: style.backgroundColor, primary: probe("--color-primary"), route: probe("--color-route") };
+    }, selector);
+  const rest = await read('.stop[data-kind="section"] .stop-branch');
+  expect(rest.content).toBe('""');
+  expect(rest.width).toBe("12px");
+  expect(rest.background).toBe(rest.primary);
+  const leaf = await read('.stop[data-kind="leaf"] .stop-branch');
+  expect(leaf.content).toBe("none");
+  await page.locator('.stop[data-kind="section"] .stop-text a').hover();
+  await expect.poll(async () => (await read('.stop[data-kind="section"] .stop-branch')).background).toBe(rest.route);
+});

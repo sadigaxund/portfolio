@@ -11,6 +11,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Changed
 
+- A subsection's stop ends in a filled dot where its branch bends down, and the dot turns the route color on hover.
 - A stop on a section page is one link target, so the branch and the preview open it too, and keyboard focus outlines its text.
 - The role line reads Software, DevOps, and Data Engineer.
 - Back to the landing page reads Back to Start, and update messages appear at the bottom right.
