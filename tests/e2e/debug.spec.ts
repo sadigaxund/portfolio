@@ -67,3 +67,24 @@ test("a planted 200 ms block shows up as dropped frames and a long gap", async (
   expect(planted.gapMs.max).toBeLessThan(400);
   expect(planted.droppedFrames).toBeGreaterThanOrEqual(6);
 });
+
+test("?coat sets data-coat on the root, keeps it across a route change, and none clears it", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("html")).not.toHaveAttribute("data-coat", /.*/);
+  await page.goto("/?coat=grid");
+  await expect(page.locator("html")).toHaveAttribute("data-coat", "grid");
+  await page.getByRole("link", { name: "Professional" }).first().click();
+  await expect(page).toHaveURL(/\/professional\/?$/);
+  await expect(page.locator("html")).toHaveAttribute("data-coat", "grid");
+  await page.goto("/personal");
+  await expect(page.locator("html")).toHaveAttribute("data-coat", "grid");
+  await page.goto("/?coat=none");
+  await expect(page.locator("html")).not.toHaveAttribute("data-coat", /.*/);
+  await page.goto("/personal");
+  await expect(page.locator("html")).not.toHaveAttribute("data-coat", /.*/);
+});
+
+test("an unknown coat value changes nothing", async ({ page }) => {
+  await page.goto("/?coat=sparkle");
+  await expect(page.locator("html")).not.toHaveAttribute("data-coat", /.*/);
+});

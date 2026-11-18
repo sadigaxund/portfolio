@@ -99,6 +99,10 @@ The line is the one authored motion. It lives in one world with one camera, and 
 | Update | The control that runs a note's scripts again | Refresh, run, reload |
 | Start | The landing page, as Back names it | Home, top |
 
+## Coatings
+
+`?coat=grid`, `?coat=contour`, and `?coat=transit` preview a coating through `data-coat` on the root, kept in sessionStorage for the tab. `?coat=none` clears it. With no coat the site is unchanged. The rules and numbers live in `src/styles/coats.css`.
+
 ## Review
 
 The dev-only `/kit` page renders every built role side by side. Check it after changing any role.
