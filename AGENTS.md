@@ -30,6 +30,7 @@ Failure it prevents: six small projects turn into one tangled project.
 - A proposal the user has not accepted goes in the proposals table. Do not build on it as if it were settled.
 - Update task checkboxes as work finishes. A task is checked only after section 5 passes.
 - Record open questions in `PLAN.md`, then ask them.
+- Before a long task, merge what is approved so Pages shows it, and write a numbered "Next steps" list in `PLAN.md` that resumes cold. Then wait for the user's go. The user reviews only on the live site and compacts the session between phases.
 - A reversal adds a new entry and marks the old one superseded. Never rewrite an old entry.
 - After a context compaction, reread `PLAN.md` and this file. Anything you remember that is absent from those files and the repo is not evidence.
 - Never cite `PLAN.md` or its ids in tracked files other than this one. Readers of the repo cannot see it, so such a reference is a dead link. Put the reason itself in the tracked text.
@@ -91,6 +92,12 @@ Rules adopted from that library, because each one prevented a reported bug:
 - Every collection renders a deliberate zero state.
 - Never put `backdrop-filter` inside a transforming subtree, and never use `background-attachment: fixed`. Both force a repaint per frame.
 
+### markii
+
+- Host markii the way its own apps do. The markii-vault Pages app and the VS Code and Obsidian extensions are the reference. Use its renderer, runtime, Lua executor, components, and packs as they are.
+- Never reimplement a markii feature. If markii lacks something, open an issue on `markii-org/markii`, with the user's consent, and wait for it.
+- Inside a leaf, only the header bar and the site foot are site code. Everything between them, the pager included, is markii text drawn by a core component or a pack. A site component in that space once behaved differently from markii's own blocks on a phone.
+
 ---
 
 ## 5. Definition of done
@@ -149,6 +156,7 @@ A comment at a call site says two things at most: the rule in at most three line
 - If an artifact leaks into history, notify the user and wait. Never force-overwrite published history.
 - One branch and one pull request per bundle of tasks. A prose-only diff goes direct to `main`.
 - Never address other people on GitHub without the user's explicit consent. The account speaks in the user's voice.
+- Run `gh` yourself, merges included once the user said yes. Never hand the user a command to type. If a permission mode blocks it, say so and suggest a permission rule.
 
 Who may do what:
 
@@ -181,7 +189,7 @@ These rules apply to every sentence committed here.
 - Delete the words that survive their own deletion: crucial, delve, pivotal, showcase, tapestry, testament, underscore, vibrant, landscape, key, robust, leverage, seamless, comprehensive.
 - No "-ing" clause bolted onto a fact to make it sound deeper.
 
-Site copy written for visitors is exempt from the word-count rule. It still needs the user's approval, because it speaks as the user.
+Site copy written for visitors is exempt from the word-count rule. It still needs the user's approval, because it speaks as the user. The private `private/copy-review.md` lists every visitor string outside note bodies. Update it in the same task as any copy change, and flag the new string for approval before merging.
 
 ---
 
@@ -223,6 +231,7 @@ Each row is a mistake a reasonable agent would repeat. One line, then where to l
 | Leave a `my-you-eye` color token at the library's value, or override one without its `-fg` pair | The library's tokens are light only. A missing `--color-primary-fg` hid the Run button's label in dark mode, and unset surface tokens gave dark pages a white toast with faint text. Set every library color the site uses from the site palette in `src/styles/tokens.css`, and screenshot both color schemes. |
 | Plant a defect, or measure a build, without rebuilding first | `dist/` holds whatever built last. Playwright served a stale `dist/` and a planted defect stayed green, and a stash-and-build of `main` left `main`'s output behind, so a size comparison measured `main` twice. Run `npm run build` after planting, restoring, or switching branches, and copy each build aside before comparing. |
 | Add page chrome outside `main` and check it only in still screenshots at 800px tall | A site foot sat below the fold at 800px, but on a 1080px window it showed mid-screen during a walk and covered the line, because `[data-line-reveal]` hides only `main`. Capture transition frames at 1920x1080 and 1280x800 for any element outside `main`. |
+| Drop a scratch script in the repo root so it can import `@playwright/test` | `eslint .` lints it, and `validate` went red while a worker's probe sat there. Keep it in the scratchpad and import Playwright by its absolute path in this repo's `node_modules`, since ES modules ignore `NODE_PATH`. |
 | Set a vertical margin on blocks inside `[data-mk-root]` | markii spaces every top-level block with one `> * + *` rule at zero specificity. A site rule that zeroed `.note p` made text touch the component above it. Leave note block spacing to markii. |
 
 ---
