@@ -5,6 +5,7 @@ export interface TreeNode {
   label: string;
   summary?: string;
   preview?: string;
+  thumb?: string;
   parent: TreeNode | null;
   children: TreeNode[];
   /** The branch walked to reach this node. Null at the root. */
@@ -23,6 +24,7 @@ function buildNode(spec: NodeSpec, parent: TreeNode, direction: Direction): Tree
     label: spec.label,
     summary: spec.summary,
     preview: spec.preview,
+    thumb: spec.thumb,
     parent,
     children: [],
     direction,

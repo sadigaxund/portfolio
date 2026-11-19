@@ -3,7 +3,8 @@ import type { NodeSpec, RoadSpec, Side, TreeSpec } from "./tree";
 
 const FILE = "content/site.yaml";
 const SLUG = /^[a-z0-9-]+$/;
-const NODE_KEYS = ["slug", "label", "summary", "preview", "children", "draft"] as const;
+const NODE_KEYS = ["slug", "label", "summary", "preview", "thumb", "children", "draft"] as const;
+const THUMB = /^(?!\/)(?!.*\.\.)[^\s]+\.(webp|png|jpg)$/;
 const SIDES: readonly Side[] = ["left", "straight", "right"];
 /** Three lines of a stop hold about 100 characters on a 360px phone, so a legal preview is never cut off. */
 const PREVIEW_MAX = 90;
@@ -28,6 +29,11 @@ function parseNode(value: unknown, path: string, keys: readonly string[] = NODE_
     if (node.preview.length > PREVIEW_MAX) {
       fail(FILE, `${path}.preview`, `is ${node.preview.length} characters; keep it to ${PREVIEW_MAX} so a phone shows it whole`);
     }
+  }
+  if (record.thumb !== undefined) {
+    if (hasChildren) fail(FILE, `${path}.thumb`, "is only allowed on a leaf, which has no children");
+    node.thumb = asString(FILE, `${path}.thumb`, record.thumb);
+    if (!THUMB.test(node.thumb)) fail(FILE, `${path}.thumb`, `must be a .webp, .png, or .jpg path inside content/, but is "${node.thumb}"`);
   }
   if (hasChildren) {
     const list = asList(FILE, `${path}.children`, record.children);

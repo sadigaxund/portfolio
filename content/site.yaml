@@ -60,15 +60,19 @@ children:
         children:
           - slug: git-resume
             label: git-resume
+            thumb: projects-blog/projects/images/thumb-git-resume.webp
             preview: Push a LaTeX resume, and GitHub Actions builds versioned PDFs and a live viewer.
           - slug: mandible
             label: Mandible
+            thumb: projects-blog/projects/images/thumb-mandible.webp
             preview: A Rust TUI manual for any CLI tool, with every command and flag in one tree.
           - slug: markii
             label: Markii
+            thumb: projects-blog/projects/images/thumb-markii.webp
             preview: Markdown that renders your own components, with sandboxed Lua feeding live data.
           - slug: aqueduct
             label: Aqueduct
+            thumb: projects-blog/projects/images/thumb-aqueduct.webp
             preview: Declarative data pipelines on Spark or DuckDB that propose their own fix when a run fails.
       - slug: blog
         label: Blog
