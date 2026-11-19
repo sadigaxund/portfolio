@@ -22,7 +22,6 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 - On most phones the leaf header keeps Back, the data's age, and Update on one row, and moves the update controls to a second row only when they would touch Back.
 - Walking back, each branch closes before the retracting line passes it, lowest first, so no branch roots are left on the line.
 - Scrolling past the top or bottom of a page no longer bounces to show the page's edge.
-- The landing summary tells how the work moved from data pipelines to the servers and deploys under them.
 - After walking into a longer page, the line above no longer runs past the point where the next branch leaves it.
 - Note text, lists, and components share one 44rem column and end at the same right edge.
 - Next and Back at the end of a leaf are drawn by Markii, as links with an arrow, a name, and a small line.
