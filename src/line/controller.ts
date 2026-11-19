@@ -3,6 +3,7 @@ import { focusArrival } from "./arrival";
 import { clearContent, revealContent } from "./content";
 import { chooseEase } from "./ease";
 import { createRunner } from "./runner";
+import { mountReflow } from "./reflow";
 import { createScene } from "./scene";
 import { holdScroll } from "./scrollHold";
 import { CLEAR_MS, createSteps } from "./steps";
@@ -25,6 +26,8 @@ function announce(stage: HTMLElement, name: string, detail: object): void {
  */
 export function mountLine(stage: HTMLElement, probe: HTMLElement, initialPath: string): () => void {
   const runner = createRunner();
+  // The hero's size sets the fork, so measure it before the first draw.
+  const stopReflow = mountReflow(stage, () => onResize());
   const scene = createScene(stage, probe, linePathOf(nodeAt(initialPath)));
   const { clearStep, panStep, growStep } = createSteps(stage, scene, runner, chooseEase());
   let backHref = "";
@@ -151,6 +154,7 @@ export function mountLine(stage: HTMLElement, probe: HTMLElement, initialPath: s
     runner.cancel();
     holdScroll("line", false);
     resize.disconnect();
+    stopReflow();
     document.removeEventListener("astro:before-preparation", onPrepare);
     document.removeEventListener("astro:before-swap", onBeforeSwap);
     document.removeEventListener("astro:after-swap", onSwapped);

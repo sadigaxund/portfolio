@@ -14,4 +14,5 @@ import "../styles/roles.css";
 import "../styles/note.css";
 import "../styles/leaf.css";
 import "../styles/chrome.css";
+import "../styles/coats.css";
 import "../styles/print.css";

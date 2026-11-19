@@ -54,7 +54,7 @@ Each role has one implementation. A variant needs a row here first.
 | Contact links | `src/discovery/ContactLinks.astro` | The profile links from `content/profile.yaml`, in the hero and the site foot. Each is at least 44px in both directions. |
 | Hero | `src/discovery/Hero.astro` | Name and role line on the left, summary and contact links on the right. One column on a phone. Appears only on the landing page. |
 | Signpost | `.line-option` in `src/line/LineStage.tsx` | Road name in `role-item`, with its children's names in `role-detail`. On a phone three roads share about 108px each, so the name uses the body face at 1rem, weight 500, which keeps "Professional" on one line. |
-| Stop | `.stop` in `src/ui/SectionBody.astro` | Title in `role-item` with a 44px target, then a preview in `role-detail`, at most 22rem wide and three lines, wrapped without orphans. A section previews its children's names, and a leaf's `preview` comes from `content/site.yaml`, where the build caps it at 90 characters so it is never cut off. A leaf's branch ends in an open ring, and a section's bends on down. Pointing at or focusing a stop draws its branch in the route color, and a leaf's ring fills. Text hangs directly off its branch, with no card. |
+| Stop | `.stop` in `src/ui/SectionBody.astro` | Title in `role-item` with a 44px target, then a preview in `role-detail`, at most 22rem wide and three lines, wrapped without orphans. A section previews its children's names, and a leaf's `preview` comes from `content/site.yaml`, where the build caps it at 90 characters so it is never cut off. A leaf's branch ends in an open ring, and a section's bends on down and ends in a filled dot the size of that ring. Pointing at or focusing a stop draws its branch in the route color, and a leaf's ring fills and a section's dot changes color. Text hangs directly off its branch, with no card. The title link stretches over the whole stop, so the branch and the preview open it, and keyboard focus outlines the text area in the route color. |
 | Leaf frame | `src/ui/LeafBody.astro`, `src/styles/leaf.css` | A static, full-width header bar 3.5rem tall with a hairline below: Back on the left, and the note bar on the right for a note with scripts. Then the note in one centered 50rem column, where prose keeps the measure and components use the whole column, then the leaf foot, then the site foot. On a phone the column has a 3rem left and 1.25rem right gutter, in line with Back. |
 | Leaf foot | `src/ui/LeafFoot.astro` | Two bordered boxes, each one whole link: "Back to" over the parent's name on the left, "Next" over the next sibling's name on the right. Small line in `role-detail`, name in `role-item`. The border turns route color on hover. On a phone Next stacks above Back. The last leaf of a section shows Back only. |
 | Note bar | `src/markii/NoteBar.tsx` | Only on a note with a script fence, at the right end of the leaf header. The data's age in `role-detail` ("Updated Nov 2026", "Updated 10 minutes ago"; a phone drops "Updated") and a secondary 48px "Update" button. |
@@ -80,6 +80,10 @@ The contract:
 
 On the landing page the hero comes before the roads in the document, so Tab reaches Resume and Email before the fork. After a walk, focus moves to the new page's `h1`, which shows no ring because it is not a control.
 
+## Reflow
+
+The site fits a 320px window and html text at 200% with no sideways scroll or overlap. The engine measures the hero's bottom edge and the first stop, and stop rows grow to the tallest stop, so no spacing is a fixed height. `tests/e2e/reflow.spec.ts` checks it. Phone gutters stop growing with text, and a leaf's update controls sit on a second row below Back.
+
 ## Motion
 
 The line is the one authored motion. It lives in one world with one camera, and every route between non-leaf nodes is a walk. Timing lives in `src/line/steps.ts` and `src/line/seam.ts`. Everything else stays still, including the thread inside a leaf.
@@ -98,6 +102,10 @@ The line is the one authored motion. It lives in one world with one camera, and 
 | Contact | The owner's links in the hero and the site foot | Get in touch, reach out |
 | Update | The control that runs a note's scripts again | Refresh, run, reload |
 | Start | The landing page, as Back names it | Home, top |
+
+## Coatings
+
+`?coat=grid`, `?coat=contour`, and `?coat=transit` preview a coating through `data-coat` on the root, kept in sessionStorage for the tab. `?coat=none` clears it. With no coat the site is unchanged. The rules and numbers live in `src/styles/coats.css`.
 
 ## Review
 

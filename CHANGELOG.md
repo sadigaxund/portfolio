@@ -6,11 +6,15 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Added
 
+- Three preview coatings for the map, chosen with ?coat=grid, ?coat=contour, or ?coat=transit and cleared with ?coat=none.
 - A leaf prints as black text on white, with outside links followed by their address and the line, header bar, and Next and Back boxes left off.
 - Text links thicken their underline on hover.
 
 ### Changed
 
+- Pages fit a 320px window and text enlarged to 200% without sideways scrolling: the landing trunk starts below the hero, section stops make room for their heading and preview text, and a leaf's update controls take a second row on a phone.
+- A subsection's stop ends in a filled dot where its branch bends down, and the dot turns the route color on hover.
+- A stop on a section page is one link target, so the branch and the preview open it too, and keyboard focus outlines its text.
 - The role line reads Software, DevOps, and Data Engineer.
 - Back to the landing page reads Back to Start, and update messages appear at the bottom right.
 - Project pages list their links as one group of rows, each with its address, and show light stills in place of the 8 MB demo GIFs, with a link to watch the demo.

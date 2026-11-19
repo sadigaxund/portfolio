@@ -5,9 +5,14 @@
   --stop-gap: 8rem;
   --stop-end: 0.75rem;
   --line-x: calc(var(--line-center) + var(--line-rest));
+  --stop-x: calc(var(--line-x) - var(--line-width) / 2);
 }
 
+/* Every row is as tall as the tallest stop and at least a gap, so larger text pushes the next stop down. */
 .stops {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-rows: minmax(var(--stop-gap), 1fr);
   padding-bottom: 6rem;
   list-style: none;
 }
@@ -15,9 +20,12 @@
 .stop {
   display: flex;
   align-items: flex-start;
-  /* Fixed, because the engine places each curve one gap below the last. */
-  height: var(--stop-gap);
-  margin-left: calc(var(--line-x) - var(--line-width) / 2);
+  /* The grid row sets the height, and the engine reads it to place each curve one row below the last. */
+  /* Shrinks to its branch and text, so the stretched link covers only the stop. */
+  position: relative;
+  width: fit-content;
+  max-width: calc(100% - var(--stop-x));
+  margin-left: var(--stop-x);
 }
 
 .stop-text {
@@ -33,14 +41,28 @@
   padding-block: calc((var(--target-min) - 1.2em) / 2);
 }
 
-/* Previews are capped at 90 characters by the build, so three lines always hold them. */
+/* The title link stretches over the whole stop, so the branch and the preview navigate too. */
+.stop-text .role-item a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+/* Focus is drawn around the text area, because the stretched link's own box is only the title. */
+.stop-text .role-item a:focus-visible {
+  outline: none;
+}
+
+.stop-text:has(a:focus-visible) {
+  border-radius: var(--radius-ui);
+  outline: 2px solid var(--color-route);
+  outline-offset: 2px;
+}
+
+/* Previews are capped at 90 characters by the build, and the row grows to hold them at any text size. */
 .stop-text .role-detail {
-  display: -webkit-box;
   margin-top: 0.25rem;
-  overflow: hidden;
   text-wrap: pretty;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
 }
 
 .stop-branch {
@@ -80,6 +102,18 @@
   border-top-right-radius: var(--stop-drop);
 }
 
+/* A subsection also ends in a filled dot, centered where the bend's stroke ends. */
+.stop[data-kind="section"] .stop-branch::before {
+  content: "";
+  position: absolute;
+  left: calc(100% + var(--stop-drop) - (var(--line-width) + var(--stop-end)) / 2);
+  bottom: calc(var(--stop-drop) * -1 - var(--stop-end) / 2);
+  width: var(--stop-end);
+  height: var(--stop-end);
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
 .stop[data-kind="section"] .stop-text {
   margin-left: var(--stop-drop);
 }
@@ -87,8 +121,9 @@
 @media (min-width: 40.01rem) {
   .stop[data-side="start"] {
     flex-direction: row-reverse;
-    margin-left: 0;
-    margin-right: calc(100% - var(--line-x) - var(--line-width) / 2);
+    margin-left: auto;
+    margin-right: calc(100% - var(--stop-x) - var(--line-width));
+    max-width: calc(var(--stop-x) + var(--line-width));
     text-align: right;
   }
 
@@ -113,6 +148,11 @@
     border-top-left-radius: var(--stop-drop);
   }
 
+  .stop[data-side="start"][data-kind="section"] .stop-branch::before {
+    left: auto;
+    right: calc(100% + var(--stop-drop) - (var(--line-width) + var(--stop-end)) / 2);
+  }
+
   .stop[data-side="start"][data-kind="section"] .stop-text {
     margin-left: 0;
     margin-right: var(--stop-drop);
@@ -125,12 +165,14 @@
   border-color: var(--color-route);
 }
 
+.stop[data-kind="section"]:has(.stop-text a:is(:hover, :focus-visible)) .stop-branch::before,
 .stop[data-kind="leaf"]:has(.stop-text a:is(:hover, :focus-visible)) .stop-branch::after {
   background: var(--color-route);
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .stop-branch,
+  .stop-branch::before,
   .stop-branch::after {
     transition:
       border-color 150ms ease-out,

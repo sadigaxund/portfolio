@@ -47,7 +47,8 @@
   --measure: 55ch;
   --link-hover-thickness: 2px;
   --target-min: 2.75rem;
-  --line-trunk-top: 20rem;
+  /* From the hero's bottom edge down to where the landing trunk begins. */
+  --trunk-gap: 7.3rem;
   --hero-width: 72rem;
   --hero-top: 3.5rem;
 }

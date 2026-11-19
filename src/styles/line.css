@@ -1,14 +1,16 @@
 :root {
   /* Whole pixels keep the straight parts of the line crisp at rest. */
   --line-center: round(50%, 1px);
-  --line-fork-y: round(62vh, 1px);
+  /* --hero-end is the hero's measured bottom, written by the engine. The fork sits below the trunk's start. */
+  --line-trunk-top: round(calc(var(--hero-end, 12.5rem) + var(--trunk-gap)), 1px);
+  --line-fork-y: max(round(62vh, 1px), calc(var(--line-trunk-top) + 2rem));
   --line-spread: round(min(30vw, 22rem), 1px);
   --line-stem: 6rem;
   --line-inset: 12vh;
   --line-lift: calc(var(--line-fork-y) - var(--line-inset));
   --line-width: 2px;
+  /* The least room a section heading takes. A taller heading grows past it. */
   --section-head: 8.5rem;
-  --line-trunk-top: 16rem;
   --line-stub: calc(var(--line-stem) * 1.5);
   /* Where the main line rests after a choice, measured from the page center. */
   --line-rest: 0px;
@@ -16,17 +18,20 @@
   --line-content-width: min(34rem, 50% - 3rem);
   --line-content-top: calc(var(--line-inset) + var(--line-stem) + 1rem);
   --line-back-left: 1rem;
+  --gutter: min(3rem, 14vw);
+  --gutter-end: min(1.25rem, 6vw);
 }
 
 /* On a phone the line rests in a left gutter, and the fork lifts out of view. */
 @media (max-width: 40rem) {
   :root {
     --line-inset: calc(var(--line-stem) * -1);
-    --line-rest: round(1.5rem - 50vw, 1px);
-    --line-content-start: 3rem;
-    --line-content-width: calc(100% - 4rem);
+    /* Gutters stop growing with the text size, so large text keeps its width. */
+    --line-rest: round(min(1.5rem, 7vw) - 50vw, 1px);
+    --line-content-start: var(--gutter);
+    --line-content-width: calc(100% - var(--gutter) - min(1rem, 4vw));
     --line-content-top: 4rem;
-    --line-back-left: 2.25rem;
+    --line-back-left: min(2.25rem, 10vw);
   }
 }
 
@@ -106,7 +111,7 @@ body {
 
 /* The line begins below the landing hero, and the lift carries that start off screen. */
 .line-trunk {
-  top: min(var(--line-trunk-top), var(--line-fork-y) - 2rem);
+  top: var(--line-trunk-top);
   left: calc(var(--line-center) - var(--line-width) / 2);
   bottom: calc(100% - var(--line-fork-y));
 }
@@ -205,7 +210,7 @@ body {
   width: var(--line-content-width);
   margin-left: var(--line-content-start);
   margin-top: var(--line-content-top);
-  height: var(--section-head);
+  min-height: var(--section-head);
   padding-block: 2rem;
 }
 
