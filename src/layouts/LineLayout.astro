@@ -40,31 +40,6 @@ const canonical = Astro.site ? new URL(node.url, Astro.site).href : undefined;
     <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/favicon.svg`} />
     <link rel="preload" as="font" type="font/woff2" href={geologica} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={instrumentSans} crossorigin />
-    <script is:inline>
-      // ?coat=grid|contour|transit previews a coating, and sessionStorage keeps it for the tab. ?coat=none clears it.
-      (() => {
-        const apply = () => {
-          try {
-            const coat = sessionStorage.getItem("coat");
-            if (coat) document.documentElement.dataset.coat = coat;
-            else delete document.documentElement.dataset.coat;
-          } catch {
-            // Blocked storage leaves the coat off.
-          }
-        };
-        try {
-          const asked = new URLSearchParams(location.search).get("coat");
-          if (asked === "" || asked === "none") sessionStorage.removeItem("coat");
-          else if (["grid", "contour", "transit"].includes(asked)) sessionStorage.setItem("coat", asked);
-        } catch {
-          // Blocked storage leaves the coat off.
-        }
-        apply();
-        // A route change swaps the root's attributes, so the coat is put back after each swap.
-        if (!window.coatSwap) document.addEventListener("astro:after-swap", apply);
-        window.coatSwap = true;
-      })();
-    </script>
     <ClientRouter />
   </head>
   <body>

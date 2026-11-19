@@ -103,9 +103,9 @@ The line is the one authored motion. It lives in one world with one camera, and 
 | Update | The control that runs a note's scripts again | Refresh, run, reload |
 | Start | The landing page, as Back names it | Home, top |
 
-## Coatings
+## Paper
 
-`?coat=grid`, `?coat=contour`, and `?coat=transit` preview a coating through `data-coat` on the root, kept in sessionStorage for the tab. `?coat=none` clears it. With no coat the site is unchanged. The rules and numbers live in `src/styles/coats.css`.
+A dot grid is the map's paper. It sits behind the line on every page, in light and dark, and moves with the camera. The rule and pitch live in `src/styles/paper.css`.
 
 ## Review
 
