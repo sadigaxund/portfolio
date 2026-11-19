@@ -29,7 +29,8 @@ export function mountLine(stage: HTMLElement, probe: HTMLElement, initialPath: s
   // The hero's size sets the fork, so measure it before the first draw.
   const stopReflow = mountReflow(stage, () => onResize());
   const scene = createScene(stage, probe, linePathOf(nodeAt(initialPath)));
-  const { clearStep, panStep, growStep } = createSteps(stage, scene, runner, chooseEase());
+  const ease = chooseEase();
+  const { clearStep, panStep, growStep } = createSteps(stage, scene, runner, ease);
   let backHref = "";
   let backLabel = "";
   let pending: { steps: Step[]; speed: number; returned?: string } | null = null;
@@ -105,7 +106,8 @@ export function mountLine(stage: HTMLElement, probe: HTMLElement, initialPath: s
     holdScroll("line", true);
     const lineCleared = clearStep(first, speed);
     const keep = first.kind === "down" ? first.node.url : undefined;
-    const contentCleared = clearContent(runner, CLEAR_MS * speed, keep);
+    const run = first.kind === "up" ? scene.levels().find((level) => level.node === first.node)?.run : undefined;
+    const contentCleared = clearContent(runner, CLEAR_MS * speed, keep, run && { run, ease });
     pending = { steps, speed, returned };
     (event as RouterEvent).loader = async () => {
       await Promise.all([lineCleared, contentCleared]).catch(() => undefined);

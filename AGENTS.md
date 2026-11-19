@@ -97,6 +97,7 @@ Rules adopted from that library, because each one prevented a reported bug:
 - Host markii the way its own apps do. The markii-vault Pages app and the VS Code and Obsidian extensions are the reference. Use its renderer, runtime, Lua executor, components, and packs as they are.
 - Never reimplement a markii feature. If markii lacks something, open an issue on `markii-org/markii`, with the user's consent, and wait for it.
 - Inside a leaf, only the header bar and the site foot are site code. Everything between them, the pager included, is markii text drawn by a core component or a pack. A site component in that space once behaved differently from markii's own blocks on a phone.
+- A note belongs to its author, who may not be a developer. It holds only markii text written by hand, including its pager. The site generates nothing into a note and adds no test or build check on what a note says. The only checks on a note are markii's own: its parser, lints, and pack validation.
 
 ---
 
