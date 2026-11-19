@@ -2,12 +2,18 @@
   --paper-grid-pitch: 24px;
 }
 
-/* The grid is the map's paper. The camera moves the layer, so it reaches past the page by a screen on the sides and the bottom. */
+/*
+ * The grid is the map's paper. The camera moves the layer, so it reaches past the page by a screen
+ * plus the camera's whole travel, on every side. The pattern stays anchored to the world's origin.
+ */
 .line-world::before {
+  --paper-reach-x: calc(100vw + var(--line-spread) + max(var(--line-cam-x, 0px), -1 * var(--line-cam-x, 0px)));
+  --paper-reach-y: calc(100vh + var(--line-lift) + max(var(--line-cam-y, 0px), -1 * var(--line-cam-y, 0px)));
   content: "";
   position: absolute;
-  inset: 0 -50vw -100vh;
+  inset: calc(-1 * var(--paper-reach-y)) calc(-1 * var(--paper-reach-x));
   pointer-events: none;
   background-image: radial-gradient(circle, var(--color-border) 0.5px, transparent 1px);
   background-size: var(--paper-grid-pitch) var(--paper-grid-pitch);
+  background-position: var(--paper-reach-x) var(--paper-reach-y);
 }

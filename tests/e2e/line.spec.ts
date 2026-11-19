@@ -35,9 +35,9 @@ test("the line survives a route change and keeps moving, with nothing written pe
     requestAnimationFrame(tick);
   });
 
-  await page.getByRole("link", { name: "Projects and blog" }).click();
+  await page.getByRole("link", { name: "Projects & Blog" }).click();
   await expect(page).toHaveURL(/\/projects-blog$/);
-  await expect(page.locator("h1")).toHaveText("Projects and blog");
+  await expect(page.locator("h1")).toHaveText("Projects & Blog");
   await settledAt(page, 1);
 
   const result = await page.evaluate(() => {
@@ -114,7 +114,7 @@ test("the chosen line reaches the page bottom, stays visible, and the others ret
   expect(box.bottom).toBeGreaterThanOrEqual(box.page - 1);
   expect(box.covered).toBe(false);
   expect(parseFloat(box.otherRetract)).toBe(1);
-  await expect(page.getByRole("link", { name: "Projects and blog" })).toBeHidden();
+  await expect(page.getByRole("link", { name: "Projects & Blog" })).toBeHidden();
 });
 
 test("a deep link draws the walked line with no animation", async ({ page }) => {
@@ -140,7 +140,7 @@ test("back retraces the path, and an interrupted choice settles", async ({ page 
   await page.goBack();
   await expect(page.locator("h1")).toHaveText("Sadig Akhund");
   await settledAt(page, 0);
-  await expect(page.getByRole("link", { name: "Projects and blog" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Projects & Blog" })).toBeVisible();
 });
 
 test("every tree node has its own page", async ({ page }) => {
@@ -186,7 +186,7 @@ test("changing branch through history passes the fork and lands on the new branc
   await whenReady(page);
   await page.locator("[data-back]").getByRole("link").click();
   await settledAt(page, 0);
-  await page.getByRole("link", { name: "Projects and blog" }).click();
+  await page.getByRole("link", { name: "Projects & Blog" }).click();
   await settledAt(page, 1);
   await page.evaluate(() => {
     const win = window as unknown as { targets: number[] };
@@ -264,8 +264,8 @@ test("reduced motion jumps straight to the end state", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   await whenReady(page);
-  await page.getByRole("link", { name: "Projects and blog" }).click();
-  await expect(page.locator("h1")).toHaveText("Projects and blog");
+  await page.getByRole("link", { name: "Projects & Blog" }).click();
+  await expect(page.locator("h1")).toHaveText("Projects & Blog");
   expect(await progress(page)).toBe(1);
 });
 
@@ -451,4 +451,21 @@ test("a section stop ends in a filled dot that takes the route color on hover, a
   expect(leaf.content).toBe("none");
   await page.locator('.stop[data-kind="section"] .stop-text a').hover();
   await expect.poll(async () => (await read('.stop[data-kind="section"] .stop-branch')).background).toBe(rest.route);
+});
+
+test("after walking into a taller page, the parent's line stops where the next level leaves it", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/");
+  await whenReady(page);
+  await page.getByRole("link", { name: "Projects & Blog" }).click();
+  await settledAt(page, 1);
+  await page.locator(".stop").getByRole("link", { name: "Projects", exact: true }).click();
+  await expect(page.locator("h1")).toHaveText("Projects");
+  await settledAt(page, 1);
+  const gap = await page.evaluate(() => {
+    const tail = document.querySelector(".line-tail")!.getBoundingClientRect();
+    const curve = document.querySelector(".line-level-curve")!.getBoundingClientRect();
+    return tail.bottom - curve.top;
+  });
+  expect(Math.abs(gap)).toBeLessThanOrEqual(2);
 });

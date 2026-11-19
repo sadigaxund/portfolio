@@ -13,12 +13,18 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Changed
 
+- The section is named Projects & Blog, and the role line reads Software, DevOps & Data Engineer.
+- Project stills on the Projects page are as wide as the text below them.
+- A stop's branch leaves the side of the line, so the line stays one color where they meet.
+- The dot grid covers the whole page on a phone and on deep sections.
+- Code blocks in a note use the same size as code inside a sentence.
+- The leaf header is taller, so Update keeps a clear margin above the header line, and on a phone the data's age sits beside Update.
+- After walking into a longer page, the line above no longer runs past the point where the next branch leaves it.
 - Note text, lists, and components share one 44rem column and end at the same right edge.
 - Next and Back at the end of a leaf are drawn by Markii, as links with an arrow, a name, and a small line.
 - Pages fit a 320px window and text enlarged to 200% without sideways scrolling: the landing trunk starts below the hero, section stops make room for their heading and preview text, and a leaf's update controls take a second row on a phone.
 - A subsection's stop ends in a filled dot where its branch bends down, and the dot turns the route color on hover.
 - A stop on a section page is one link target, so the branch and the preview open it too, and keyboard focus outlines its text.
-- The role line reads Software, DevOps, and Data Engineer.
 - Back to the landing page reads Back to Start, and update messages appear at the bottom right.
 - Project pages list their links as one group of rows, each with its address, and show light stills in place of the 8 MB demo GIFs, with a link to watch the demo.
 - Every leaf page sits in one frame: a header bar with Back and the update control, the note in a centered column, Next and Back boxes, and one foot with the contact links and a Powered by Markii badge.

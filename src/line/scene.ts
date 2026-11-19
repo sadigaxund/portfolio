@@ -60,6 +60,17 @@ function measureStage(stage: HTMLElement, probe: HTMLElement): Measure {
   };
 }
 
+/**
+ * Sets a run's height and rescales its scaleY, so the drawn length stays put.
+ * A walk sets the scale before the page swap, and the new page can be taller.
+ */
+function resizeRun(run: HTMLElement, height: number): void {
+  const before = parseFloat(run.style.height);
+  const scale = /scaleY\(([\d.e-]+)\)/.exec(run.style.transform);
+  run.style.height = `${height}px`;
+  if (scale && before > 0 && height > 0) run.style.transform = `scaleY(${(Number(scale[1]) * before) / height})`;
+}
+
 /** Holds the one world every line lives in, and the camera that looks at it. */
 export function createScene(stage: HTMLElement, probe: HTMLElement, path: TreeNode[]): Scene {
   const extras = required<HTMLElement>(stage, ".line-levels");
@@ -148,7 +159,7 @@ export function createScene(stage: HTMLElement, probe: HTMLElement, path: TreeNo
       stage.dataset.chosen = first ? String(first.node.direction) : "none";
       for (const level of levels) {
         const length = m.height - (m.forkY + m.stem * STUB_RATIO - m.lift);
-        level.run.style.height = `${Math.max(length, 0)}px`;
+        resizeRun(level.run, Math.max(length, 0));
         if (level.run !== tail) {
           level.run.style.left = `${level.x - 1}px`;
           level.run.style.top = `${level.top}px`;

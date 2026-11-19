@@ -36,7 +36,20 @@ test.describe("phone width", () => {
     await page.waitForSelector('.line-stage[data-settled="true"]');
     const over = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     expect(over).toBe(0);
-    const width = await page.locator(".stop-thumb").first().evaluate((el) => el.getBoundingClientRect().width);
-    expect(width).toBeLessThanOrEqual(128.5);
+    await expectThumbsMatchText(page);
   });
 });
+
+test("each thumbnail is as wide as the description under it", async ({ page }) => {
+  await page.goto(ROUTE);
+  await page.waitForSelector('.line-stage[data-settled="true"]');
+  await expectThumbsMatchText(page);
+});
+
+async function expectThumbsMatchText(page: import("@playwright/test").Page) {
+  const pairs = await page.locator(".stop:has(.stop-thumb)").evaluateAll((stops) =>
+    stops.map((stop) => [stop.querySelector(".stop-thumb")!, stop.querySelector(".role-detail")!].map((el) => el.getBoundingClientRect().width)),
+  );
+  expect(pairs.length).toBeGreaterThan(0);
+  for (const [thumb, text] of pairs) expect(Math.abs(thumb - text)).toBeLessThanOrEqual(1);
+}

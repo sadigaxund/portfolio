@@ -65,23 +65,18 @@
   text-wrap: pretty;
 }
 
-/* A project's still sits above its title, inside the stretched link, and follows the text's alignment. */
+/* A project's still sits above its title, inside the stretched link, as wide as the text below it. */
 .stop-thumb {
   display: block;
-  width: var(--stop-thumb);
-  max-width: 100%;
+  width: 100%;
   height: auto;
   aspect-ratio: 16 / 10;
   object-fit: cover;
+  /* Its own width never widens the stop, so the text sets it. */
+  contain: inline-size;
   margin-bottom: 0.5rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-ui);
-}
-
-@media (max-width: 40rem) {
-  .stop-thumb {
-    width: var(--stop-thumb-phone);
-  }
 }
 
 .stop-branch {
@@ -92,6 +87,8 @@
   border-bottom: var(--line-width) solid var(--color-primary);
   border-left: var(--line-width) solid var(--color-primary);
   border-bottom-left-radius: var(--stop-drop);
+  /* Hides the stroke where it lies on the main line, so the line stays whole and the branch leaves its edge. */
+  clip-path: inset(-2rem -2rem -2rem var(--line-width));
 }
 
 /* A leaf ends in an open ring, the same stop the thread inside a leaf uses. */
@@ -146,15 +143,12 @@
     text-align: right;
   }
 
-  .stop[data-side="start"] .stop-thumb {
-    margin-left: auto;
-  }
-
   .stop[data-side="start"] .stop-branch {
     border-left: 0;
     border-right: var(--line-width) solid var(--color-primary);
     border-bottom-left-radius: 0;
     border-bottom-right-radius: var(--stop-drop);
+    clip-path: inset(-2rem var(--line-width) -2rem -2rem);
   }
 
   .stop[data-side="start"][data-kind="leaf"] .stop-branch::after {
