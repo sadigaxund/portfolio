@@ -100,16 +100,19 @@ test("script markers stay hidden while the note renders", async ({ page }) => {
   await expect(page.locator(".mk-script").first()).toBeHidden();
 });
 
+/** The pager is the last markii row in the note: one card per link. */
+const PAGER = "[data-mk-root] > .mk-row:last-child .mk-card";
+
 test("the pager is markii's: Back then Next at the end of the note, Back only on the last leaf", async ({ page }) => {
   await page.goto("/professional/career");
-  const links = page.locator("[data-mk-root] .mk-nav_link");
-  await expect(links).toHaveText(["ProfessionalBack to", "EducationNext"]);
+  await expect(page.locator(PAGER)).toHaveText(["Back toProfessional", "NextEducation"]);
+  const links = page.locator(`${PAGER} a`);
   await expect(links.nth(0)).toHaveAttribute("href", "/professional");
   await expect(links.nth(1)).toHaveAttribute("href", "/professional/education");
   await page.goto("/professional/certifications");
-  await expect(page.locator("[data-mk-root] .mk-nav_link")).toHaveText(["ProfessionalBack to"]);
+  await expect(page.locator(PAGER)).toHaveText(["Back toProfessional"]);
   await page.goto("/personal/instagram");
-  await expect(page.locator("[data-mk-root] .mk-nav_link").first()).toHaveAttribute("href", "/personal");
+  await expect(page.locator(`${PAGER} a`).first()).toHaveAttribute("href", "/personal");
 });
 
 test("prose, a figure, and a stat row end at the same edge", async ({ page }, info) => {
@@ -128,7 +131,7 @@ test.describe("pager without JavaScript", () => {
   test("is in the static HTML, on a note with scripts too", async ({ page }) => {
     for (const path of ["/professional/career", SCRIPTED]) {
       await page.goto(path);
-      await expect(page.locator("[data-mk-root] .mk-nav_link").first()).toContainText("Back to");
+      await expect(page.locator(PAGER).first()).toContainText("Back to");
     }
   });
 });
@@ -136,7 +139,7 @@ test.describe("pager without JavaScript", () => {
 test("the pager is the same after the island hydrates", async ({ page }) => {
   await page.goto(SCRIPTED);
   await page.waitForLoadState("networkidle");
-  await expect(page.locator("[data-mk-root] .mk-nav_link").first()).toContainText("Back to");
+  await expect(page.locator(PAGER).first()).toContainText("Back to");
   await expect(page.locator(".leaf-foot")).toHaveCount(0);
 });
 
