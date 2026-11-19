@@ -32,7 +32,7 @@ main h1[tabindex="-1"]:focus {
   transform: none;
 }
 
-/* The leaf's foot: one tinted band with the owner's links and the Markii credit. Its edges line up with Back and Update. */
+/* The leaf's foot: one tinted band with the owner's links and the Markii credit. Its edges line up with Back's text and Update. */
 .site-foot {
   position: relative;
   display: flex;
@@ -40,7 +40,7 @@ main h1[tabindex="-1"]:focus {
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem 3rem;
-  padding: 2rem var(--leaf-edge) 2.25rem calc(var(--line-back-left) + 0.75rem);
+  padding: 2rem var(--leaf-edge) 2.25rem;
   border-top: 1px solid var(--color-border);
   background: var(--color-doc-surface);
 }
@@ -121,6 +121,6 @@ main h1[tabindex="-1"]:focus {
   .site-foot {
     flex-direction: column;
     align-items: flex-start;
-    padding-inline: var(--gutter) var(--gutter-end);
+    padding-inline: var(--leaf-edge);
   }
 }

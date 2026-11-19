@@ -427,3 +427,33 @@ test("Projects lists its four stops in order", async ({ page }) => {
   await expect(page.locator("h1")).toHaveText("Projects");
   await expect(page.locator(".stop .role-item")).toHaveText(["git-resume", "Mandible", "Markii", "Aqueduct"]);
 });
+
+test.describe("a leaf on a phone", () => {
+  test.use({ viewport: { width: 360, height: 760 } });
+  test("keeps one edge on both sides, shared by Back, the note, Update, and the foot", async ({ page }) => {
+    await page.goto("/projects-blog/projects/mandible");
+    await page.waitForSelector(".leaf-surface[data-head-fit], .leaf-surface[data-head-wrap]");
+    const edges = await page.evaluate(() => {
+      const box = (selector: string) => document.querySelector(selector)!.getBoundingClientRect();
+      const back = document.querySelector<HTMLElement>("[data-back] a")!;
+      const backText = back.getBoundingClientRect().left + parseFloat(getComputedStyle(back).paddingLeft);
+      const foot = document.querySelector<HTMLElement>(".site-foot")!;
+      const style = getComputedStyle(foot);
+      return {
+        width: document.documentElement.clientWidth,
+        column: box(".leaf-column"),
+        widest: Math.max(...[...document.querySelectorAll("[data-mk-root] > *")].map((el) => el.getBoundingClientRect().right)),
+        backText,
+        update: box(".note-bar-refresh").right,
+        foot: [parseFloat(style.paddingLeft), parseFloat(style.paddingRight)],
+      };
+    });
+    const left = edges.column.left;
+    const right = edges.width - edges.column.right;
+    expect(Math.abs(left - right)).toBeLessThanOrEqual(1);
+    expect(Math.abs(edges.widest - edges.column.right)).toBeLessThanOrEqual(1);
+    expect(Math.abs(edges.backText - left)).toBeLessThanOrEqual(1);
+    expect(Math.abs(edges.width - edges.update - right)).toBeLessThanOrEqual(1);
+    expect(edges.foot.map((pad) => Math.abs(pad - left) <= 1)).toEqual([true, true]);
+  });
+});
