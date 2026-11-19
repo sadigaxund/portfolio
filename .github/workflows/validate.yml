@@ -5,6 +5,9 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -16,6 +19,12 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run validate
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: npm run test:base
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

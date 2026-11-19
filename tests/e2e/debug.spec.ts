@@ -68,49 +68,8 @@ test("a planted 200 ms block shows up as dropped frames and a long gap", async (
   expect(planted.droppedFrames).toBeGreaterThanOrEqual(6);
 });
 
-test("?coat sets data-coat on the root, keeps it across a route change, and none clears it", async ({ page }) => {
+test("the grid layer is on with no URL param", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator("html")).not.toHaveAttribute("data-coat", /.*/);
-  await page.goto("/?coat=grid");
-  await expect(page.locator("html")).toHaveAttribute("data-coat", "grid");
-  await page.getByRole("link", { name: "Professional" }).first().click();
-  await expect(page).toHaveURL(/\/professional\/?$/);
-  await expect(page.locator("html")).toHaveAttribute("data-coat", "grid");
-  await page.goto("/personal");
-  await expect(page.locator("html")).toHaveAttribute("data-coat", "grid");
-  await page.goto("/?coat=none");
-  await expect(page.locator("html")).not.toHaveAttribute("data-coat", /.*/);
-  await page.goto("/personal");
-  await expect(page.locator("html")).not.toHaveAttribute("data-coat", /.*/);
-});
-
-test("an unknown coat value changes nothing", async ({ page }) => {
-  await page.goto("/?coat=sparkle");
-  await expect(page.locator("html")).not.toHaveAttribute("data-coat", /.*/);
-});
-
-test("each coat changes its own layer and no coat leaves the line as it was", async ({ page }) => {
-  const read = () =>
-    page.evaluate(() => {
-      const world = document.querySelector(".line-world")!;
-      const layer = getComputedStyle(world, "::before");
-      return {
-        width: getComputedStyle(document.documentElement).getPropertyValue("--line-width").trim(),
-        layer: layer.content,
-        image: layer.backgroundImage,
-        mask: layer.maskImage,
-      };
-    });
-  await page.goto("/?coat=none");
-  const plain = await read();
-  expect(plain.layer).toBe("none");
-  await page.goto("/?coat=grid");
-  expect((await read()).image).toContain("radial-gradient");
-  await page.goto("/?coat=contour");
-  expect((await read()).mask).toContain("data:image/svg+xml");
-  await page.goto("/?coat=transit");
-  const transit = await read();
-  expect(transit.width).toBe("4px");
-  expect(transit.layer).toBe("none");
-  expect(plain.width).toBe("2px");
+  const image = await page.evaluate(() => getComputedStyle(document.querySelector(".line-world")!, "::before").backgroundImage);
+  expect(image).toContain("radial-gradient");
 });

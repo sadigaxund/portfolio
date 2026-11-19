@@ -6,7 +6,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Added
 
-- Three preview coatings for the map, chosen with ?coat=grid, ?coat=contour, or ?coat=transit and cleared with ?coat=none.
+- A dot grid behind the line on every page, as the map's paper.
 - A leaf prints as black text on white, with outside links followed by their address and the line, header bar, and Next and Back boxes left off.
 - Text links thicken their underline on hover.
 

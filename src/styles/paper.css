@@ -1,0 +1,13 @@
+:root {
+  --paper-grid-pitch: 24px;
+}
+
+/* The grid is the map's paper. The camera moves the layer, so it reaches past the page by a screen on the sides and the bottom. */
+.line-world::before {
+  content: "";
+  position: absolute;
+  inset: 0 -50vw -100vh;
+  pointer-events: none;
+  background-image: radial-gradient(circle, var(--color-border) 0.5px, transparent 1px);
+  background-size: var(--paper-grid-pitch) var(--paper-grid-pitch);
+}

@@ -1,4 +1,4 @@
-import { createMarkiiHost } from "@markii/host";
+import { createMarkiiHost, type HostHeaders } from "@markii/host";
 import { createNodeHostIsolate } from "@markii/host/node";
 import type { StoredValue } from "@markii/runtime";
 import { createAdapter } from "./adapter";
@@ -11,6 +11,14 @@ const NETWORK_KINDS: readonly string[] = ["capability-denied", "tier-blocked", "
 
 // In CI a failed bake waits and tries again before it fails the deploy, so a short rate limit does not.
 const RETRY_DELAYS_MS: readonly number[] = process.env.CI ? [60_000, 300_000, 600_000] : [];
+
+const GITHUB_ORIGIN = "https://api.github.com";
+
+/** Request headers for the build's fetches: a token for the GitHub API origin only, and none without a token. */
+export function bakeHeaders(env: Readonly<Record<string, string | undefined>>): HostHeaders | undefined {
+  const token = env.GITHUB_TOKEN;
+  return token ? { [GITHUB_ORIGIN]: { Authorization: `Bearer ${token}` } } : undefined;
+}
 
 export interface BakeRequest {
   documentKey: string;
@@ -32,7 +40,7 @@ export interface BakeRequest {
 async function bakeOnce(request: BakeRequest): Promise<Record<string, StoredValue>> {
   const host = createMarkiiHost(
     createAdapter({
-      isolate: createNodeHostIsolate(),
+      isolate: createNodeHostIsolate({ headers: bakeHeaders(process.env) }),
       memento: createMemoryMemento(),
       packs: bundlePacks({}),
       prompt: createBuildPrompt(request.allowedOrigins),
