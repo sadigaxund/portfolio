@@ -50,3 +50,10 @@ Point a coding agent such as opencode at the repo and ask it to update the resum
 ::nav_link[Live demo]{href="https://as-foss.github.io/git-resume/" desc="as-foss.github.io/git-resume" icon="arrow"}
 ::nav_link[Demo video]{href="https://www.youtube.com/watch?v=CiZllBuUCZ4" desc="youtube.com" icon="arrow"}
 :::
+
+::page_back[[Projects](../projects)]
+:::page_next{img=images/thumb-mandible.webp}
+[Mandible](mandible.mk.md)
+
+A Rust TUI manual for any CLI tool, with every command and flag in one tree.
+:::

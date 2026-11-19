@@ -31,3 +31,10 @@
 - Built an internal FastAPI metrics service and a benchmarking proof of concept across InfluxDB, Snowflake, and MongoDB.
 
 *Stack: Spark, NiFi, Elasticsearch, Logstash, Kibana, Python, FastAPI, MongoDB, InfluxDB, Snowflake*
+
+::page_back[[Professional](../professional)]
+:::page_next
+[Education](education.mk.md)
+
+MS, George Washington University. BS, ADA University.
+:::

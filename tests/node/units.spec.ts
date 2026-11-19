@@ -33,6 +33,11 @@ test.describe("makeResolveHref", () => {
     expect(resolve("./aqueduct.md")).toBe("/projects-blog/projects/aqueduct");
     expect(resolve("../../professional/career.mk.md#kdm")).toBe("/professional/career#kdm");
   });
+  test("maps a link without an extension onto a section or the landing page", () => {
+    const withSections = makeResolveHref("content/projects-blog/projects/markii.mk.md", { ...routes, "content/projects-blog/projects": "/projects-blog/projects", content: "/" });
+    expect(withSections("../projects")).toBe("/projects-blog/projects");
+    expect(withSections("../..")).toBe("/");
+  });
   test("leaves every other link alone", () => {
     for (const href of ["https://example.com/a.md", "#top", "/professional/career", "./missing.md", "./photo.png", "../../../../x.md"]) {
       expect(resolve(href)).toBeUndefined();

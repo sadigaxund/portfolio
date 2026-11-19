@@ -15,6 +15,7 @@
   --mk-warning: var(--color-doc-warning);
   --mk-danger: var(--color-doc-danger);
   --mk-limit: var(--color-doc-limit);
+  --mk-heading-font: var(--font-display);
   --mk-stat-value-size: var(--text-item);
   --mk-stat-value-weight: 600;
   --mk-callout-accent-width: 1px;
