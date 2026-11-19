@@ -1,6 +1,5 @@
-/* A rendered note takes its text roles from roles.css. Prose keeps the measure, and components use the whole column. */
+/* A rendered note takes its text roles from roles.css. Prose and components share the whole column. */
 .note :is(ul, ol) {
-  max-width: var(--measure);
   margin-top: 0.5rem;
   padding-inline-start: 1.25rem;
   font-size: var(--text-body);

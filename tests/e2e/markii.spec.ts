@@ -112,6 +112,16 @@ test("the pager is markii's: Back then Next at the end of the note, Back only on
   await expect(page.locator("[data-mk-root] .mk-nav_link").first()).toHaveAttribute("href", "/personal");
 });
 
+test("prose, a figure, and a stat row end at the same edge", async ({ page }, info) => {
+  test.skip(info.project.name !== "desktop", "measured at 1280");
+  await page.goto("/projects-blog/projects/mandible");
+  const edge = (selector: string) => page.locator(`.note ${selector}`).evaluateAll((els) => els.map((el) => el.getBoundingClientRect().right));
+  const prose = await edge("> p:not(.note-detail)");
+  expect(prose.length).toBeGreaterThan(1);
+  const figure = (await edge("> .mk-figure"))[0];
+  for (const right of [...prose, ...(await edge("> .mk-row"))]) expect(Math.abs(right - figure)).toBeLessThanOrEqual(1);
+});
+
 test.describe("pager without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 

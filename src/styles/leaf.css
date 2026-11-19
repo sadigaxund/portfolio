@@ -3,7 +3,7 @@
  * controls; the note in one centered column; then the site foot. DESIGN.md, "Leaf frame".
  */
 :root {
-  --leaf-column: 50rem;
+  --leaf-column: 44rem;
   --leaf-head: 3.5rem;
   --leaf-edge: 1rem;
 }
@@ -35,10 +35,6 @@
   width: min(var(--leaf-column), 100% - 2.5rem);
   margin-inline: auto;
   padding-block: 3.5rem 4.5rem;
-}
-
-.leaf-column .note :is(h2, h3, blockquote) {
-  max-width: var(--measure);
 }
 
 /* A note's update controls sit at the right end of the header bar. */
