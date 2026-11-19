@@ -26,14 +26,15 @@ function atStraightBranch(): boolean {
 
 /**
  * At the fork, scrolling past the page bottom continues straight on, and arrow keys pick
- * any branch. Scrolling up from the top of the straight branch returns, but only in a gesture
- * that started there, so a fast scroll through a long page never leaves it. Modified keys stay
+ * any branch. Scrolling up from the top of the straight branch returns. Both count only in a
+ * gesture that started at that edge, so the momentum of a scroll that reaches it never walks on. Modified keys stay
  * with the browser, because Alt+Left means back. Returns a cleanup.
  */
 export function mountIntent(): () => void {
   let wheelTotal = 0;
   let wheelAt = Number.NEGATIVE_INFINITY;
   let startedAtTop = false;
+  let startedAtBottom = false;
   let touchY: number | null = null;
   let leaving = false;
 
@@ -54,9 +55,10 @@ export function mountIntent(): () => void {
     if (fresh) {
       wheelTotal = 0;
       startedAtTop = scrollY <= 0;
+      startedAtBottom = atPageBottom();
     }
     const pixels = event.deltaY * (event.deltaMode === WheelEvent.DOM_DELTA_LINE ? WHEEL_LINE_PX : 1);
-    const forward = pixels > 0 && atFork() && atPageBottom();
+    const forward = pixels > 0 && startedAtBottom && atFork() && atPageBottom();
     const back = pixels < 0 && startedAtTop && atStraightBranch();
     if (scrollHeld() || event.ctrlKey || !(forward || back)) {
       wheelTotal = 0;

@@ -279,10 +279,12 @@ for (const [name, from, go] of [
     await page.mouse.move(100, 100);
     await page.getByRole("link", { name: go }).click();
     await page.waitForTimeout(120);
+    // The click may scroll its link into view first, and the hold keeps that position.
+    const held = await page.evaluate(() => scrollY);
     await page.addStyleTag({ content: "main { min-height: 300vh !important; }" });
     await page.mouse.wheel(0, 400);
     await page.waitForTimeout(100);
-    expect(await page.evaluate(() => scrollY)).toBe(0);
+    expect(await page.evaluate(() => scrollY)).toBe(held);
     await page.waitForFunction(
       () =>
         document.querySelector<HTMLElement>(".line-stage")!.dataset.settled === "true" &&

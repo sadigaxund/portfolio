@@ -13,6 +13,8 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Changed
 
+- The landing summary tells how the work moved from data pipelines to the servers and deploys under them. On a phone the fork sits one scroll below it.
+- Scrolling down to the fork stops at the page bottom, and only a new scroll continues straight on, so momentum never walks into Professional.
 - The section is named Projects & Blog, and the role line reads Software, DevOps & Data Engineer.
 - Project stills on the Projects page are as wide as the text below them.
 - A stop's branch leaves the side of the line, so the line stays one color where they meet.

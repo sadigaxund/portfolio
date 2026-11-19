@@ -1,6 +1,6 @@
 # The landing page hero. Links show in this order.
 role: Software, DevOps & Data Engineer. Baku, Azerbaijan.
-summary: I run Linux servers and delivery pipelines behind data platforms. 3+ years, including a government data platform on RHEL and the CI/CD and Terraform setup for a product team.
+summary: I started in data engineering, on a bank's telemetry pipeline, and kept moving down to the servers and deploys underneath. At the Ministry of Tourism I ran a government data platform on RHEL, and at KDM Force I built the CI/CD pipelines and Terraform modules that cut new-environment bring-up from 5–6 hours to under one. Outside work I build open-source tools for the same problems, for data teams and the developers who ship their work.
 links:
   - label: Resume
     href: https://resume.sakhund.cc

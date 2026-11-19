@@ -225,6 +225,23 @@ test("wheel past the page bottom at the fork continues straight on", async ({ pa
   await expect(page).toHaveURL(/\/professional$/);
 });
 
+test("a fast scroll down to the fork stops at the bottom, and only a new gesture walks on", async ({ page }) => {
+  await page.goto("/");
+  await whenReady(page);
+  await page.addStyleTag({ content: "main { min-height: 300vh !important; }" });
+  await page.mouse.move(100, 100);
+  await page.waitForTimeout(300);
+  for (let i = 0; i < 40; i += 1) {
+    await page.mouse.wheel(0, 200);
+    await page.waitForTimeout(30);
+  }
+  await expect.poll(() => page.evaluate(() => scrollY + innerHeight >= document.documentElement.scrollHeight - 1)).toBe(true);
+  await page.waitForTimeout(300);
+  await expect(page).toHaveURL(/\/$/);
+  await page.mouse.wheel(0, 150);
+  await expect(page).toHaveURL(/\/professional$/);
+});
+
 test("arrow keys pick a branch at the fork, and modified arrows stay with the browser", async ({ page }) => {
   await page.goto("/");
   await whenReady(page);
@@ -274,6 +291,8 @@ test("the stage starts at the page top, and labels have large tap targets", asyn
   await whenReady(page);
   const top = await page.evaluate(() => document.querySelector(".line-stage")!.getBoundingClientRect().top);
   expect(top).toBe(0);
+  // A phone shows the summary first, so the fork may sit one scroll below it.
+  if (page.viewportSize()!.width <= 640) await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
   const label = await page.getByRole("link", { name: "Personal" }).boundingBox();
   expect(label!.height).toBeGreaterThanOrEqual(44);
   expect(label!.y + label!.height).toBeLessThanOrEqual(page.viewportSize()!.height);
