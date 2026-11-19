@@ -7,7 +7,10 @@
   --line-x: calc(var(--line-center) + var(--line-rest));
 }
 
+/* Every row is as tall as the tallest stop and at least a gap, so larger text pushes the next stop down. */
 .stops {
+  display: grid;
+  grid-auto-rows: minmax(var(--stop-gap), 1fr);
   padding-bottom: 6rem;
   list-style: none;
 }
@@ -15,8 +18,7 @@
 .stop {
   display: flex;
   align-items: flex-start;
-  /* Fixed, because the engine places each curve one gap below the last. */
-  height: var(--stop-gap);
+  /* The grid row sets the height, and the engine reads it to place each curve one row below the last. */
   /* Shrinks to its branch and text, so the stretched link covers only the stop. */
   position: relative;
   width: fit-content;
@@ -54,14 +56,10 @@
   outline-offset: 2px;
 }
 
-/* Previews are capped at 90 characters by the build, so three lines always hold them. */
+/* Previews are capped at 90 characters by the build, and the row grows to hold them at any text size. */
 .stop-text .role-detail {
-  display: -webkit-box;
   margin-top: 0.25rem;
-  overflow: hidden;
   text-wrap: pretty;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
 }
 
 .stop-branch {

@@ -114,7 +114,7 @@
 /* On a phone the hero stacks, then the line starts below it. */
 @media (max-width: 40rem) {
   :root {
-    --line-trunk-top: 23rem;
+    --trunk-gap: 0.7125rem;
     --hero-top: 2rem;
   }
 

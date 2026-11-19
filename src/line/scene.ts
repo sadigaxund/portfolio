@@ -40,7 +40,11 @@ function measureStage(stage: HTMLElement, probe: HTMLElement): Measure {
   const size = (name: string) => required(probe, name).getBoundingClientRect().height;
   const stem = size(".line-probe-stem");
   const lift = size(".line-probe-lift");
-  const firstStop = size(".line-probe-first") - (box.height + stem * STUB_RATIO - lift);
+  // A section page's own stops are the truth, so a taller heading or row moves every curve with it.
+  const stops = document.querySelectorAll<HTMLElement>(".stop");
+  const top = stage.getBoundingClientRect().top;
+  const firstAt = stops[0] ? stops[0].getBoundingClientRect().top - top : size(".line-probe-first");
+  const firstStop = firstAt - (box.height + stem * STUB_RATIO - lift);
   return {
     centerX: stage.clientWidth / 2,
     forkY: box.height,
@@ -51,7 +55,7 @@ function measureStage(stage: HTMLElement, probe: HTMLElement): Measure {
     reach: size(".line-probe-reach"),
     drop: size(".line-probe-drop"),
     firstStop,
-    stopGap: size(".line-probe-gap"),
+    stopGap: stops[0] ? stops[0].getBoundingClientRect().height : size(".line-probe-gap"),
     bothSides: !window.matchMedia("(max-width: 40rem)").matches,
   };
 }

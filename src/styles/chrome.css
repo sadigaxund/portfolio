@@ -65,8 +65,9 @@ main h1[tabindex="-1"]:focus {
 /* One link over the whole badge: logo, name, and the GitHub mark. */
 .markii-credit {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.875rem;
+  gap: 0.5rem 0.875rem;
   max-width: 100%;
   padding: 0.625rem 1rem 0.625rem 0.625rem;
   border: 1px solid var(--color-border);
@@ -78,7 +79,7 @@ main h1[tabindex="-1"]:focus {
 
 .markii-credit > * {
   min-width: 0;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .markii-credit:hover {
@@ -120,6 +121,6 @@ main h1[tabindex="-1"]:focus {
   .site-foot {
     flex-direction: column;
     align-items: flex-start;
-    padding-inline: 3rem 1.25rem;
+    padding-inline: var(--gutter) var(--gutter-end);
   }
 }
