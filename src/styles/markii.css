@@ -21,10 +21,17 @@
   --mk-card-border-width: 1px;
   --mk-stale-opacity: 1;
   --mk-control-min-size: var(--target-min);
+  /* markii sizes code, captions, and cards in em, so its base is the body text size. */
+  font-size: var(--text-body);
   font-family: inherit;
 }
 
 /* Hides the collapsed script marker, as markii's own hosts do for their hide-script-blocks setting. */
 [data-mk-root][data-hide-scripts] .mk-script {
   display: none;
+}
+
+/* my-you-eye's CodeBlock sets its text to --text-xs. In a note it takes the note's own size, so block code matches inline code. */
+[data-mk-root] pre {
+  --text-xs: var(--text-body);
 }

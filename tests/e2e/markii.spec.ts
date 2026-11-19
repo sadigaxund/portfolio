@@ -68,6 +68,20 @@ test("the update controls sit in the leaf header, above the note", async ({ page
   expect(note.top).toBeGreaterThan(head.bottom);
 });
 
+for (const width of [1280, 360]) {
+  test(`at ${width}px the Update button clears the header line, and the age sits beside it`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto(SCRIPTED);
+    const [head, age, button, back] = await page.evaluate(() =>
+      [".leaf-head", ".note-bar-age", ".note-bar-refresh", "[data-back] a"].map((selector) => document.querySelector(selector)!.getBoundingClientRect().toJSON()),
+    );
+    expect(head.bottom - button.bottom).toBeGreaterThanOrEqual(10);
+    expect(button.top - head.top).toBeGreaterThanOrEqual(10);
+    expect(button.left - age.right).toBeLessThanOrEqual(16);
+    expect(age.top >= back.bottom || age.left >= back.right).toBe(true);
+  });
+}
+
 test("refreshing asks with markii's own words, and a no keeps the values", async ({ page }) => {
   await page.goto(SCRIPTED);
   const before = await page.locator(TOTAL).first().textContent();

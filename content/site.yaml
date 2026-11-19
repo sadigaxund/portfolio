@@ -52,7 +52,7 @@ children:
         preview: Astronomer hackathon winner. Google Data Analytics certificate.
 
   - slug: projects-blog
-    label: Projects and blog
+    label: Projects & Blog
     side: right
     children:
       - slug: projects

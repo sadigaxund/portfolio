@@ -4,7 +4,10 @@
  */
 :root {
   --leaf-column: 44rem;
-  --leaf-head: 3.5rem;
+  /* Tall enough for the 48px Update button with 0.75rem above and below it. */
+  --leaf-head: 4.5rem;
+  /* The phone's first header row, holding Back alone. */
+  --leaf-back-row: 3.5rem;
   --leaf-edge: 1rem;
 }
 
@@ -21,9 +24,14 @@
   background: var(--color-bg);
 }
 
-/* Back keeps its place but scrolls away with the header on a leaf. */
+/* Back keeps its place but scrolls away with the header on a leaf, centered in its row. */
 [data-view="leaf"] .line-back {
   position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+  height: var(--leaf-head);
+  background: none;
 }
 
 .leaf-head {
@@ -64,18 +72,22 @@
     margin-inline: var(--gutter) var(--gutter-end);
   }
 
-  /* The update controls take a second row, so they never run under Back. */
+  /* The update controls take a second row under Back, kept together at the right edge. */
   .leaf-surface:has(.note-bar) .leaf-head {
-    height: calc(var(--leaf-head) * 2);
+    height: calc(var(--leaf-back-row) + var(--leaf-head));
+  }
+
+  [data-view="leaf"]:has(.note-bar) .line-back {
+    height: var(--leaf-back-row);
   }
 
   .note-bar {
-    top: var(--leaf-head);
+    top: var(--leaf-back-row);
     right: min(0.75rem, 3vw);
     left: var(--line-back-left);
     flex-wrap: wrap;
-    align-content: flex-start;
-    justify-content: space-between;
+    align-content: center;
+    justify-content: flex-end;
     height: auto;
     min-height: var(--leaf-head);
     gap: 0 min(0.75rem, 3vw);

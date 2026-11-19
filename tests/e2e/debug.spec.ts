@@ -21,8 +21,8 @@ test("without the flag there is no overlay and the debug code is not fetched", a
   page.on("request", (request) => requests.push(request.url()));
   await page.goto("/");
   await page.waitForSelector(".line-stage[data-ready]");
-  await page.getByRole("link", { name: "Projects and blog" }).click();
-  await expect(page.locator("h1")).toHaveText("Projects and blog");
+  await page.getByRole("link", { name: "Projects & Blog" }).click();
+  await expect(page.locator("h1")).toHaveText("Projects & Blog");
   await expect(overlay(page)).toHaveCount(0);
   expect(requests.filter((url) => /debug/.test(url))).toEqual([]);
 });
@@ -32,8 +32,8 @@ test("?debug=line shows the overlay, and it survives a route change", async ({ p
   await page.waitForSelector(".line-stage[data-ready]");
   await expect(overlay(page)).toBeVisible();
   await idleMeasured(page);
-  await page.getByRole("link", { name: "Projects and blog" }).click();
-  await expect(page.locator("h1")).toHaveText("Projects and blog");
+  await page.getByRole("link", { name: "Projects & Blog" }).click();
+  await expect(page.locator("h1")).toHaveText("Projects & Blog");
   await expect(page).not.toHaveURL(/debug/);
   await expect(overlay(page)).toHaveAttribute("data-state", "done");
   await expect(overlay(page)).toContainText("rafFrames");
