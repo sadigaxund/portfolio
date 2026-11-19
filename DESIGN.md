@@ -80,6 +80,10 @@ The contract:
 
 On the landing page the hero comes before the roads in the document, so Tab reaches Resume and Email before the fork. After a walk, focus moves to the new page's `h1`, which shows no ring because it is not a control.
 
+## Reflow
+
+The site fits a 320px window and html text at 200% with no sideways scroll or overlap. The engine measures the hero's bottom edge and the first stop, and stop rows grow to the tallest stop, so no spacing is a fixed height. `tests/e2e/reflow.spec.ts` checks it. Phone gutters stop growing with text, and a leaf's update controls sit on a second row below Back.
+
 ## Motion
 
 The line is the one authored motion. It lives in one world with one camera, and every route between non-leaf nodes is a walk. Timing lives in `src/line/steps.ts` and `src/line/seam.ts`. Everything else stays still, including the thread inside a leaf.
