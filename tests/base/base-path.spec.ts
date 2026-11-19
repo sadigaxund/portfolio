@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 const BASE = "/portfolio";
-const PAGES = ["/", "/professional", "/professional/career", "/projects-blog/projects/mandible"];
+const PAGES = ["/", "/professional", "/professional/career", "/projects-blog/projects", "/projects-blog/projects/mandible"];
 
 for (const path of PAGES) {
   test(`${path} serves every file it references under the base path`, async ({ page }) => {

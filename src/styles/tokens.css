@@ -2,6 +2,8 @@
 :root {
   --font-sans: "Instrument Sans Variable", "Helvetica Neue", Arial, sans-serif;
   --font-display: "Geologica Variable", "Helvetica Neue", Arial, sans-serif;
+  --stop-thumb: 10rem;
+  --stop-thumb-phone: 8rem;
   --color-bg: #fbfcfd;
   --color-fg: #12151c;
   --color-muted: #565d6b;

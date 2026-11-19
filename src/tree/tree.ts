@@ -13,6 +13,8 @@ export interface NodeSpec {
   summary?: string;
   /** One line under a leaf's name on its parent. Leaves only. */
   preview?: string;
+  /** A still image beside a leaf's name on its parent, as a path inside `content/`. Leaves only. */
+  thumb?: string;
   children?: NodeSpec[];
   /** True while the node holds placeholder content. A build with `SITE_DRAFTS=hide` leaves it out. */
   draft?: true;

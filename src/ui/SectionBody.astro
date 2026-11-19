@@ -1,6 +1,8 @@
 ---
 import { Link } from "my-you-eye";
 import { previewOf, summaryOf } from "../sections/previews";
+import { LOCAL_IMAGES } from "../markii/localImages";
+import { thumbUrl } from "../sections/thumbs";
 import { isLeaf, type TreeNode } from "../tree/walk";
 
 interface Props {
@@ -27,6 +29,8 @@ const { node } = Astro.props;
         >
           <span class="stop-branch" aria-hidden="true" />
           <div class="stop-text">
+            {/* Decorative: the title beside it names the project, so the alt is empty. */}
+            {child.thumb && <img class="stop-thumb" src={thumbUrl(child.thumb, LOCAL_IMAGES)} alt="" width="480" height="300" loading="lazy" decoding="async" />}
             <h2 class="role-item">
               <Link href={child.url}>{child.label}</Link>
             </h2>

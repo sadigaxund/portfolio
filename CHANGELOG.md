@@ -6,6 +6,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Added
 
+- A small still of each project above its name on the Projects page.
 - A dot grid behind the line on every page, as the map's paper.
 - A leaf prints as black text on white, with outside links followed by their address and the line and header bar left off.
 - Text links thicken their underline on hover.
