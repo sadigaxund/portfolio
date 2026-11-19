@@ -32,7 +32,9 @@ test("?debug=line shows the overlay, and it survives a route change", async ({ p
   await page.waitForSelector(".line-stage[data-ready]");
   await expect(overlay(page)).toBeVisible();
   await idleMeasured(page);
-  await page.getByRole("link", { name: "Projects & Blog" }).click();
+  // The overlay covers the bottom of a phone screen, where the fork sits, so the link is followed from the keyboard.
+  await page.getByRole("link", { name: "Projects & Blog" }).focus();
+  await page.keyboard.press("Enter");
   await expect(page.locator("h1")).toHaveText("Projects & Blog");
   await expect(page).not.toHaveURL(/debug/);
   await expect(overlay(page)).toHaveAttribute("data-state", "done");
