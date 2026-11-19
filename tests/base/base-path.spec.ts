@@ -48,3 +48,10 @@ test("walking from the start reaches a leaf", async ({ page }) => {
   await page.locator(".stop a").first().click();
   await expect(page.locator("main h1")).toHaveText("Career");
 });
+
+test("the pager links stay under the base path", async ({ page }) => {
+  await page.goto(`${BASE}/professional/career`);
+  const links = page.locator("[data-mk-root] > .mk-row:last-child .mk-card a");
+  await expect(links.nth(0)).toHaveAttribute("href", `${BASE}/professional`);
+  await expect(links.nth(1)).toHaveAttribute("href", `${BASE}/professional/education`);
+});

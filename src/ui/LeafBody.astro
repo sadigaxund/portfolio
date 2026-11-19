@@ -2,7 +2,6 @@
 import SiteFoot from "../discovery/SiteFoot.astro";
 import Note from "../markii/Note.astro";
 import type { TreeNode } from "../tree/walk";
-import LeafFoot from "./LeafFoot.astro";
 
 interface Props {
   node: TreeNode;
@@ -15,7 +14,6 @@ const { node } = Astro.props;
   <div class="leaf-head"></div>
   <div class="leaf-column">
     <Note node={node} />
-    <LeafFoot node={node} />
   </div>
 </main>
 <SiteFoot />

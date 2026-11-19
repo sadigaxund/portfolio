@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const HIDDEN = [".line-stage", ".skip-link", ".leaf-head", ".note-bar", ".leaf-foot", ".markii-credit", '[role="region"][aria-label^="Notifications"]'];
+const HIDDEN = [".line-stage", ".skip-link", ".leaf-head", ".note-bar", ".markii-credit", '[role="region"][aria-label^="Notifications"]'];
 
 test("a printed leaf drops the screen chrome and keeps the site foot name", async ({ page }) => {
   await page.goto("/projects-blog/projects/mandible");
