@@ -3,7 +3,6 @@
   align-items: center;
   gap: 0.5rem;
   min-width: 0;
-  margin: 0;
 }
 .mk-page_back__arrow {
   flex: none;
