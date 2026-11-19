@@ -1,0 +1,105 @@
+.mk-page_back {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  margin: 0;
+}
+.mk-page_back__arrow {
+  flex: none;
+  color: var(--mk-muted);
+}
+.mk-page_back__label {
+  flex: none;
+  color: var(--mk-muted);
+}
+.mk-page_back__name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.mk-page_next {
+  container-type: inline-size;
+}
+.mk-page_next__card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-card-radius, 8px);
+  background: var(--mk-raised);
+  overflow: hidden;
+}
+.mk-page_next__card:hover,
+.mk-page_next__card:focus-within {
+  border-color: var(--mk-accent);
+}
+.mk-page_next__card:has(a:focus-visible) {
+  outline: 2px solid var(--mk-accent);
+  outline-offset: 2px;
+}
+.mk-page_next__card--still {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+.mk-page_next__still {
+  min-width: 0;
+  aspect-ratio: 16 / 10;
+  border-inline-end: 1px solid var(--mk-border);
+  background: var(--mk-surface);
+}
+.mk-page_next__still img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mk-page_next__text {
+  display: grid;
+  align-content: center;
+  gap: 0.35rem;
+  min-width: 0;
+  padding: 1.25rem 1.4rem;
+}
+.mk-page_next__label {
+  color: var(--mk-muted);
+}
+.mk-page_next__body {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+.mk-page_next__body > p {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.mk-page_next__body > p:first-child {
+  font-family: var(--mk-heading-font, inherit);
+  font-size: var(--mk-stat-value-size, 1.125rem);
+  font-weight: var(--mk-stat-value-weight, 600);
+  line-height: 1.3;
+}
+.mk-page_next__body > p + p {
+  color: var(--mk-muted);
+}
+.mk-page_next__body a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.mk-page_next__body a:hover {
+  text-decoration-thickness: 2px;
+}
+.mk-page_next__body a:focus-visible {
+  outline: none;
+}
+
+@container (max-width: 34rem) {
+  .mk-page_next__card--still {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .mk-page_next__still {
+    border-inline-end: 0;
+    border-block-end: 1px solid var(--mk-border);
+  }
+}

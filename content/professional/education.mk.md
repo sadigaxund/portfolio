@@ -7,3 +7,10 @@
 ## ADA University
 
 *Bachelor of Science, Computer Engineering. 2017 to 2021.*
+
+::page_back[[Professional](../professional)]
+:::page_next
+[Certifications](certifications.mk.md)
+
+Astronomer hackathon winner. Google Data Analytics certificate.
+:::

@@ -1,0 +1,24 @@
+{
+  "name": "page",
+  "version": "1.0.0",
+  "engine": "react",
+  "components": {
+    "back": {
+      "source": "./src/back.tsx",
+      "description": "One quiet line that leads back to the parent page: a left arrow, the muted label \"Back to\", and the page name as the link.",
+      "kind": "leaf",
+      "attributes": []
+    },
+    "next": {
+      "source": "./src/next.tsx",
+      "description": "A wide card for the next page: an optional still on the left, then the label \"Next\", the page name as the link, and a muted preview line. The whole card is the link.",
+      "kind": "container",
+      "attributes": [
+        {
+          "name": "img",
+          "description": "A still shown on the left half of the card, as a path relative to the note. Decorative, so it has no alt text. Left out, the card is text only."
+        }
+      ]
+    }
+  }
+}

@@ -92,3 +92,5 @@ Low-confidence patches and any guardrail violation escalate to human review.
 ::nav_link[Threat model]{href="https://github.com/sadigaxund/aqueduct/blob/main/docs/threat_model.md" desc="docs/threat_model.md on GitHub" icon="arrow"}
 ::nav_link[Blueprint and engine spec]{href="https://github.com/sadigaxund/aqueduct/blob/main/docs/specs.md" desc="docs/specs.md on GitHub" icon="arrow"}
 :::
+
+::page_back[[Projects](../projects)]
