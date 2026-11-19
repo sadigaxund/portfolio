@@ -4,7 +4,6 @@ An AI harness for data pipelines on Spark or DuckDB: the model proposes a fix, a
 
 ```lua {name=repo permissions=api.github.com}
 local r = net.fetch_json("https://api.github.com/repos/sadigaxund/Aqueduct")
-if r.stargazers_count == nil then error(r.message or "GitHub returned no repository data") end
 return {
   stars = r.stargazers_count,
   language = r.language,

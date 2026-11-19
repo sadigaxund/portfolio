@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import type { HostPromptRequest } from "@markii/host";
-import { bakeNote } from "../../src/markii/bake";
+import { bakeHeaders, bakeNote } from "../../src/markii/bake";
 import { createBuildPrompt } from "../../src/markii/buildPrompt";
 import { staleValuesForRehydration as stale } from "@markii/host";
 
@@ -75,5 +75,15 @@ test.describe("bakeNote", () => {
     expect(values.far).toBeUndefined();
     expect(lines).toHaveLength(1);
     expect(lines[0]).toContain('script "far"');
+  });
+});
+
+test.describe("bakeHeaders", () => {
+  test("gives the token to the GitHub API origin only", () => {
+    expect(bakeHeaders({ GITHUB_TOKEN: "t0k" })).toEqual({ "https://api.github.com": { Authorization: "Bearer t0k" } });
+  });
+  test("adds no headers without a token", () => {
+    expect(bakeHeaders({})).toBeUndefined();
+    expect(bakeHeaders({ GITHUB_TOKEN: "" })).toBeUndefined();
   });
 });
