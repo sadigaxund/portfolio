@@ -4,9 +4,9 @@
  */
 :root {
   --leaf-column: 44rem;
-  /* Tall enough for the 48px Update button with 0.75rem above and below it. */
-  --leaf-head: 4.5rem;
-  /* The phone's first header row, holding Back alone. */
+  /* Tall enough for the 40px Update button with 0.75rem above and below it. */
+  --leaf-head: 4rem;
+  /* The first header row when the update controls drop to a second one. */
   --leaf-back-row: 3.5rem;
   --leaf-edge: 1rem;
 }
@@ -56,10 +56,10 @@
   height: var(--leaf-head);
 }
 
+/* The age keeps one line, so its width is fixed and the header can tell whether it fits beside Back. */
 .note-bar .role-detail {
-  min-width: 0;
   margin-top: 0;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
 }
 
 .note-bar .note-bar-refresh {
@@ -72,28 +72,46 @@
     margin-inline: var(--gutter) var(--gutter-end);
   }
 
-  /* The update controls take a second row under Back, kept together at the right edge. */
-  .leaf-surface:has(.note-bar) .leaf-head {
-    height: calc(var(--leaf-back-row) + var(--leaf-head));
-  }
-
-  [data-view="leaf"]:has(.note-bar) .line-back {
-    height: var(--leaf-back-row);
-  }
-
   .note-bar {
-    top: var(--leaf-back-row);
     right: min(0.75rem, 3vw);
-    left: var(--line-back-left);
-    flex-wrap: wrap;
-    align-content: center;
-    justify-content: flex-end;
-    height: auto;
-    min-height: var(--leaf-head);
-    gap: 0 min(0.75rem, 3vw);
+    gap: min(0.75rem, 3vw);
   }
 
   .note-bar-lead {
     display: none;
   }
+}
+
+/*
+ * The update controls take a second row under Back only when they would touch it on one row.
+ * src/markii/headFit.ts decides, and a narrow window starts with two rows until it has.
+ */
+@media (max-width: 22.49rem) {
+  .leaf-surface:has(.note-bar):not([data-head-fit]) .leaf-head {
+    height: calc(var(--leaf-back-row) + var(--leaf-head));
+  }
+
+  [data-view="leaf"]:has(.leaf-surface:has(.note-bar):not([data-head-fit])) .line-back {
+    height: var(--leaf-back-row);
+  }
+
+  .leaf-surface:has(.note-bar):not([data-head-fit]) .note-bar {
+    top: var(--leaf-back-row);
+    left: var(--line-back-left);
+    justify-content: flex-end;
+  }
+}
+
+.leaf-surface[data-head-wrap] .leaf-head {
+  height: calc(var(--leaf-back-row) + var(--leaf-head));
+}
+
+[data-view="leaf"]:has(.leaf-surface[data-head-wrap]) .line-back {
+  height: var(--leaf-back-row);
+}
+
+.leaf-surface[data-head-wrap] .note-bar {
+  top: var(--leaf-back-row);
+  left: var(--line-back-left);
+  justify-content: flex-end;
 }

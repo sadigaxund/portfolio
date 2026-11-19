@@ -18,7 +18,10 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 - A stop's branch leaves the side of the line, so the line stays one color where they meet.
 - The dot grid covers the whole page on a phone and on deep sections.
 - Code blocks in a note use the same size as code inside a sentence.
-- The leaf header is taller, so Update keeps a clear margin above the header line, and on a phone the data's age sits beside Update.
+- The leaf header is taller, so Update keeps a clear margin above the header line.
+- On most phones the leaf header keeps Back, the data's age, and Update on one row, and moves the update controls to a second row only when they would touch Back.
+- Walking back, each branch closes before the retracting line passes it, lowest first, so no branch roots are left on the line.
+- Scrolling past the top or bottom of a page no longer bounces to show the page's edge.
 - After walking into a longer page, the line above no longer runs past the point where the next branch leaves it.
 - Note text, lists, and components share one 44rem column and end at the same right edge.
 - Next and Back at the end of a leaf are drawn by Markii, as links with an arrow, a name, and a small line.

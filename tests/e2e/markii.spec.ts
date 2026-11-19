@@ -68,19 +68,40 @@ test("the update controls sit in the leaf header, above the note", async ({ page
   expect(note.top).toBeGreaterThan(head.bottom);
 });
 
-for (const width of [1280, 360]) {
-  test(`at ${width}px the Update button clears the header line, and the age sits beside it`, async ({ page }) => {
+const headLayout = (page: import("@playwright/test").Page) =>
+  page.evaluate(() => {
+    const [head, age, button, back] = [".leaf-head", ".note-bar-age", ".note-bar-refresh", "[data-back] a"].map((selector) =>
+      document.querySelector(selector)!.getBoundingClientRect().toJSON(),
+    );
+    return { head, age, button, back };
+  });
+
+for (const [width, rows] of [[1280, 1], [360, 1], [320, 2]] as const) {
+  test(`at ${width}px the header takes ${rows} row(s), and Update clears its line`, async ({ page }) => {
     await page.setViewportSize({ width, height: 800 });
     await page.goto(SCRIPTED);
-    const [head, age, button, back] = await page.evaluate(() =>
-      [".leaf-head", ".note-bar-age", ".note-bar-refresh", "[data-back] a"].map((selector) => document.querySelector(selector)!.getBoundingClientRect().toJSON()),
-    );
+    await page.waitForSelector(".leaf-surface[data-head-fit], .leaf-surface[data-head-wrap]");
+    const { head, age, button, back } = await headLayout(page);
     expect(head.bottom - button.bottom).toBeGreaterThanOrEqual(10);
-    expect(button.top - head.top).toBeGreaterThanOrEqual(10);
     expect(button.left - age.right).toBeLessThanOrEqual(16);
-    expect(age.top >= back.bottom || age.left >= back.right).toBe(true);
+    if (rows === 1) {
+      expect(Math.abs(back.top + back.height / 2 - (button.top + button.height / 2))).toBeLessThanOrEqual(2);
+      expect(age.left - back.right).toBeGreaterThanOrEqual(-1);
+    } else {
+      expect(age.top).toBeGreaterThanOrEqual(back.bottom - 1);
+    }
   });
 }
+
+test("a longer age moves the update controls to a second row instead of under Back", async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 800 });
+  await page.goto(SCRIPTED);
+  await page.waitForSelector(".leaf-surface[data-head-fit]");
+  await page.locator(".note-bar-age").evaluate((age) => (age.lastChild!.textContent = "48 minutes ago, and more"));
+  await page.waitForSelector(".leaf-surface[data-head-wrap]");
+  const { age, back } = await headLayout(page);
+  expect(age.top).toBeGreaterThanOrEqual(back.bottom - 1);
+});
 
 test("refreshing asks with markii's own words, and a no keeps the values", async ({ page }) => {
   await page.goto(SCRIPTED);

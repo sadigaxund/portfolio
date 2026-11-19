@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "my-you-eye";
+import { watchHeadFit } from "./headFit";
 import { lastRunText } from "./runText";
 
 interface NoteBarProps {
@@ -33,13 +34,15 @@ function useHydrated(): boolean {
 export function NoteBar({ ranAt, builtLabel, running, runs, onRefresh }: NoteBarProps) {
   const now = useMinuteClock();
   const hydrated = useHydrated();
+  const bar = useRef<HTMLDivElement>(null);
+  useEffect(() => (bar.current ? watchHeadFit(bar.current) : undefined), []);
   return (
-    <div className="note-bar" data-runs={runs}>
+    <div ref={bar} className="note-bar" data-runs={runs}>
       <p className="role-detail note-bar-age" role="status">
         <span className="note-bar-lead">Updated </span>
         {lastRunText(ranAt, now, builtLabel)}
       </p>
-      <Button className="note-bar-refresh" variant="secondary" size="lg" loading={running} disabled={!hydrated || running} onClick={onRefresh}>
+      <Button className="note-bar-refresh" variant="secondary" size="md" loading={running} disabled={!hydrated || running} onClick={onRefresh}>
         Update
       </Button>
     </div>

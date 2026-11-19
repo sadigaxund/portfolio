@@ -469,3 +469,30 @@ test("after walking into a taller page, the parent's line stops where the next l
   });
   expect(Math.abs(gap)).toBeLessThanOrEqual(2);
 });
+
+test("walking back, each branch has closed before the retracting line passes its root", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/projects-blog/projects");
+  await whenReady(page);
+  await page.waitForSelector('.line-stage[data-settled="true"]');
+  await page.evaluate(() => {
+    const win = window as unknown as { late: string[] };
+    win.late = [];
+    const run = [...document.querySelectorAll<HTMLElement>(".line-run")].at(-1)!;
+    const branches = [...document.querySelectorAll<HTMLElement>("main .stop-branch")];
+    const sample = () => {
+      const tip = run.getBoundingClientRect().bottom;
+      branches.forEach((branch, index) => {
+        const animation = branch.getAnimations()[0];
+        if (!animation || !branch.isConnected) return;
+        const progress = animation.effect?.getComputedTiming().progress ?? 1;
+        if (tip < branch.getBoundingClientRect().top - 1 && progress < 1) win.late.push(`stop ${index} at ${progress.toFixed(2)}`);
+      });
+      if (document.contains(run)) requestAnimationFrame(sample);
+    };
+    requestAnimationFrame(sample);
+  });
+  await page.locator("[data-back]").getByRole("link").click();
+  await expect(page.locator("h1")).toHaveText("Projects & Blog");
+  expect(await page.evaluate(() => (window as unknown as { late: string[] }).late)).toEqual([]);
+});

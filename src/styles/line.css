@@ -40,9 +40,10 @@
   --section-head: 12rem;
 }
 
-/* An always-present scrollbar keeps the line's center from shifting between short and long pages. */
+/* A constant scrollbar keeps the line centered, and no overscroll bounce shows the page's edge. */
 html {
   overflow-y: scroll;
+  overscroll-behavior: none;
 }
 
 /* flow-root stops the content's top margin collapsing through body and moving the stage. */
