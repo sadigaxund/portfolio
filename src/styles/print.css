@@ -14,7 +14,6 @@
   .skip-link,
   .leaf-head,
   .note-bar,
-  .leaf-foot,
   .markii-credit,
   [role="region"][aria-label*="otification" i] {
     display: none !important;

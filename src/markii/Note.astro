@@ -10,6 +10,7 @@ import { bakeNote } from "./bake";
 import { packNamespacesUsed } from "./registry";
 import { SETTINGS } from "./config";
 import { noteHasScripts, staleValuesForRehydration } from "@markii/host";
+import { pagerMarkdown } from "./pager";
 import { fetchRemoteNote, parseRemoteNote } from "../notes/remote";
 
 interface Props {
@@ -26,7 +27,8 @@ const path = [...Object.keys(LOCAL), ...Object.keys(REMOTE)].find((key) => stem(
 if (path === undefined) throw new Error(`No note for ${node.url}`);
 const documentKey = path.slice(1);
 const remote = path in REMOTE ? parseRemoteNote(documentKey, REMOTE[path]) : undefined;
-const text = remote ? await fetchRemoteNote(documentKey, remote) : LOCAL[path];
+// The pager joins the note text here, so the static HTML, the pack scan and the island all see it.
+const text = (remote ? await fetchRemoteNote(documentKey, remote) : LOCAL[path]) + pagerMarkdown(node);
 const routes = Object.fromEntries(ALL_NODES.filter(isLeaf).map((leaf) => [`content/${routeParam(leaf)}`, leaf.url]));
 const scripted = noteHasScripts(text);
 const packNames = packNamespacesUsed(BUNDLED, text);

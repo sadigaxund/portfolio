@@ -100,11 +100,34 @@ test("script markers stay hidden while the note renders", async ({ page }) => {
   await expect(page.locator(".mk-script").first()).toBeHidden();
 });
 
-test("a leaf foot links to the next leaf, and the last leaf links only back", async ({ page }) => {
+test("the pager is markii's: Back then Next at the end of the note, Back only on the last leaf", async ({ page }) => {
   await page.goto("/professional/career");
-  await expect(page.locator(".leaf-foot a")).toHaveText(["Next Education", "Back to Professional"]);
+  const links = page.locator("[data-mk-root] .mk-nav_link");
+  await expect(links).toHaveText(["ProfessionalBack to", "EducationNext"]);
+  await expect(links.nth(0)).toHaveAttribute("href", "/professional");
+  await expect(links.nth(1)).toHaveAttribute("href", "/professional/education");
   await page.goto("/professional/certifications");
-  await expect(page.locator(".leaf-foot a")).toHaveText(["Back to Professional"]);
+  await expect(page.locator("[data-mk-root] .mk-nav_link")).toHaveText(["ProfessionalBack to"]);
+  await page.goto("/personal/instagram");
+  await expect(page.locator("[data-mk-root] .mk-nav_link").first()).toHaveAttribute("href", "/personal");
+});
+
+test.describe("pager without JavaScript", () => {
+  test.use({ javaScriptEnabled: false });
+
+  test("is in the static HTML, on a note with scripts too", async ({ page }) => {
+    for (const path of ["/professional/career", SCRIPTED]) {
+      await page.goto(path);
+      await expect(page.locator("[data-mk-root] .mk-nav_link").first()).toContainText("Back to");
+    }
+  });
+});
+
+test("the pager is the same after the island hydrates", async ({ page }) => {
+  await page.goto(SCRIPTED);
+  await page.waitForLoadState("networkidle");
+  await expect(page.locator("[data-mk-root] .mk-nav_link").first()).toContainText("Back to");
+  await expect(page.locator(".leaf-foot")).toHaveCount(0);
 });
 
 test("every leaf ends in one foot with the contact links and the Markii credit", async ({ page }) => {

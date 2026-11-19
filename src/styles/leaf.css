@@ -1,6 +1,6 @@
 /*
  * The leaf frame: a full-width header bar with Back and, for a note with scripts, its update
- * controls; the note in one centered column; the pager; then the site foot. DESIGN.md, "Leaf frame".
+ * controls; the note in one centered column; then the site foot. DESIGN.md, "Leaf frame".
  */
 :root {
   --leaf-column: 50rem;
@@ -62,46 +62,6 @@
   flex: none;
 }
 
-/* Next and Back, each one whole-box link. */
-.leaf-foot {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  margin-top: 4rem;
-}
-
-.leaf-foot a {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 4.5rem;
-  padding: 0.75rem 1.25rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-ui);
-  color: var(--color-fg);
-  text-decoration: none;
-}
-
-.leaf-foot a:hover {
-  border-color: var(--color-route);
-}
-
-.leaf-foot .leaf-foot-back {
-  grid-row: 1;
-  grid-column: 1;
-}
-
-.leaf-foot .leaf-foot-next {
-  grid-row: 1;
-  grid-column: 2;
-  text-align: right;
-}
-
-.leaf-foot .role-detail {
-  margin-top: 0;
-  color: var(--color-muted);
-}
-
 @media (max-width: 40rem) {
   .leaf-column {
     width: auto;
@@ -127,17 +87,5 @@
 
   .note-bar-lead {
     display: none;
-  }
-
-  .leaf-foot {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .leaf-foot .leaf-foot-back {
-    grid-row: 2;
-  }
-
-  .leaf-foot .leaf-foot-next {
-    grid-column: 1;
   }
 }
