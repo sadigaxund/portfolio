@@ -13,6 +13,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Changed
 
+- On a phone a leaf keeps the same margin on both sides, so cards and code blocks sit centered, and Update and the site foot line up with the note's edges.
 - The landing summary tells how the work moved from data pipelines to the servers and deploys under them. On a phone the fork sits one scroll below it.
 - Scrolling down to the fork stops at the page bottom, and only a new scroll continues straight on, so momentum never walks into Professional.
 - The section is named Projects & Blog, and the role line reads Software, DevOps & Data Engineer.

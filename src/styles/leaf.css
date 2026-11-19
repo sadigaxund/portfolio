@@ -8,7 +8,8 @@
   --leaf-head: 4rem;
   /* The first header row when the update controls drop to a second one. */
   --leaf-back-row: 3.5rem;
-  --leaf-edge: 1rem;
+  /* The leaf's side edge, mirroring Back's text on the left: Update and the foot end here. */
+  --leaf-edge: calc(var(--line-back-left) + 0.75rem);
 }
 
 /* A leaf fills at least the window, and a short note keeps its foot at the window's bottom edge. */
@@ -66,14 +67,22 @@
   flex: none;
 }
 
+/*
+ * A leaf has no line, so on a phone it drops the map's wide left gutter. One edge on both sides
+ * holds Back's text, the note, Update, and the foot.
+ */
 @media (max-width: 40rem) {
+  :root[data-view="leaf"] {
+    --leaf-edge: var(--gutter-end);
+    --line-back-left: calc(var(--gutter-end) - 0.75rem);
+  }
+
   .leaf-column {
     width: auto;
-    margin-inline: var(--gutter) var(--gutter-end);
+    margin-inline: var(--leaf-edge);
   }
 
   .note-bar {
-    right: min(0.75rem, 3vw);
     gap: min(0.75rem, 3vw);
   }
 
