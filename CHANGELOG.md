@@ -16,6 +16,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Changed
 
+- On a phone narrower than 360px, the fork's labels keep each word whole.
 - A road whose pages are all unpublished stays at the fork and says "Nothing here yet."
 - On a phone, the landing page scrolls far enough to show the roads' subtitles in full.
 - On a phone, the foot's contact links and the Powered by Markii stamp span the full width.
