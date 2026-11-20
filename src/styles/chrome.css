@@ -133,3 +133,21 @@ main h1[tabindex="-1"]:focus {
     margin-left: auto;
   }
 }
+
+/* Back is an arrow and the parent's name, the same form as the pager's Back line. */
+.line-back a {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.line-back-arrow {
+  flex: none;
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: var(--color-muted);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

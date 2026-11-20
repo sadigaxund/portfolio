@@ -53,3 +53,10 @@ async function expectThumbsMatchText(page: import("@playwright/test").Page) {
   expect(pairs.length).toBeGreaterThan(0);
   for (const [thumb, text] of pairs) expect(Math.abs(thumb - text)).toBeLessThanOrEqual(1);
 }
+
+test("Mandible's stop leads its preview with a star and its star count", async ({ page }) => {
+  await page.goto("/projects-blog/projects");
+  const stars = page.locator(".stop", { hasText: "Mandible" }).locator(".stop-stars");
+  await expect(stars).toHaveText("200+ stars.");
+  await expect(stars.locator("svg")).toHaveCount(1);
+});

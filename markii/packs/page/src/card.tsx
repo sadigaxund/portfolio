@@ -20,8 +20,8 @@ const CHEVRON = {
 } as const;
 
 /**
- * The card both `page_prev` and `page_next` draw: an optional still, a label
- * with a chevron, and the body. The link inside the body is ordinary Markdown,
+ * The card both `page_prev` and `page_next` draw: an optional still, then the
+ * body with a chevron on its outer side. The label is for screen readers only. The link inside the body is ordinary Markdown,
  * so the host resolves its address. Its anchor is stretched over the card in
  * CSS, which makes the whole card one tab stop.
  */
@@ -41,12 +41,12 @@ export function PageCard({ direction, label, attributes, children, resolveImageS
           </div>
         )}
         <div className="mk-page_card__text">
-          <span className="mk-page_card__label">
+          <span className="mk-page_card__label">{label}</span>
+          <div className="mk-page_card__name">
             {direction === 'prev' && chevron}
-            {label}
+            <div className="mk-page_card__body">{children}</div>
             {direction === 'next' && chevron}
-          </span>
-          <div className="mk-page_card__body">{children}</div>
+          </div>
         </div>
       </div>
     </div>

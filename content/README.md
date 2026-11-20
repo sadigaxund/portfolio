@@ -10,7 +10,7 @@ Everything the owner edits by hand lives here. A push to `main` redeploys the si
 
 ## Nodes
 
-Each node has a `slug` and a `label`. It may have a `summary` (sections only), a `preview` (leaves only), and `children`. A node with children is a section. A node without children is a leaf. Children nest without limit.
+Each node has a `slug` and a `label`. It may have a `summary` (sections only), a `preview` (leaves only), a `stars` count such as `200+` (leaves only, shown with a star before the preview), and `children`. A node with children is a section. A node without children is a leaf. Children nest without limit.
 
 `draft: true` marks a node with placeholder content. A build with `SITE_DRAFTS=hide` leaves out the node, its subtree, and any section left empty. Without that variable, drafts show.
 
@@ -38,7 +38,8 @@ A section has no note.
 ## Images and links
 
 - Put an image in an `images/` folder beside its note and name it relative to the note, as in `::::figure{src="images/mandible-demo.webp" alt="..."}`. The build copies and fingerprints it.
-- Center a logo under the title with `:::center`, then `![](images/logo-name.webp)`, then `:::`. A logo is a 128px square WebP.
+- Open a project note with one `:::center` block holding the logo `![](images/logo-name.webp)`, the `# ` title, and the one-line tagline. A logo is a 128px square WebP.
+- Center a row of stats with `:::row{cols=3 text=center}`.
 - Put a demo on the page as a `video` with an MP4 and a still as its `poster`, as the Mandible note does. Keep a clip under about 2MB.
 - Link another note by its file name, as in `[Markii](markii.mk.md)`, and a section by its path, as in `[Projects](../projects)`.
 - Write a note's outside links as one `nav_group` from the bundled `nav` pack, one `nav_link` per destination, with the address as `desc`. The git-resume note shows the form.

@@ -3,8 +3,9 @@ import type { NodeSpec, RoadSpec, Side, TreeSpec } from "./tree";
 
 const FILE = "content/site.yaml";
 const SLUG = /^[a-z0-9-]+$/;
-const NODE_KEYS = ["slug", "label", "summary", "preview", "thumb", "children", "draft"] as const;
+const NODE_KEYS = ["slug", "label", "summary", "preview", "stars", "thumb", "children", "draft"] as const;
 const THUMB = /^(?!\/)(?!.*\.\.)[^\s]+\.(webp|png|jpg)$/;
+const STARS = /^[0-9]+\+?$/;
 const SIDES: readonly Side[] = ["left", "straight", "right"];
 /** Three lines of a stop hold about 100 characters on a 360px phone, so a legal preview is never cut off. */
 const PREVIEW_MAX = 90;
@@ -29,6 +30,13 @@ function parseNode(value: unknown, path: string, keys: readonly string[] = NODE_
     if (node.preview.length > PREVIEW_MAX) {
       fail(FILE, `${path}.preview`, `is ${node.preview.length} characters; keep it to ${PREVIEW_MAX} so a phone shows it whole`);
     }
+  }
+  if (record.stars !== undefined) {
+    if (hasChildren) fail(FILE, `${path}.stars`, "is only allowed on a leaf, which has no children");
+    node.stars = asString(FILE, `${path}.stars`, String(record.stars));
+    if (!STARS.test(node.stars)) fail(FILE, `${path}.stars`, `must be a number with an optional +, such as 200+, but is "${node.stars}"`);
+    const length = `${node.stars} stars. ${node.preview ?? ""}`.length;
+    if (length > PREVIEW_MAX) fail(FILE, `${path}.stars`, `with the preview makes ${length} characters; keep both to ${PREVIEW_MAX}`);
   }
   if (record.thumb !== undefined) {
     if (hasChildren) fail(FILE, `${path}.thumb`, "is only allowed on a leaf, which has no children");

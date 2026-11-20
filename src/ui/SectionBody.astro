@@ -35,7 +35,17 @@ const { node } = Astro.props;
             <h2 class="role-item">
               <Link href={child.url}>{child.label}</Link>
             </h2>
-            {previewOf(child) && <p class="role-detail">{previewOf(child)}</p>}
+            {(child.stars || previewOf(child)) && (
+              <p class="role-detail">
+                {child.stars && (
+                  <span class="stop-stars">
+                    <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 1.2l1.95 4.1 4.5.55-3.3 3.1.85 4.45L8 11.2l-4 2.2.85-4.45-3.3-3.1 4.5-.55z" /></svg>
+                    {child.stars} stars.
+                  </span>
+                )}{" "}
+                {previewOf(child)}
+              </p>
+            )}
           </div>
         </li>
       ))

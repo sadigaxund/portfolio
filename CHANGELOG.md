@@ -7,7 +7,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 ### Added
 
 - A Previous and a Next card at the end of each project and each Professional page, wrapping from the last page to the first.
-- Each project page shows its logo above the title.
+- Each project page opens with its logo, title, and tagline centered, and its stats centered below.
 - The Mandible and Aqueduct demos play on the page as short silent clips, with a still before they start.
 - A small still of each project above its name on the Projects page.
 - A dot grid behind the line on every page, as the map's paper.
@@ -16,6 +16,8 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Changed
 
+- Back and the pager show an arrow and the page's name in place of the words Back to, Previous, and Next.
+- Mandible's entry on the Projects page leads with its star count.
 - On a phone narrower than 360px, the fork's labels keep each word whole.
 - A road whose pages are all unpublished stays at the fork and says "Nothing here yet."
 - On a phone, the landing page scrolls far enough to show the roads' subtitles in full.

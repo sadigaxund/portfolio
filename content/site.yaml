@@ -64,6 +64,7 @@ children:
             preview: Push a LaTeX resume, and GitHub Actions builds versioned PDFs and a live viewer.
           - slug: mandible
             label: Mandible
+            stars: 200+
             thumb: projects-blog/projects/images/thumb-mandible.webp
             preview: A Rust TUI manual for any CLI tool, with every command and flag in one tree.
           - slug: markii

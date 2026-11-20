@@ -25,3 +25,10 @@ test("the schema names a thumb of the wrong type or place", () => {
   expect(() => parseTree(road({ thumb: "x.gif" }))).toThrow("inside content/");
   expect(parseTree(road({ thumb: "p/x.webp" })).children[0]?.children?.[0]?.thumb).toBe("p/x.webp");
 });
+
+test("the schema takes a star count only as a number with an optional plus, within the preview's length", () => {
+  expect(parseTree(road({ stars: "200+" })).children[0]?.children?.[0]?.stars).toBe("200+");
+  expect(parseTree(road({ stars: 14 })).children[0]?.children?.[0]?.stars).toBe("14");
+  expect(() => parseTree(road({ stars: "lots" }))).toThrow("stars must be a number");
+  expect(() => parseTree(road({ stars: "200+", preview: "x".repeat(80) }))).toThrow("keep both to 90");
+});

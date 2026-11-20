@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { Link } from "my-you-eye";
 import type { Direction } from "../tree/tree";
 import { previewOf } from "../sections/previews";
-import { backLabelOf, BRANCHES, nodeAt, ROOT } from "../tree/walk";
+import { backNameOf, BRANCHES, nodeAt, ROOT } from "../tree/walk";
 import { mountLine } from "./controller";
 import { DIRECTIONS } from "./geometry";
 import { mountIntent } from "./intent";
@@ -85,7 +85,13 @@ export default function LineStage({ initialPath }: LineStageProps) {
         className="line-back"
         style={{ opacity: progress, visibility: progress > 0 ? "visible" : "hidden" }}
       >
-        <Link href={(initialNode?.parent ?? ROOT).url}>{backLabelOf(initialNode)}</Link>
+        <Link href={(initialNode?.parent ?? ROOT).url}>
+          <svg className="line-back-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path d="M10 3 5 8l5 5" />
+          </svg>
+          <span className="sr-only">Back to </span>
+          <span data-back-name>{backNameOf(initialNode)}</span>
+        </Link>
       </nav>
     </div>
   );
