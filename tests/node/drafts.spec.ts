@@ -40,7 +40,7 @@ test.describe("drafts", () => {
     expect(kept.children[1].children?.map((child) => child.slug)).toEqual(["p"]);
   });
   test("a road marked draft itself is hidden", () => {
-    const own = { ...tree, children: [{ ...tree.children[0], draft: true }, ...tree.children.slice(1)] };
+    const own = { ...tree, children: [{ ...tree.children[0], draft: true as const }, ...tree.children.slice(1)] };
     expect(hideDrafts(own).children.map((road) => road.slug)).toEqual(["b", "c"]);
     expect(hiddenRoutes(own)).toEqual(["a", "b/q"]);
   });

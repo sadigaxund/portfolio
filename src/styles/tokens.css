@@ -43,6 +43,10 @@
   --text-lead: clamp(1.1875rem, 1.14rem + 0.19vw, 1.375rem);
   --text-body: clamp(1.0625rem, 1.034rem + 0.128vw, 1.1875rem);
   --text-detail: clamp(0.9375rem, 0.92rem + 0.08vw, 1rem);
+  /* The fork's labels on a phone, and one step smaller below 360px. See fork.css. */
+  --text-fork-name: 1rem;
+  --text-fork-name-narrow: 0.9375rem;
+  --text-fork-detail-narrow: 0.875rem;
   /* Running text stops at about 70 characters. */
   --measure: 55ch;
   --link-hover-thickness: 2px;
