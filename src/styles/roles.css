@@ -97,6 +97,11 @@
 }
 
 /* Wide on a desktop: who on the left, what and how to reach on the right. */
+/* The fork's labels are drawn on the line layer, outside the page's flow, so the landing page reaches past them. */
+main:has(.hero) {
+  min-height: calc(var(--fork-end, 0px) + 2.5rem);
+}
+
 .hero {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

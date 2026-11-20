@@ -50,3 +50,34 @@ test("a short leaf keeps its foot in the window", async ({ page }) => {
   expect(foot!.y + foot!.height).toBeLessThanOrEqual(height + 1);
   expect(foot!.y + foot!.height).toBeGreaterThanOrEqual(height - 1);
 });
+
+for (const viewport of [{ width: 360, height: 740 }, { width: 320, height: 640 }, { width: 1280, height: 800 }]) {
+  test(`at ${viewport.width}x${viewport.height} the landing page reaches past the fork's labels`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    await page.waitForSelector(".line-stage[data-ready]");
+    await page.evaluate(() => document.fonts.ready);
+    const { end, labels } = await page.evaluate(() => ({
+      end: document.documentElement.scrollHeight,
+      labels: Math.max(...[...document.querySelectorAll("[data-option]")].map((option) => option.getBoundingClientRect().bottom + scrollY)),
+    }));
+    expect(end - labels).toBeGreaterThanOrEqual(16);
+  });
+}
+
+test("on a phone the foot's links and the Markii credit span its width", async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 760 });
+  await page.goto("/professional/career");
+  const edges = await page.evaluate(() => {
+    const foot = document.querySelector<HTMLElement>(".site-foot")!;
+    const right = foot.getBoundingClientRect().right - parseFloat(getComputedStyle(foot).paddingRight);
+    const links = [...foot.querySelectorAll(".contact-links a")].at(-1)!.getBoundingClientRect().right;
+    const credit = foot.querySelector(".markii-credit")!.getBoundingClientRect().right;
+    const repo = foot.querySelector(".markii-credit-repo")!;
+    const repoRight = repo.getBoundingClientRect().right + parseFloat(getComputedStyle(repo.parentElement!).paddingRight);
+    return { right, links, credit, repoRight };
+  });
+  expect(Math.abs(edges.links - edges.right)).toBeLessThanOrEqual(1);
+  expect(Math.abs(edges.credit - edges.right)).toBeLessThanOrEqual(1);
+  expect(Math.abs(edges.repoRight - edges.credit)).toBeLessThanOrEqual(2);
+});
