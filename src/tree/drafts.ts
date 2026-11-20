@@ -14,9 +14,9 @@ function prune<T extends NodeSpec>(node: T): T {
   return { ...node, children: node.children.filter((child) => !isHidden(child)).map(prune) };
 }
 
-/** The tree without drafts and without the sections they leave empty. */
+/** The tree without drafts and without the sections they leave empty. A road stays unless it is a draft itself, so the fork keeps its three roads. */
 export function hideDrafts(tree: TreeSpec): TreeSpec {
-  const roads: RoadSpec[] = tree.children.filter((road) => !isHidden(road)).map(prune);
+  const roads: RoadSpec[] = tree.children.filter((road) => !road.draft).map(prune);
   return { ...tree, children: roads };
 }
 
@@ -25,7 +25,8 @@ export function hiddenRoutes(tree: TreeSpec): string[] {
   const out: string[] = [];
   const walk = (node: NodeSpec, prefix: string) => {
     const route = `${prefix}${node.slug}`;
-    if (isHidden(node)) out.push(route);
+    const hidden = prefix === "" ? Boolean(node.draft) : isHidden(node);
+    if (hidden) out.push(route);
     else (node.children ?? []).forEach((child) => walk(child, `${route}/`));
   };
   tree.children.forEach((road) => walk(road, ""));

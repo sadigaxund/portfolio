@@ -8,6 +8,8 @@ export interface TreeNode {
   thumb?: string;
   parent: TreeNode | null;
   children: TreeNode[];
+  /** True for a node declared with children, even when hidden drafts left it none. */
+  section: boolean;
   /** The branch walked to reach this node. Null at the root. */
   direction: Direction | null;
 }
@@ -27,6 +29,7 @@ function buildNode(spec: NodeSpec, parent: TreeNode, direction: Direction): Tree
     thumb: spec.thumb,
     parent,
     children: [],
+    section: spec.children !== undefined,
     direction,
   };
   node.children = (spec.children ?? []).map((child) => buildNode(child, node, direction));
@@ -37,7 +40,7 @@ function withDescendants(node: TreeNode): TreeNode[] {
   return [node, ...node.children.flatMap(withDescendants)];
 }
 
-export const ROOT: TreeNode = { url: `${BASE}/`, label: TREE.label, parent: null, children: [], direction: null };
+export const ROOT: TreeNode = { url: `${BASE}/`, label: TREE.label, parent: null, children: [], section: true, direction: null };
 
 const DIRECTION_OF: Record<Side, Direction> = { left: -1, straight: 0, right: 1 };
 
@@ -63,7 +66,7 @@ export function routeParam(node: TreeNode): string | undefined {
 
 /** A leaf is a node past the root with nothing below it. It owns the whole screen. */
 export function isLeaf(node: TreeNode): boolean {
-  return node.parent !== null && node.children.length === 0;
+  return node.parent !== null && !node.section;
 }
 
 export function isLeafPath(path: string): boolean {
