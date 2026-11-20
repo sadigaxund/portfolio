@@ -19,7 +19,7 @@ export interface IslandProps extends NoteProps {
   builtLabel: string;
 }
 
-function ScriptedNote({ text, documentKey, routes, remote, bakedStale, builtLabel, registry = defaultRegistry }: IslandProps) {
+function ScriptedNote({ text, documentKey, routes, bakedStale, builtLabel, registry = defaultRegistry }: IslandProps) {
   const prompts = useMemo<PromptBridge>(() => ({ ask: undefined }), []);
   const { values, running, ranAt, runs, run } = useNoteRun(documentKey, text, bakedStale, prompts);
   const { toast } = useToast();
@@ -33,7 +33,7 @@ function ScriptedNote({ text, documentKey, routes, remote, bakedStale, builtLabe
     <>
       <NoteBar ranAt={ranAt} builtLabel={builtLabel} running={running} runs={runs} onRefresh={() => void refresh()} />
       <div className="note" data-mk-root="" data-hide-scripts={SETTINGS.hideScriptBlocks || undefined}>
-        {renderNote(text, documentKey, routes, registry, createValueStore(values), remote, LOCAL_IMAGES)}
+        {renderNote(text, documentKey, routes, registry, createValueStore(values), LOCAL_IMAGES)}
       </div>
       <GrantDialog bridge={prompts} />
     </>

@@ -1,18 +1,24 @@
 import { existsSync, readFileSync } from "node:fs";
 import { load } from "js-yaml";
 
+function opensWithOtherHeading(url, label) {
+  const file = [".mk.md", ".md"].map((ext) => `content${url}${ext}`).find((path) => existsSync(path));
+  const heading = file && /^# (.+)$/m.exec(readFileSync(file, "utf8"));
+  return Boolean(heading) && heading[1] !== label;
+}
+
 /**
  * Every node's URL and label in content/site.yaml, parsed by the same YAML library the build uses.
- * `remote` marks a leaf whose note is downloaded, so its heading is the note's own.
- * @returns {{ url: string, label: string, remote: boolean }[]}
+ * `ownHeading` marks a leaf whose note opens with a heading that differs from the node's label.
+ * @returns {{ url: string, label: string, ownHeading: boolean }[]}
  */
 export function siteNodes() {
   const root = load(readFileSync("content/site.yaml", "utf8"));
-  const nodes = [{ url: "/", label: root.label, remote: false }];
+  const nodes = [{ url: "/", label: root.label, ownHeading: false }];
   const walk = (children, prefix) => {
     for (const child of children ?? []) {
       const url = `${prefix}/${child.slug}`;
-      nodes.push({ url, label: child.label, remote: existsSync(`content${url}.remote.yaml`) });
+      nodes.push({ url, label: child.label, ownHeading: opensWithOtherHeading(url, child.label) });
       walk(child.children, url);
     }
   };
