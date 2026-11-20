@@ -6,7 +6,7 @@ Everything the owner edits by hand lives here. A push to `main` redeploys the si
 
 - `site.yaml` is the map of the site. It is one tree from the root: a `label`, then `children` at every level. Comments in the file explain each field.
 - `profile.yaml` is the landing page hero: role, summary, and links.
-- One note per leaf, at `content/<url path>.md` or `content/<url path>.mk.md`. The note is found by its path, and no field declares it. `professional/career.mk.md` belongs to `/professional/career`. Use `.mk.md` for a Markii note and `.md` otherwise. Each note starts with `# <label>`.
+- One note per leaf, at `content/<url path>.md` or `content/<url path>.mk.md`. The note is found by its path, and no field declares it. `professional/career.mk.md` belongs to `/professional/career`. Use `.mk.md` for a Markii note and `.md` otherwise. Each note starts with a `# ` heading, usually its label.
 
 ## Nodes
 
@@ -38,8 +38,33 @@ A section has no note.
 ## Images and links
 
 - Put an image in an `images/` folder beside its note and name it relative to the note, as in `::::figure{src="images/mandible-demo.webp" alt="..."}`. The build copies and fingerprints it.
-- Prefer a still WebP over an animated GIF, and link the GIF from the caption as "Watch the demo".
+- Center a logo under the title with `:::center`, then `![](images/logo-name.webp)`, then `:::`. A logo is a 128px square WebP.
+- Put a demo on the page as a `video` with an MP4 and a still as its `poster`, as the Mandible note does. Keep a clip under about 2MB.
+- Link another note by its file name, as in `[Markii](markii.mk.md)`, and a section by its path, as in `[Projects](../projects)`.
 - Write a note's outside links as one `nav_group` from the bundled `nav` pack, one `nav_link` per destination, with the address as `desc`. The git-resume note shows the form.
+
+## End of a note
+
+Each leaf ends with a pager from the local `page` pack. It is plain text in the note, so a new or moved page means editing its neighbours' pagers too. Follow the order in `site.yaml`, and wrap from the last page to the first.
+
+With three or more pages in a section:
+
+```
+---
+
+::page_back[[Projects](../projects)]
+
+::::row{cols=2}
+:::page_prev{img=images/thumb-git-resume.webp}
+[git-resume](git-resume.mk.md)
+:::
+:::page_next{img=images/thumb-markii.webp}
+[Markii](markii.mk.md)
+:::
+::::
+```
+
+With two pages, drop the row and keep one `page_next` to the other page. With one page, keep only the `---` and the `page_back` line. `img` is optional, and a card without it shows text only.
 
 ## YAML tip
 
