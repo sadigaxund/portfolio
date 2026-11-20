@@ -117,10 +117,19 @@ main h1[tabindex="-1"]:focus {
   color: var(--color-fg);
 }
 
+/* On a phone the foot stacks, and its links and the Markii credit each span the full width. */
 @media (max-width: 40rem) {
   .site-foot {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     padding-inline: var(--leaf-edge);
+  }
+
+  .site-foot .contact-links {
+    justify-content: space-between;
+  }
+
+  .markii-credit-repo {
+    margin-left: auto;
   }
 }

@@ -24,7 +24,7 @@ my-you-eye's own surface, secondary, ring, and status tokens are set from these 
 
 ## Text roles
 
-Roles live in `src/styles/roles.css`, and their sizes are `--text-*` tokens in `tokens.css`. Sizes grow from a 360px to a 1920px viewport. The root size stays 16px, so the line's geometry never moves. Pages name a role and never set a size or weight.
+Roles live in `src/styles/roles.css`, and their sizes are `--text-*` tokens in `tokens.css`. Sizes grow from a 360px to a 1920px viewport. The site never sets the root font size, because the line's geometry is in rem and a fluid root would rescale it. A visitor's own font setting still scales the root, and the line reflows with it. Pages name a role and never set a size or weight.
 
 | Class | Font | Size, 360 to 1920 | Weight | Use |
 |---|---|---|---|---|

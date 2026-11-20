@@ -35,7 +35,7 @@
   --color-danger-fg: var(--color-bg);
   --color-warning: var(--color-doc-warning);
   --color-warning-fg: var(--color-bg);
-  /* Text sizes grow from a 360px to a 1920px viewport. The root size stays 16px, so the line's rem geometry never moves. */
+  /* Text sizes grow from a 360px to a 1920px viewport. The site never sets the root size, because the line's geometry is in rem. */
   --text-name: clamp(3rem, 2.4rem + 3vw, 4.5rem);
   --text-heading: clamp(2.5rem, 2rem + 2vw, 3.5rem);
   --text-item: clamp(1.5rem, 1.41rem + 0.39vw, 1.875rem);
