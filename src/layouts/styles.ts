@@ -2,6 +2,7 @@
 // Tokens and roles come after line.css so that their values win.
 import "../styles/global.css";
 import "../styles/line.css";
+import "../styles/fork.css";
 import "../styles/route.css";
 import "@fontsource-variable/geologica";
 import "@fontsource-variable/instrument-sans";

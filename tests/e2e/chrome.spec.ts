@@ -65,6 +65,30 @@ for (const viewport of [{ width: 360, height: 740 }, { width: 320, height: 640 }
   });
 }
 
+for (const width of [320, 340, 360]) {
+  test(`at ${width}px no word in the fork's labels breaks across lines`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 640 });
+    await page.goto("/");
+    await page.waitForSelector(".line-stage[data-ready]");
+    await page.evaluate(() => document.fonts.ready);
+    const broken = await page.evaluate(() =>
+      [...document.querySelectorAll(".line-option-name, .line-option-preview")].flatMap((element) => {
+        const text = element.firstChild ?? element;
+        const node = text.nodeType === Node.TEXT_NODE ? text : element.querySelector("a")?.firstChild;
+        if (!node?.textContent) return [];
+        return [...node.textContent.matchAll(/[^\s,]+/g)].flatMap((word) => {
+          const range = document.createRange();
+          range.setStart(node, word.index);
+          range.setEnd(node, word.index + word[0].length);
+          const lines = new Set([...range.getClientRects()].map((rect) => Math.round(rect.top)));
+          return lines.size > 1 ? [word[0]] : [];
+        });
+      }),
+    );
+    expect(broken).toEqual([]);
+  });
+}
+
 test("on a phone the foot's links and the Markii credit span its width", async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 760 });
   await page.goto("/professional/career");
