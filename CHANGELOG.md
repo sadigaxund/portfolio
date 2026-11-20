@@ -7,7 +7,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 ### Added
 
 - A Previous and a Next card at the end of each project and each Professional page, wrapping from the last page to the first.
-- Each project page shows its logo below the title.
+- Each project page shows its logo above the title.
 - The Mandible and Aqueduct demos play on the page as short silent clips, with a still before they start.
 - A small still of each project above its name on the Projects page.
 - A dot grid behind the line on every page, as the map's paper.

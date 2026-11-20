@@ -1,8 +1,8 @@
-# Aqueduct
-
 :::center
 ![](images/logo-aqueduct.webp)
 :::
+
+# Aqueduct
 
 An AI harness for data pipelines on Spark or DuckDB: the model proposes a fix, and the harness decides.
 
