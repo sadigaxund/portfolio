@@ -2,9 +2,9 @@
 ![](images/logo-git-resume.webp)
 
 # git-resume
-:::
 
 A small release pipeline for a resume written in LaTeX.
+:::
 
 ```lua {name=repo permissions=api.github.com}
 local r = net.fetch_json("https://api.github.com/repos/AS-FOSS/git-resume")

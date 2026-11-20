@@ -2,9 +2,9 @@
 ![](images/logo-mandible.webp)
 
 # Mandible
-:::
 
 A terminal manual for every command-line tool on your machine.
+:::
 
 ```lua {name=repo permissions=api.github.com}
 local r = net.fetch_json("https://api.github.com/repos/AS-FOSS/mandible")

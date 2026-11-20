@@ -2,9 +2,9 @@
 ![](images/logo-aqueduct.webp)
 
 # Aqueduct
-:::
 
 An AI harness for data pipelines on Spark or DuckDB: the model proposes a fix, and the harness decides.
+:::
 
 ```lua {name=repo permissions=api.github.com}
 local r = net.fetch_json("https://api.github.com/repos/sadigaxund/Aqueduct")
