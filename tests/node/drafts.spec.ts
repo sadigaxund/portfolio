@@ -40,9 +40,9 @@ test.describe("drafts", () => {
     expect(kept.children[1].children?.map((child) => child.slug)).toEqual(["p"]);
   });
   test("a road marked draft itself is hidden", () => {
-    const own = parseTree({ label: "R", children: [{ slug: "a", label: "A", side: "left", draft: true, children: [{ slug: "x", label: "X" }] }] });
-    expect(hideDrafts(own).children).toEqual([]);
-    expect(hiddenRoutes(own)).toEqual(["a"]);
+    const own = { ...tree, children: [{ ...tree.children[0], draft: true }, ...tree.children.slice(1)] };
+    expect(hideDrafts(own).children.map((road) => road.slug)).toEqual(["b", "c"]);
+    expect(hiddenRoutes(own)).toEqual(["a", "b/q"]);
   });
   test("lists the hidden routes without descending into them", () => {
     expect(hiddenRoutes(tree)).toEqual(["a/x", "a/g", "b/q"]);

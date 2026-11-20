@@ -10,17 +10,19 @@ test.describe("a build with drafts hidden", () => {
   const out = mkdtempSync(join(tmpdir(), "site-hide-"));
   test.afterAll(() => rmSync(out, { recursive: true, force: true }));
 
-  test("leaves the draft roads out of pages and links", () => {
+  test("leaves draft pages out, and keeps every road with an empty section's zero state", () => {
     execFileSync("npx", ["astro", "build", "--outDir", out], { env: { ...process.env, SITE_DRAFTS: "hide" }, stdio: "pipe" });
-    for (const gone of ["personal", "personal/instagram", "personal/hobbies/placeholder-leaf", "projects-blog/blog"]) {
+    for (const gone of ["personal/instagram", "personal/hobbies", "personal/hobbies/placeholder-leaf", "projects-blog/blog"]) {
       expect(existsSync(join(out, gone, "index.html")), `${gone} is built`).toBe(false);
     }
     expect(existsSync(join(out, "projects-blog/projects/mandible/index.html"))).toBe(true);
     const landing = readFileSync(join(out, "index.html"), "utf8");
-    expect(landing).not.toMatch(/href="[^"]*\/personal/);
-    expect(landing).not.toContain("Personal");
-    expect(landing).not.toContain(`data-branch="-1"`);
-    expect(landing).not.toContain(`data-option="-1"`);
+    expect(landing).toContain(`data-option="-1"`);
+    expect(landing).toContain("Nothing here yet.");
+    expect(landing).not.toMatch(/\/personal\/(instagram|hobbies)/);
+    const personal = readFileSync(join(out, "personal/index.html"), "utf8");
+    expect(personal).toContain("Nothing here yet.");
+    expect(personal).not.toContain(`class="stop"`);
     expect(readFileSync(join(out, "projects-blog/index.html"), "utf8")).not.toMatch(/\/blog"/);
     expect(readFileSync(join(out, "projects-blog/projects/aqueduct/index.html"), "utf8")).not.toMatch(/\/projects-blog\/blog/);
   });
