@@ -5,6 +5,7 @@ export interface TreeNode {
   label: string;
   summary?: string;
   preview?: string;
+  stars?: string;
   thumb?: string;
   parent: TreeNode | null;
   children: TreeNode[];
@@ -26,6 +27,7 @@ function buildNode(spec: NodeSpec, parent: TreeNode, direction: Direction): Tree
     label: spec.label,
     summary: spec.summary,
     preview: spec.preview,
+    stars: spec.stars,
     thumb: spec.thumb,
     parent,
     children: [],

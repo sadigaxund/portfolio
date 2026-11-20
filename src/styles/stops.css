@@ -196,3 +196,18 @@
       background-color 150ms ease-out;
   }
 }
+
+/* A repository's star count leads the preview, in the text color so it reads first. */
+.stop-stars {
+  white-space: nowrap;
+  color: var(--color-fg);
+}
+
+.stop-stars svg {
+  display: inline-block;
+  width: 0.95em;
+  height: 0.95em;
+  margin-right: 0.3em;
+  vertical-align: -0.1em;
+  fill: currentColor;
+}

@@ -13,6 +13,8 @@ export interface NodeSpec {
   summary?: string;
   /** One line under a leaf's name on its parent. Leaves only. */
   preview?: string;
+  /** A repository's star count, such as 200+, shown with a star before the preview. Leaves only. */
+  stars?: string;
   /** A still image beside a leaf's name on its parent, as a path inside `content/`. Leaves only. */
   thumb?: string;
   children?: NodeSpec[];
