@@ -73,8 +73,11 @@ test("on a phone the foot's links and the Markii credit span its width", async (
     const right = foot.getBoundingClientRect().right - parseFloat(getComputedStyle(foot).paddingRight);
     const links = [...foot.querySelectorAll(".contact-links a")].at(-1)!.getBoundingClientRect().right;
     const credit = foot.querySelector(".markii-credit")!.getBoundingClientRect().right;
-    return { right, links, credit };
+    const repo = foot.querySelector(".markii-credit-repo")!;
+    const repoRight = repo.getBoundingClientRect().right + parseFloat(getComputedStyle(repo.parentElement!).paddingRight);
+    return { right, links, credit, repoRight };
   });
   expect(Math.abs(edges.links - edges.right)).toBeLessThanOrEqual(1);
   expect(Math.abs(edges.credit - edges.right)).toBeLessThanOrEqual(1);
+  expect(Math.abs(edges.repoRight - edges.credit)).toBeLessThanOrEqual(2);
 });
