@@ -4,7 +4,7 @@ import './pager.css';
 
 /**
  * `::page_back[Projects](../projects)`: one quiet line leading back to the
- * parent page. The bracket content is the link, rendered by Markii, so the
+ * parent page, an arrow and the parent's name. "Back to" is for screen readers only. The bracket content is the link, rendered by Markii, so the
  * host resolves its address. The arrow is an inline SVG that follows the
  * text color.
  */

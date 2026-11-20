@@ -1,4 +1,6 @@
+:::center
 # Career
+:::
 
 ## KDM Force
 

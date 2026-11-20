@@ -1,4 +1,4 @@
-import { backLabelOf, isLeafPath, nodeAt, ROOT } from "../tree/walk";
+import { backNameOf, isLeafPath, nodeAt, ROOT } from "../tree/walk";
 import { focusArrival } from "./arrival";
 import { clearContent, revealContent } from "./content";
 import { chooseEase } from "./ease";
@@ -32,7 +32,7 @@ export function mountLine(stage: HTMLElement, probe: HTMLElement, initialPath: s
   const ease = chooseEase();
   const { clearStep, panStep, growStep } = createSteps(stage, scene, runner, ease);
   let backHref = "";
-  let backLabel = "";
+  let backName = "";
   let pending: { steps: Step[]; speed: number; returned?: string } | null = null;
   let jumpAtSwap: string | null = null;
   let scrollBefore = 0;
@@ -77,7 +77,7 @@ export function mountLine(stage: HTMLElement, probe: HTMLElement, initialPath: s
     const { from, to, loader } = event as RouterEvent;
     const node = nodeAt(to.pathname);
     backHref = (node?.parent ?? ROOT).url;
-    backLabel = backLabelOf(node);
+    backName = backNameOf(node);
     walkId += 1;
     runner.cancel();
     pending = null;
@@ -118,7 +118,8 @@ export function mountLine(stage: HTMLElement, probe: HTMLElement, initialPath: s
   const onBeforeSwap = (event: Event) => {
     const backLink = scene.back.querySelector("a");
     backLink?.setAttribute("href", backHref);
-    if (backLink) backLink.textContent = backLabel;
+    const name = backLink?.querySelector("[data-back-name]");
+    if (name) name.textContent = backName;
     scrollBefore = scrollY;
     const incoming = (event as Event & { newDocument?: Document }).newDocument;
     if (pending && incoming) incoming.documentElement.dataset.lineReveal = "pending";

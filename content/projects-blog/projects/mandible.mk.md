@@ -1,8 +1,8 @@
 :::center
 ![](images/logo-mandible.webp)
-:::
 
 # Mandible
+:::
 
 A terminal manual for every command-line tool on your machine.
 
@@ -16,7 +16,7 @@ return {
 }
 ```
 
-:::row{cols=3}
+:::row{cols=3 text=center}
 ::stat{data=repo.pushed_at label="Last push" format=relative}
 ::stat{data=repo.language label="Language"}
 ::stat{data=repo.stars label="Stars"}
@@ -49,7 +49,7 @@ Mandible asks the tool itself. It reads the tool's `--help`, its shell completio
 
 It opens any tool, but it does not read every tool correctly yet. A person checks a random sample by hand against each tool's own `--help`.
 
-::::row{cols=2}
+::::row{cols=2 text=center}
 :::card
 ### 27 of 44
 Tools fully correct in the latest audit, on 0.9.0 (61%). The true rate is likely between 47% and 74%.

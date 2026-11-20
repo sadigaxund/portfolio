@@ -1,8 +1,8 @@
 :::center
 ![](images/logo-git-resume.webp)
-:::
 
 # git-resume
+:::
 
 A small release pipeline for a resume written in LaTeX.
 
@@ -16,7 +16,7 @@ return {
 }
 ```
 
-:::row{cols=3}
+:::row{cols=3 text=center}
 ::stat{data=repo.pushed_at label="Last push" format=relative}
 ::stat{data=repo.language label="Language"}
 ::stat{data=repo.stars label="Stars"}

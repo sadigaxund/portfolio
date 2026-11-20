@@ -74,10 +74,10 @@ export function isLeafPath(path: string): boolean {
   return node !== undefined && isLeaf(node);
 }
 
-/** The Back link names where it goes. The landing page is called start. */
-export function backLabelOf(node: TreeNode | undefined): string {
+/** The Back link shows an arrow and where it goes. The landing page is called Home. */
+export function backNameOf(node: TreeNode | undefined): string {
   const parent = node?.parent ?? ROOT;
-  return `Back to ${parent === ROOT ? "Start" : parent.label}`;
+  return parent === ROOT ? "Home" : parent.label;
 }
 
 /** The node after this one among its siblings, in `content/site.yaml` order. */

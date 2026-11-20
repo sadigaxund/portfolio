@@ -76,7 +76,7 @@ const headLayout = (page: import("@playwright/test").Page) =>
     return { head, age, button, back };
   });
 
-for (const [width, rows] of [[1280, 1], [360, 1], [320, 2]] as const) {
+for (const [width, rows] of [[1280, 1], [360, 1], [320, 1]] as const) {
   test(`at ${width}px the header takes ${rows} row(s), and Update clears its line`, async ({ page }) => {
     await page.setViewportSize({ width, height: 800 });
     await page.goto(SCRIPTED);

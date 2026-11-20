@@ -29,16 +29,20 @@ test("the list wraps: the first page's Previous is the last, and the last page's
   await expect(page).toHaveURL(/\/projects-blog\/projects\/git-resume$/);
 });
 
-test("labels carry a chevron, and the back line leads to the parent", async ({ page }) => {
+test("arrows point the way, and the words Back to, Previous, and Next are for screen readers only", async ({ page }) => {
   await page.goto("/professional/certifications");
   await expect(page.locator(".mk-page_back a")).toHaveAttribute("href", "/professional");
-  await expect(page.locator(".mk-page_back")).toContainText("Back to");
+  const hidden = (selector: string) => page.locator(selector).evaluate((el) => el.getBoundingClientRect().width <= 1);
+  await expect(page.locator(".mk-page_back__label")).toHaveText("Back to");
   await expect(page.locator(`${PREV} .mk-page_card__label`)).toHaveText("Previous");
   await expect(page.locator(`${NEXT} .mk-page_card__label`)).toHaveText("Next");
+  expect(await hidden(".mk-page_back__label")).toBe(true);
+  expect(await hidden(`${PREV} .mk-page_card__label`)).toBe(true);
+  expect(await hidden(`${NEXT} .mk-page_card__label`)).toBe(true);
   const order = (selector: string) =>
-    page.locator(`${selector} .mk-page_card__label`).evaluate((el) => [...el.childNodes].map((node) => (node.nodeType === 1 ? "svg" : "text")));
-  expect(await order(PREV)).toEqual(["svg", "text"]);
-  expect(await order(NEXT)).toEqual(["text", "svg"]);
+    page.locator(`${selector} .mk-page_card__name`).evaluate((el) => [...el.children].map((child) => child.tagName.toLowerCase()));
+  expect(await order(PREV)).toEqual(["svg", "div"]);
+  expect(await order(NEXT)).toEqual(["div", "svg"]);
 });
 
 test("in a half-width card the still sits on top, and Next is right-aligned", async ({ page }) => {

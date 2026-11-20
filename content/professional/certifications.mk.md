@@ -1,4 +1,6 @@
+:::center
 # Certifications
+:::
 
 ## Astronomer Beyond the DAG Hackathon
 

@@ -1,4 +1,6 @@
+:::center
 # Education
+:::
 
 ## George Washington University
 

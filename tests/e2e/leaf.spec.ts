@@ -37,7 +37,7 @@ test("a leaf owns the whole screen, with no line, and Back sits in its header", 
   expect(box!.y + box!.height).toBeLessThanOrEqual(head!.y + head!.height);
   const hit = await back.evaluate((link) => {
     const rect = link.getBoundingClientRect();
-    return document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2) === link;
+    return link.contains(document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2));
   });
   expect(hit).toBe(true);
   await page.evaluate(() => {
