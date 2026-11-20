@@ -1,17 +1,16 @@
 ---
 title: Format Tour
-description: A guided tour of Markii, from directives to layout to scripting, using this playground as the editor.
+description: A guided tour of Markii, from directives to layout to scripting.
 ---
-
-# Welcome to Markii
 
 :::center
 ![](images/logo-markii.webp)
 :::
 
-This page is a Markii document, and you are standing inside the editor. Change
-anything in the left pane and the right pane re-renders as you type. Nothing
-you do here can break the page, so poke at everything.
+# Welcome to Markii
+
+This page is a Markii document. Each part below shows one feature of the
+format, written in that feature.
 
 ## Start with what you know
 
@@ -19,8 +18,8 @@ Everything markdown does still works: **bold**, links, lists, tables. Markii
 adds one rule on top: a *directive* places a component in the document.
 
 :::callout{type=info title="This box is a directive"}
-Type `:::callout` on a line, write any markdown inside, close with `:::`.
-Try changing `type=info` to `warning`, then to `danger`.
+Write `:::callout` on a line, any markdown inside, and close with `:::`.
+The two boxes below change only `type=info` to `warning` and `danger`.
 :::
 
 :::callout{type=warning title="Same box, different temper"}
@@ -39,7 +38,8 @@ badge :badge[plain] with no variant at all.
 ## The live part
 
 This document fetches its own data. Rendering never runs code, so the
-block below sits inert until you click **Run scripts** above the preview:
+block below runs only when the site is built, or when you press **Update**
+at the top of the page:
 
 ```lua {name=repo permissions=api.github.com}
 local repo = net.fetch_json("https://api.github.com/repositories/10270250")
@@ -50,10 +50,10 @@ return {
 }
 ```
 
-Click Run, then look: facebook/react has :value[repo.stars] stars.
+The build ran it once, so facebook/react has :value[repo.stars] stars.
 
-Before the click, that sentence shows a quiet `{repo.stars}` marker, and
-every component below shows an empty state. That is the format's core
+Without a value, that sentence would show a quiet `{repo.stars}` marker,
+and every component below an empty state. That is the format's core
 promise: a document is always readable, with or without its data.
 
 ## A dashboard from one value
@@ -125,7 +125,7 @@ Headings, lists, and `code` all work inside one.
 
 :::card
 ### Another
-Cards in a row share the width evenly, and stack when the pane gets narrow.
+Cards in a row share the width evenly, and stack when the page gets narrow.
 :::
 ::::
 
@@ -166,7 +166,7 @@ A divider marks a section break without borrowing CommonMark's `---`:
 
 ## Now break something
 
-Rename `callout` above to `callotu` and watch: the page does not crash. An
+A misspelled name, such as `callotu` for `callout`, does not crash the page. An
 unknown name renders a labeled box with its content intact, which is what
 lets a note travel to machines with different components installed:
 
@@ -195,7 +195,7 @@ Not rendered, because it is inside a fence.
 
 ## Where to go next
 
-This playground is a demo, not the product. The format and its libraries
+This page is a tour, not the product. The format and its libraries
 live in the [repository](https://github.com/markii-org/markii). The
 documentation is written to be read in order, but each page stands on its
 own:

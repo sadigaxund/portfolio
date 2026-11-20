@@ -1,8 +1,8 @@
-# Mandible
-
 :::center
 ![](images/logo-mandible.webp)
 :::
+
+# Mandible
 
 A terminal manual for every command-line tool on your machine.
 

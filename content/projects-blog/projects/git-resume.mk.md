@@ -1,8 +1,8 @@
-# git-resume
-
 :::center
 ![](images/logo-git-resume.webp)
 :::
+
+# git-resume
 
 A small release pipeline for a resume written in LaTeX.
 
