@@ -8,4 +8,15 @@
 
 *Google. Apr 2022.*
 
+---
+
 ::page_back[[Professional](../professional)]
+
+::::row{cols=2}
+:::page_prev
+[Education](education.mk.md)
+:::
+:::page_next
+[Career](career.mk.md)
+:::
+::::

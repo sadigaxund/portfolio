@@ -68,9 +68,15 @@ The goal. Accuracy rose from 19% in 0.1.7 to 61% in 0.9.0, on the same tools.
 ::nav_link[Design document]{href="https://github.com/AS-FOSS/mandible/blob/main/docs/design.md" desc="docs/design.md on GitHub" icon="arrow"}
 :::
 
+---
+
 ::page_back[[Projects](../projects)]
+
+::::row{cols=2}
+:::page_prev{img=images/thumb-git-resume.webp}
+[git-resume](git-resume.mk.md)
+:::
 :::page_next{img=images/thumb-markii.webp}
 [Markii](markii.mk.md)
-
-Markdown that renders your own components, with sandboxed Lua feeding live data.
 :::
+::::

@@ -97,4 +97,15 @@ Low-confidence patches and any guardrail violation escalate to human review.
 ::nav_link[Blueprint and engine spec]{href="https://github.com/sadigaxund/aqueduct/blob/main/docs/specs.md" desc="docs/specs.md on GitHub" icon="arrow"}
 :::
 
+---
+
 ::page_back[[Projects](../projects)]
+
+::::row{cols=2}
+:::page_prev{img=images/thumb-markii.webp}
+[Markii](markii.mk.md)
+:::
+:::page_next{img=images/thumb-git-resume.webp}
+[git-resume](git-resume.mk.md)
+:::
+::::

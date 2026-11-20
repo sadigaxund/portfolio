@@ -32,9 +32,15 @@
 
 *Stack: Spark, NiFi, Elasticsearch, Logstash, Kibana, Python, FastAPI, MongoDB, InfluxDB, Snowflake*
 
+---
+
 ::page_back[[Professional](../professional)]
+
+::::row{cols=2}
+:::page_prev
+[Certifications](certifications.mk.md)
+:::
 :::page_next
 [Education](education.mk.md)
-
-MS, George Washington University. BS, ADA University.
 :::
+::::

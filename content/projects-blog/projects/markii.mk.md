@@ -218,3 +218,16 @@ Where to use it and what to use it with:
 | [Obsidian plugin](https://github.com/markii-org/markii-obsidian) | The same preview, run, and export inside a vault, installed through BRAT |
 | [markii-packs](https://github.com/markii-org/markii-packs) | Ready-made component packs: blog, dash, data, fin, prep, read, tech, track |
 | [markii-vault](https://github.com/markii-org/markii-vault) | Example notes and a starter vault showing the pieces working together |
+
+---
+
+::page_back[[Projects](../projects)]
+
+::::row{cols=2}
+:::page_prev{img=images/thumb-mandible.webp}
+[Mandible](mandible.mk.md)
+:::
+:::page_next{img=images/thumb-aqueduct.webp}
+[Aqueduct](aqueduct.mk.md)
+:::
+::::
