@@ -10,7 +10,6 @@ import { bakeNote } from "./bake";
 import { packNamespacesUsed } from "./registry";
 import { SETTINGS } from "./config";
 import { noteHasScripts, staleValuesForRehydration } from "@markii/host";
-import { fetchRemoteNote, parseRemoteNote } from "../notes/remote";
 
 interface Props {
   node: TreeNode;
@@ -19,14 +18,12 @@ interface Props {
 const { node } = Astro.props;
 // Notes are read at build time. The build check has already matched each leaf to one note.
 const LOCAL = import.meta.glob<string>("/content/**/*.{md,mk.md}", { query: "?raw", import: "default", eager: true });
-const REMOTE = import.meta.glob<unknown>("/content/**/*.remote.yaml", { import: "default", eager: true });
 const route = routeParam(node);
-const stem = (key: string) => key.replace(/\.(mk\.md|md|remote\.yaml)$/, "");
-const path = [...Object.keys(LOCAL), ...Object.keys(REMOTE)].find((key) => stem(key) === `/content/${route}`);
+const stem = (key: string) => key.replace(/\.(mk\.md|md)$/, "");
+const path = Object.keys(LOCAL).find((key) => stem(key) === `/content/${route}`);
 if (path === undefined) throw new Error(`No note for ${node.url}`);
 const documentKey = path.slice(1);
-const remote = path in REMOTE ? parseRemoteNote(documentKey, REMOTE[path]) : undefined;
-const text = remote ? await fetchRemoteNote(documentKey, remote) : LOCAL[path];
+const text = LOCAL[path];
 // Every page is a link target: leaves by note path, sections by folder path, and the landing page as `content`.
 const routes = Object.fromEntries(ALL_NODES.map((page) => [page.parent ? `content/${routeParam(page)}` : "content", page.url]));
 const scripted = noteHasScripts(text);
@@ -41,10 +38,10 @@ const builtLabel = new Intl.DateTimeFormat("en", { month: "short", year: "numeri
 <NotePacks names={packNames} />
 {
   scripted && usesPacks ? (
-    <NoteIslandPacks client:idle text={text} documentKey={documentKey} routes={routes} remote={remote} bakedStale={baked} builtLabel={builtLabel} />
+    <NoteIslandPacks client:idle text={text} documentKey={documentKey} routes={routes} bakedStale={baked} builtLabel={builtLabel} />
   ) : scripted ? (
-    <NoteIsland client:idle text={text} documentKey={documentKey} routes={routes} remote={remote} bakedStale={baked} builtLabel={builtLabel} />
+    <NoteIsland client:idle text={text} documentKey={documentKey} routes={routes} bakedStale={baked} builtLabel={builtLabel} />
   ) : (
-    <NoteBody text={text} documentKey={documentKey} routes={routes} remote={remote} registry={PACKS.registry} />
+    <NoteBody text={text} documentKey={documentKey} routes={routes} registry={PACKS.registry} />
   )
 }

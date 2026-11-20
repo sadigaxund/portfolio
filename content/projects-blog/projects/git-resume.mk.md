@@ -1,5 +1,9 @@
 # git-resume
 
+:::center
+![](images/logo-git-resume.webp)
+:::
+
 A small release pipeline for a resume written in LaTeX.
 
 ```lua {name=repo permissions=api.github.com}
@@ -51,9 +55,15 @@ Point a coding agent such as opencode at the repo and ask it to update the resum
 ::nav_link[Demo video]{href="https://www.youtube.com/watch?v=CiZllBuUCZ4" desc="youtube.com" icon="arrow"}
 :::
 
+---
+
 ::page_back[[Projects](../projects)]
+
+::::row{cols=2}
+:::page_prev{img=images/thumb-aqueduct.webp}
+[Aqueduct](aqueduct.mk.md)
+:::
 :::page_next{img=images/thumb-mandible.webp}
 [Mandible](mandible.mk.md)
-
-A Rust TUI manual for any CLI tool, with every command and flag in one tree.
 :::
+::::

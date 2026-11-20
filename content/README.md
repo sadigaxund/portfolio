@@ -7,7 +7,6 @@ Everything the owner edits by hand lives here. A push to `main` redeploys the si
 - `site.yaml` is the map of the site. It is one tree from the root: a `label`, then `children` at every level. Comments in the file explain each field.
 - `profile.yaml` is the landing page hero: role, summary, and links.
 - One note per leaf, at `content/<url path>.md` or `content/<url path>.mk.md`. The note is found by its path, and no field declares it. `professional/career.mk.md` belongs to `/professional/career`. Use `.mk.md` for a Markii note and `.md` otherwise. Each note starts with `# <label>`.
-- A note kept in another GitHub repository is a `content/<url path>.remote.yaml` with three keys: `repo` (owner/name), `ref` (branch, tag, or commit), and `path` (the note inside that repository). The build downloads it and fails if the file is missing or has moved. Its own first heading is the page heading, and its relative links point back to that repository.
 
 ## Nodes
 

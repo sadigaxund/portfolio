@@ -1,5 +1,9 @@
 # Aqueduct
 
+:::center
+![](images/logo-aqueduct.webp)
+:::
+
 An AI harness for data pipelines on Spark or DuckDB: the model proposes a fix, and the harness decides.
 
 ```lua {name=repo permissions=api.github.com}
@@ -22,7 +26,7 @@ return {
 
 A pipeline fails at 3 a.m. over a column rename upstream. Somebody gets paged, scrolls a four-kilobyte stack trace, and hand-writes a one-line fix. Aqueduct turns that night into a pull request waiting for review in the morning.
 
-::::figure{src="images/aqueduct-demo.webp" alt="Aqueduct in a terminal: the classify_priority module fails on an unresolved SQL column, and the agent answers with a JSON patch that renames the column."}
+::::video{src="images/aqueduct-demo.mp4" poster="images/aqueduct-demo.webp" alt="Aqueduct in a terminal: the classify_priority module fails on an unresolved SQL column, and the agent answers with a JSON patch that renames the column."}
 Wake up to a reviewable fix instead of a wall of errors. [Watch the demo](https://github.com/user-attachments/assets/92acb8fb-80ad-4cac-b5bd-e00a114d22cb).
 ::::
 
@@ -93,4 +97,15 @@ Low-confidence patches and any guardrail violation escalate to human review.
 ::nav_link[Blueprint and engine spec]{href="https://github.com/sadigaxund/aqueduct/blob/main/docs/specs.md" desc="docs/specs.md on GitHub" icon="arrow"}
 :::
 
+---
+
 ::page_back[[Projects](../projects)]
+
+::::row{cols=2}
+:::page_prev{img=images/thumb-markii.webp}
+[Markii](markii.mk.md)
+:::
+:::page_next{img=images/thumb-git-resume.webp}
+[git-resume](git-resume.mk.md)
+:::
+::::

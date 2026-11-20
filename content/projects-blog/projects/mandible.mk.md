@@ -1,5 +1,9 @@
 # Mandible
 
+:::center
+![](images/logo-mandible.webp)
+:::
+
 A terminal manual for every command-line tool on your machine.
 
 ```lua {name=repo permissions=api.github.com}
@@ -26,7 +30,7 @@ return {
 
 Run `mandible docker` and it opens a tree of every command, subcommand and flag, with the selected one's documentation beside it. It runs on Linux and macOS, on x86_64 and arm64.
 
-::::figure{src="images/mandible-demo.webp" alt="Mandible in a terminal, showing git: the tree of its 158 commands on the left, and the usage, positionals, and flags of the selected command on the right."}
+::::video{src="images/mandible-demo.mp4" poster="images/mandible-demo.webp" alt="Mandible in a terminal, showing git: the tree of its 158 commands on the left, and the usage, positionals, and flags of the selected command on the right."}
 A tree of every command, subcommand and flag on the left. The selected one's documentation on the right. [Watch the demo](https://github.com/user-attachments/assets/bf9e3d32-f8f2-4e33-a82b-a537cea87f55).
 ::::
 
@@ -64,9 +68,15 @@ The goal. Accuracy rose from 19% in 0.1.7 to 61% in 0.9.0, on the same tools.
 ::nav_link[Design document]{href="https://github.com/AS-FOSS/mandible/blob/main/docs/design.md" desc="docs/design.md on GitHub" icon="arrow"}
 :::
 
+---
+
 ::page_back[[Projects](../projects)]
+
+::::row{cols=2}
+:::page_prev{img=images/thumb-git-resume.webp}
+[git-resume](git-resume.mk.md)
+:::
 :::page_next{img=images/thumb-markii.webp}
 [Markii](markii.mk.md)
-
-Markdown that renders your own components, with sandboxed Lua feeding live data.
 :::
+::::

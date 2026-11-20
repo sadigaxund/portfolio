@@ -135,13 +135,13 @@ test("script markers stay hidden while the note renders", async ({ page }) => {
   await expect(page.locator(".mk-script").first()).toBeHidden();
 });
 
-test("prose, a figure, and a stat row end at the same edge", async ({ page }, info) => {
+test("prose, a video, and a stat row end at the same edge", async ({ page }, info) => {
   test.skip(info.project.name !== "desktop", "measured at 1280");
   await page.goto("/projects-blog/projects/mandible");
   const edge = (selector: string) => page.locator(`.note ${selector}`).evaluateAll((els) => els.map((el) => el.getBoundingClientRect().right));
   const prose = await edge("> p:not(.note-detail)");
   expect(prose.length).toBeGreaterThan(1);
-  const figure = (await edge("> .mk-figure"))[0];
+  const figure = (await edge("> .mk-video"))[0];
   for (const right of [...prose, ...(await edge("> .mk-row"))]) expect(Math.abs(right - figure)).toBeLessThanOrEqual(1);
 });
 
@@ -155,11 +155,12 @@ test("every leaf ends in one foot with the contact links and the Markii credit",
 test.describe("project notes without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 
-  test("a project shows its local still and its links as a pack group", async ({ page }) => {
+  test("a project shows its local clip and its links as a pack group", async ({ page }) => {
     await page.goto("/projects-blog/projects/mandible");
-    const still = page.locator(".note img").first();
-    await expect(still).toHaveAttribute("src", /mandible-demo\.[\w-]+\.webp$/);
-    await expect(still).toHaveAttribute("alt", /^Mandible in a terminal/);
+    const clip = page.locator(".note video").first();
+    await expect(clip).toHaveAttribute("src", /mandible-demo\.[\w-]+\.mp4$/);
+    await expect(clip).toHaveAttribute("poster", /mandible-demo\.[\w-]+\.webp$/);
+    await expect(clip).toHaveAttribute("aria-label", /^Mandible in a terminal/);
     await expect(page.getByRole("link", { name: "Watch the demo" })).toBeVisible();
     const links = page.locator(".note a[href='https://github.com/AS-FOSS/mandible']");
     await expect(links).toHaveCount(1);

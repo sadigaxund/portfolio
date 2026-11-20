@@ -16,12 +16,15 @@ for (const path of PAGES) {
       };
       document.querySelectorAll("link[href]").forEach((el) => add(el.getAttribute("href")));
       document.querySelectorAll("script[src], img[src]").forEach((el) => add(el.getAttribute("src")));
+      document.querySelectorAll("video[src]").forEach((el) => add(el.getAttribute("src")));
+      document.querySelectorAll("video[poster]").forEach((el) => add(el.getAttribute("poster")));
       document.querySelectorAll("source[srcset]").forEach((el) => {
         (el.getAttribute("srcset") ?? "").split(",").forEach((part) => add(part.trim().split(/\s+/)[0] ?? null));
       });
       return [...found];
     });
     expect(urls.length, "no same-origin files found").toBeGreaterThan(0);
+    if (path.endsWith("/mandible")) expect(urls.some((url) => url.endsWith(".mp4")), "the clip is among the files").toBe(true);
     for (const url of urls) {
       const res = await page.request.get(url);
       expect(res.status(), `GET ${url} on ${path}`).toBe(200);

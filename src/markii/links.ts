@@ -1,5 +1,3 @@
-import { blobUrl, rawUrl, type RemoteNote } from "../notes/remote";
-
 const DOC_EXT = /\.(mk\.md|md)$/;
 
 /** Collapses `.` and `..` in a slash path. Returns undefined when it climbs out of the root. */
@@ -40,16 +38,4 @@ export function makeLocalImageResolver(documentKey: string, images: Readonly<Rec
     const path = collapse(folder + src);
     return path === undefined ? undefined : images[`/${path}`];
   };
-}
-
-/** Resolvers for a note downloaded from GitHub: a relative link opens on GitHub, and a relative image loads raw. */
-export function makeRemoteResolvers(note: RemoteNote): { href: (href: string) => string | undefined; image: (src: string) => string | undefined } {
-  const folder = note.path.slice(0, note.path.lastIndexOf("/") + 1);
-  const at = (target: string, toUrl: (path: string) => string) => {
-    if (ABSOLUTE.test(target)) return undefined;
-    const [file, ...rest] = target.split(/(?=[#?])/);
-    const path = collapse(folder + file);
-    return path === undefined ? undefined : toUrl(path) + rest.join("");
-  };
-  return { href: (href) => at(href, (path) => blobUrl(note, path)), image: (src) => at(src, (path) => rawUrl(note, path)) };
 }

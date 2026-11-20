@@ -36,3 +36,8 @@
 [data-mk-root] pre {
   --text-xs: var(--text-body);
 }
+
+/* Tailwind's preflight makes every img a block. markii's own hosts keep an image in a paragraph inline, so text alignment places it. */
+[data-mk-root] p > img {
+  display: inline;
+}
