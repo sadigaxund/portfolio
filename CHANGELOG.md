@@ -16,6 +16,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Changed
 
+- A road whose pages are all unpublished stays at the fork and says "Nothing here yet."
 - On a phone, the landing page scrolls far enough to show the roads' subtitles in full.
 - On a phone, the foot's contact links and the Powered by Markii stamp span the full width.
 - On a phone a leaf keeps the same margin on both sides, so cards and code blocks sit centered, and Update and the site foot line up with the note's edges.

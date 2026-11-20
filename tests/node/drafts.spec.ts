@@ -33,13 +33,19 @@ test.describe("drafts", () => {
     expect(hidesDrafts("")).toBe(false);
     expect(hidesDrafts(undefined)).toBe(false);
   });
-  test("a draft takes its subtree, and a section left empty goes too", () => {
+  test("a draft takes its subtree, and a section left empty goes too, but a road stays", () => {
     const kept = hideDrafts(tree);
-    expect(kept.children.map((road) => road.slug)).toEqual(["b", "c"]);
-    expect(kept.children[0].children?.map((child) => child.slug)).toEqual(["p"]);
+    expect(kept.children.map((road) => road.slug)).toEqual(["a", "b", "c"]);
+    expect(kept.children[0].children).toEqual([]);
+    expect(kept.children[1].children?.map((child) => child.slug)).toEqual(["p"]);
+  });
+  test("a road marked draft itself is hidden", () => {
+    const own = { ...tree, children: [{ ...tree.children[0], draft: true }, ...tree.children.slice(1)] };
+    expect(hideDrafts(own).children.map((road) => road.slug)).toEqual(["b", "c"]);
+    expect(hiddenRoutes(own)).toEqual(["a", "b/q"]);
   });
   test("lists the hidden routes without descending into them", () => {
-    expect(hiddenRoutes(tree)).toEqual(["a", "b/q"]);
+    expect(hiddenRoutes(tree)).toEqual(["a/x", "a/g", "b/q"]);
   });
   test("rejects a draft that is not a boolean", () => {
     expect(() => parseTree({ label: "R", children: [{ slug: "a", label: "A", side: "left", draft: "yes" }] })).toThrow("draft must be true or false");

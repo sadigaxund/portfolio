@@ -6,7 +6,7 @@ export type Step = { kind: "down" | "up"; node: TreeNode };
 export function linePathOf(node: TreeNode | undefined): TreeNode[] {
   const path: TreeNode[] = [];
   for (let at = node; at?.parent; at = at.parent) {
-    if (at.children.length > 0) path.unshift(at);
+    if (at.section) path.unshift(at);
   }
   return path;
 }
