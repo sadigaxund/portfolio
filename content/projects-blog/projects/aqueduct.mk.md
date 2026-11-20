@@ -1,5 +1,9 @@
 # Aqueduct
 
+:::center
+![](images/logo-aqueduct.webp)
+:::
+
 An AI harness for data pipelines on Spark or DuckDB: the model proposes a fix, and the harness decides.
 
 ```lua {name=repo permissions=api.github.com}

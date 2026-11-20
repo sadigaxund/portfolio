@@ -1,5 +1,9 @@
 # Mandible
 
+:::center
+![](images/logo-mandible.webp)
+:::
+
 A terminal manual for every command-line tool on your machine.
 
 ```lua {name=repo permissions=api.github.com}

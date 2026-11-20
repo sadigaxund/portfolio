@@ -1,5 +1,9 @@
 # git-resume
 
+:::center
+![](images/logo-git-resume.webp)
+:::
+
 A small release pipeline for a resume written in LaTeX.
 
 ```lua {name=repo permissions=api.github.com}

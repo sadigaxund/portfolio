@@ -5,6 +5,10 @@ description: A guided tour of Markii, from directives to layout to scripting, us
 
 # Welcome to Markii
 
+:::center
+![](images/logo-markii.webp)
+:::
+
 This page is a Markii document, and you are standing inside the editor. Change
 anything in the left pane and the right pane re-renders as you type. Nothing
 you do here can break the page, so poke at everything.
