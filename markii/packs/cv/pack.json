@@ -1,0 +1,50 @@
+{
+  "name": "cv",
+  "version": "1.0.0",
+  "engine": "react",
+  "components": {
+    "entry": {
+      "source": "./src/entry.tsx",
+      "description": "One entry of a career, education, or certification list: a square logo tile on the left, and the Markdown inside on the right, usually a heading, a role line, bullets, and links. Consecutive entries are joined by a rail below each logo, so the list reads as a timeline.",
+      "kind": "container",
+      "attributes": [
+        {
+          "name": "logo",
+          "description": "The organization's logo as a square image, as a path relative to the note. The tile's own background is part of the image. Decorative, because the heading beside it names the organization."
+        }
+      ]
+    },
+    "layer": {
+      "source": "./src/layer.tsx",
+      "description": "One layer of a skills stack, such as Process or Store: its name on the left and the cv_skill lines inside it as a wrapping row of tools.",
+      "kind": "container",
+      "attributes": [
+        {
+          "name": "name",
+          "description": "The layer's name, shown as its heading."
+        }
+      ]
+    },
+    "skill": {
+      "source": "./src/skill.tsx",
+      "description": "One tool in a layer, with a dot for how deep it went: used at work, built a project with it, or studied. With used, the tool opens on tap to show where it was used.",
+      "kind": "leaf",
+      "attributes": [
+        {
+          "name": "level",
+          "description": "work, project, or studied. Anything else counts as studied."
+        },
+        {
+          "name": "used",
+          "description": "Where the tool was used, such as \"KDM Force, Aqueduct\". Left out, the tool does not open."
+        }
+      ]
+    },
+    "legend": {
+      "source": "./src/legend.tsx",
+      "description": "What each dot means: used at work, built a project with it, or studied.",
+      "kind": "leaf",
+      "attributes": []
+    }
+  }
+}

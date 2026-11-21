@@ -1,10 +1,14 @@
-:::center
+::::center
 ![](images/logo-mandible.webp)
 
 # Mandible
 
 A terminal manual for every command-line tool on your machine.
+
+:::page_links
+- [Repository](https://github.com/AS-FOSS/mandible)
 :::
+::::
 
 ```lua {name=repo permissions=api.github.com}
 local r = net.fetch_json("https://api.github.com/repos/AS-FOSS/mandible")

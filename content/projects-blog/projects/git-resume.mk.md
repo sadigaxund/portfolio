@@ -1,10 +1,14 @@
-:::center
+::::center
 ![](images/logo-git-resume.webp)
 
 # git-resume
 
 A small release pipeline for a resume written in LaTeX.
+
+:::page_links
+- [Repository](https://github.com/AS-FOSS/git-resume)
 :::
+::::
 
 ```lua {name=repo permissions=api.github.com}
 local r = net.fetch_json("https://api.github.com/repos/AS-FOSS/git-resume")

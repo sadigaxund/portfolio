@@ -3,11 +3,15 @@ title: Format Tour
 description: A guided tour of Markii, from directives to layout to scripting.
 ---
 
-:::center
+::::center
 ![](images/logo-markii.webp)
 
 # Welcome to Markii
+
+:::page_links
+- [Repository](https://github.com/markii-org/markii)
 :::
+::::
 
 This page is a Markii document. Each part below shows one feature of the
 format, written in that feature.

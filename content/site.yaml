@@ -60,6 +60,9 @@ children:
       - slug: certifications
         label: Certifications
         preview: Astronomer hackathon winner. Google Data Analytics certificate.
+      - slug: skills
+        label: Skills
+        preview: Data platforms and the servers under them, layer by layer, with where I used each.
 
   - slug: projects-blog
     label: Projects & Blog
@@ -88,6 +91,11 @@ children:
             label: Aqueduct
             thumb: projects-blog/projects/images/thumb-aqueduct.webp
             preview: Declarative data pipelines on Spark or DuckDB that propose their own fix when a run fails.
+          - slug: homelab
+            label: Homelab
+            draft: true
+            thumb: projects-blog/projects/images/thumb-homelab.webp
+            preview: Self-hosted services on TrueNAS and ZFS, behind Cloudflare Tunnels and Terraform.
       - slug: blog
         label: Blog
         draft: true

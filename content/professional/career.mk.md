@@ -2,6 +2,7 @@
 # Career
 :::
 
+::::cv_entry{logo=images/logo-kdm.webp}
 ## KDM Force
 
 *Data platform engineer. Remote, Rome. Jun 2022 to Nov 2025.*
@@ -12,7 +13,9 @@
 - Cut dashboard load time on multi-million-row tables from 20–30 s to 2–3 s with a PostgreSQL-backed cache.
 
 *Stack: GitLab CI, Docker, Terraform, Hetzner Cloud, Linux, pytest, Playwright, PostgreSQL, Trino, Iceberg*
+::::
 
+::::cv_entry{logo=images/logo-mot.webp}
 ## Ministry of Tourism
 
 *Data infrastructure engineer. Contract, remote, Riyadh. Jun 2023 to Sep 2025.*
@@ -24,7 +27,9 @@
 - Wrote the runbooks for deployment, recovery, and the network layout at handover.
 
 *Stack: RHEL, VMware, Apache Spark, Kafka, Superset, MS SQL Server, Snowflake, Python, Bash*
+::::
 
+::::cv_entry{logo=images/logo-unibank.webp}
 ## Unibank
 
 *Data engineer, intern. Baku. Oct 2021 to May 2022.*
@@ -33,6 +38,7 @@
 - Built an internal FastAPI metrics service and a benchmarking proof of concept across InfluxDB, Snowflake, and MongoDB.
 
 *Stack: Spark, NiFi, Elasticsearch, Logstash, Kibana, Python, FastAPI, MongoDB, InfluxDB, Snowflake*
+::::
 
 ---
 
@@ -40,7 +46,7 @@
 
 ::::row{cols=2}
 :::page_prev
-[Certifications](certifications.mk.md)
+[Skills](skills.mk.md)
 :::
 :::page_next
 [Education](education.mk.md)
