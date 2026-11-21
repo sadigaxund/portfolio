@@ -419,11 +419,11 @@ test("spamming a stop or a fork label runs its transition once", async ({ page }
   await expect(page).toHaveURL(/\/personal$/);
 });
 
-test("Projects lists its four stops in order", async ({ page }) => {
+test("Projects lists its stops in order, the Homelab draft last", async ({ page }) => {
   await page.goto("/projects-blog/projects");
   await whenReady(page);
   await expect(page.locator("h1")).toHaveText("Projects");
-  await expect(page.locator(".stop .role-item")).toHaveText(["git-resume", "Mandible", "Markii", "Aqueduct"]);
+  await expect(page.locator(".stop .role-item")).toHaveText(["git-resume", "Mandible", "Markii", "Aqueduct", "Homelab"]);
 });
 
 test.describe("a leaf on a phone", () => {

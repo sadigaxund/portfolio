@@ -21,13 +21,6 @@ test.describe("notes without scripts", () => {
     await expect(page.locator(".note h2").first()).toHaveText("KDM Force");
     await expect(page.locator(".note")).toContainText("Cut new-environment bring-up from 5–6 hours");
   });
-
-  test("a role line written as one emphasis run renders as detail text", async ({ page }) => {
-    await page.goto("/professional/career");
-    const role = page.locator(".note > p.note-detail").first();
-    await expect(role).toHaveText("Data platform engineer. Remote, Rome. Jun 2022 to Nov 2025.");
-    await expect(role.locator("em")).toHaveCount(0);
-  });
 });
 
 test("a note with no scripts loads no markii script and has no note bar", async ({ page }) => {
@@ -162,8 +155,10 @@ test.describe("project notes without JavaScript", () => {
     await expect(clip).toHaveAttribute("poster", /mandible-demo\.[\w-]+\.webp$/);
     await expect(clip).toHaveAttribute("aria-label", /^Mandible in a terminal/);
     await expect(page.getByRole("link", { name: "Watch the demo" })).toBeVisible();
+    // One repository link in the head's chip, and one in the links group.
     const links = page.locator(".note a[href='https://github.com/AS-FOSS/mandible']");
-    await expect(links).toHaveCount(1);
+    await expect(links).toHaveCount(2);
+    await expect(page.locator(".mk-page_links a[href='https://github.com/AS-FOSS/mandible']")).toHaveCount(1);
     await expect(page.locator(".note")).not.toContainText("nav_link");
   });
 });

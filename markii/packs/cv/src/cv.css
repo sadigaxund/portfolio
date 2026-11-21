@@ -1,8 +1,9 @@
 /* A logo rail on the left, the entry's Markdown on the right. Only --mk-* tokens. */
 .mk-cv_entry {
   display: grid;
-  grid-template-columns: 3rem minmax(0, 1fr);
-  column-gap: 1.25rem;
+  /* The logo keeps its pixel size when text grows, so the text column keeps its room. */
+  grid-template-columns: 48px minmax(0, 1fr);
+  column-gap: 1rem;
 }
 
 .mk-cv_entry__rail {
@@ -13,8 +14,8 @@
 .mk-cv_entry__dot {
   display: block;
   box-sizing: border-box;
-  width: 3rem;
-  height: 3rem;
+  width: 48px;
+  height: 48px;
   border: 1px solid var(--mk-border);
   border-radius: 0.75rem;
   object-fit: cover;
@@ -28,7 +29,7 @@
 .mk-cv_entry__rail::after {
   content: "";
   position: absolute;
-  top: calc(3rem + 0.5rem);
+  top: calc(48px + 0.5rem);
   bottom: calc(-1 * var(--mk-rhythm, 1rem) + 0.5rem);
   left: calc(50% - 1px);
   width: 2px;
@@ -58,11 +59,10 @@
   margin-top: 0.75rem;
 }
 
-/* The heading's first line sits level with the logo. */
+/* The heading's first line is centered on the logo, and a word wider than the column breaks. */
 .mk-cv_entry .mk-cv_entry__body > :first-child {
-  min-height: 3rem;
-  display: flex;
-  align-items: center;
+  padding-top: max(0px, calc((48px - 1lh) / 2));
+  overflow-wrap: anywhere;
 }
 
 /*

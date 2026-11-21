@@ -5,7 +5,7 @@ const ROUTE = "/projects-blog/projects";
 test("each project stop shows one hashed thumbnail", async ({ page }) => {
   await page.goto(ROUTE);
   const thumbs = page.locator(".stop .stop-thumb");
-  await expect(thumbs).toHaveCount(4);
+  await expect(thumbs).toHaveCount(5);
   for (const src of await thumbs.evaluateAll((els) => els.map((el) => el.getAttribute("src") ?? ""))) {
     expect(src).toMatch(/\/_astro\/thumb-[a-z-]+\.[\w-]+\.webp$/);
   }
