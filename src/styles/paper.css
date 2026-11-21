@@ -20,9 +20,11 @@
 }
 
 /*
- * Section-page text sits on plain paper: each block is as wide as its text, and a spread shadow paints
+ * Text over the grid sits on plain paper: each block is as wide as its text, and a spread shadow paints
  * the paper a small pad beyond it without moving the letters. Start-side stops stay right-aligned.
  */
+.hero :is(.role-name, .role-detail, .role-body),
+.hero .contact-links a,
 .line-content :is(.role-heading, .role-lead, .role-detail),
 .stop-text :is(.role-item, .role-detail) {
   width: fit-content;
