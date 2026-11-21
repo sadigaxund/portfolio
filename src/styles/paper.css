@@ -1,5 +1,6 @@
 :root {
   --paper-grid-pitch: 24px;
+  --paper-text-pad: 0.25em;
 }
 
 /*
@@ -16,4 +17,22 @@
   background-image: radial-gradient(circle, var(--color-border) 0.5px, transparent 1px);
   background-size: var(--paper-grid-pitch) var(--paper-grid-pitch);
   background-position: var(--paper-reach-x) var(--paper-reach-y);
+}
+
+/*
+ * Section-page text sits on plain paper: each block is as wide as its text plus a small pad, and the
+ * negative margin keeps the letters where they were. Start-side stops stay right-aligned.
+ */
+.line-content :is(.role-heading, .role-lead, .role-detail),
+.stop-text :is(.role-item, .role-detail) {
+  width: fit-content;
+  padding-inline: var(--paper-text-pad);
+  margin-inline: calc(-1 * var(--paper-text-pad));
+  background: var(--color-bg);
+}
+
+@media (min-width: 40.01rem) {
+  .stop[data-side="start"] .stop-text :is(.role-item, .role-detail) {
+    margin-inline-start: auto;
+  }
 }

@@ -102,3 +102,32 @@ test("the landing hero answers first, and stays clear of the line", async ({ pag
     expect(clash).toEqual({ crosses: false, offscreen: false });
   }
 });
+
+test("section text sits on plain paper, sized to its words", async ({ page }) => {
+  await page.goto("/projects-blog/projects");
+  const read = () =>
+    page.evaluate(() => {
+      const paper = getComputedStyle(document.documentElement).getPropertyValue("--color-bg");
+      const probe = document.createElement("div");
+      probe.style.backgroundColor = paper;
+      document.body.append(probe);
+      const bg = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      const h1 = document.querySelector<HTMLElement>(".line-content h1")!;
+      const text = document.createRange();
+      text.selectNodeContents(h1);
+      const em = parseFloat(getComputedStyle(h1).fontSize);
+      return {
+        bg,
+        h1: getComputedStyle(h1).backgroundColor,
+        slack: h1.getBoundingClientRect().width - text.getBoundingClientRect().width,
+        em,
+        stops: [...document.querySelectorAll(".stop h2")].map((h2) => getComputedStyle(h2).backgroundColor),
+      };
+    });
+  const got = await read();
+  expect(got.stops.length).toBeGreaterThan(0);
+  expect(got.h1).toBe(got.bg);
+  for (const stop of got.stops) expect(stop).toBe(got.bg);
+  expect(got.slack).toBeLessThanOrEqual(got.em);
+});
