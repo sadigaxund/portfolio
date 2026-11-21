@@ -154,7 +154,7 @@ test("every tree node has its own page", async ({ page }) => {
 });
 
 test("a leaf deep link rests on its branch, and Back climbs one level at a time", async ({ page }) => {
-  await page.goto("/personal/hobbies");
+  await page.goto("/personal/engineering-science");
   await whenReady(page);
   expect(await progress(page)).toBe(1);
   expect(await chosen(page)).toBe("-1");
@@ -167,7 +167,7 @@ test("a leaf deep link rests on its branch, and Back climbs one level at a time"
 });
 
 test("opening a leaf and returning leaves the line still", async ({ page }) => {
-  await page.goto("/personal/hobbies/engineering-science");
+  await page.goto("/personal/engineering-science");
   await whenReady(page);
   await page.evaluate(() => {
     const win = window as unknown as { started: number };
@@ -448,7 +448,7 @@ test("keyboard focus on a stop outlines its text in the route color", async ({ p
 });
 
 test("a section stop ends in a filled dot that takes the route color on hover, and a leaf keeps its ring", async ({ page }) => {
-  await page.goto("/personal/hobbies");
+  await page.goto("/personal");
   const read = (selector: string) =>
     page.evaluate((sel) => {
       const probe = (token: string) => {

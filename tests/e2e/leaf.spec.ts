@@ -14,7 +14,7 @@ const seamIdle = (page: Page) =>
     .toBe(true);
 
 test("a leaf owns the whole screen, with no line, and Back sits in its header", async ({ page }) => {
-  await page.goto("/personal/hobbies/engineering-science/digital-logic-design");
+  await page.goto("/personal/engineering-science/digital-logic-design");
   await whenReady(page);
   const view = await page.evaluate(() => {
     const main = document.querySelector("main")!.getBoundingClientRect();
@@ -48,7 +48,7 @@ test("a leaf owns the whole screen, with no line, and Back sits in its header", 
 });
 
 test("the seam shuts before the swap, then parts to both edges", async ({ page }) => {
-  await page.goto("/personal/hobbies/engineering-science");
+  await page.goto("/personal/engineering-science");
   await whenReady(page);
   await page.evaluate(() => {
     const win = window as unknown as { atSwap: string; path: number[] };
@@ -94,20 +94,20 @@ test("both sides of the seam meet exactly on the resting line", async ({ page })
 });
 
 test("Back shuts the seam and returns to the line, one level at a time", async ({ page }) => {
-  await page.goto("/personal/hobbies/engineering-science/digital-logic-design");
+  await page.goto("/personal/engineering-science/digital-logic-design");
   await whenReady(page);
   await page.locator("[data-back]").getByRole("link").click();
-  await expect(page).toHaveURL(/\/personal\/hobbies\/engineering-science$/);
+  await expect(page).toHaveURL(/\/personal\/engineering-science$/);
   await expect(page.locator("h1")).toHaveText("Engineering & Science");
   await seamIdle(page);
   await expect(page.locator(".line-tail")).toBeVisible();
   await page.locator("[data-back]").getByRole("link").click();
-  await expect(page).toHaveURL(/\/personal\/hobbies$/);
-  await expect(page.locator("h1")).toHaveText("Hobbies");
+  await expect(page).toHaveURL(/\/personal$/);
+  await expect(page.locator("h1")).toHaveText("Personal");
 });
 
 test("a leaf interrupted by browser back still settles on the line", async ({ page }) => {
-  await page.goto("/personal/hobbies");
+  await page.goto("/personal");
   await whenReady(page);
   await page.getByRole("link", { name: "Engineering & Science" }).click();
   await page.waitForSelector('.line-stage[data-settled="true"]');
@@ -121,7 +121,7 @@ test("a leaf interrupted by browser back still settles on the line", async ({ pa
 
 test("reduced motion enters a leaf with no seam", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/personal/hobbies/engineering-science");
+  await page.goto("/personal/engineering-science");
   await whenReady(page);
   await page.evaluate(() => {
     const win = window as unknown as { shown: boolean };
@@ -138,7 +138,7 @@ test("reduced motion enters a leaf with no seam", async ({ page }) => {
 test.describe("without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
   test("a leaf is a real page with no line, and Back is a real link", async ({ page }) => {
-    await page.goto("/personal/hobbies/engineering-science");
+    await page.goto("/personal/engineering-science");
     await page.getByRole("link", { name: "Digital Logic Design" }).click();
     await expect(page.locator("h1")).toHaveText("Digital Logic Design");
     await expect(page.locator(".line-tail")).toBeHidden();
@@ -150,18 +150,15 @@ test.describe("without JavaScript", () => {
 test("a level can mix leaves and subsections, at any depth", async ({ page }) => {
   await page.goto("/personal");
   await whenReady(page);
-  await expect(page.locator('[data-stop-url="/personal/hobbies"]')).toHaveAttribute("data-kind", "section");
-  await page.getByRole("link", { name: "Hobbies" }).click();
-  await expect(page.locator("h1")).toHaveText("Hobbies");
-  await expect(page.locator('[data-stop-url="/personal/hobbies/engineering-science"]')).toHaveAttribute("data-kind", "section");
-  await expect(page.locator('[data-stop-url="/personal/hobbies/gym"]')).toHaveAttribute("data-kind", "leaf");
+  await expect(page.locator('[data-stop-url="/personal/engineering-science"]')).toHaveAttribute("data-kind", "section");
+  await expect(page.locator('[data-stop-url="/personal/gym"]')).toHaveAttribute("data-kind", "leaf");
   await page.getByRole("link", { name: "Engineering & Science" }).click();
-  await expect(page).toHaveURL(/\/personal\/hobbies\/engineering-science$/);
+  await expect(page).toHaveURL(/\/personal\/engineering-science$/);
   await page.getByRole("link", { name: "Digital Logic Design" }).click();
   await expect(page.locator("h1")).toHaveText("Digital Logic Design");
   await expect(page.locator(".line-world")).toBeHidden();
   await seamIdle(page);
-  for (const label of ["Engineering & Science", "Hobbies", "Personal"]) {
+  for (const label of ["Engineering & Science", "Personal"]) {
     await page.locator("[data-back]").getByRole("link").click();
     await expect(page.locator("h1")).toHaveText(label);
   }
@@ -209,8 +206,8 @@ test("entering a subsection pans the whole line in one world, with the root line
   await page.goto("/personal");
   await whenReady(page);
   await sampleWalk(page);
-  await page.getByRole("link", { name: "Hobbies" }).click();
-  await expect(page.locator("h1")).toHaveText("Hobbies");
+  await page.getByRole("link", { name: "Engineering & Science" }).click();
+  await expect(page.locator("h1")).toHaveText("Engineering & Science");
   await page.waitForSelector('.line-stage[data-settled="true"]');
   await page.waitForTimeout(300);
   const rows = await walkRows(page);
@@ -227,7 +224,7 @@ test("entering a subsection pans the whole line in one world, with the root line
 });
 
 test("going back up a level pans back too, and the stop returns where it left", async ({ page }) => {
-  await page.goto("/personal/hobbies");
+  await page.goto("/personal/engineering-science");
   await whenReady(page);
   await sampleWalk(page);
   await page.locator("[data-back]").getByRole("link").click();
@@ -238,13 +235,13 @@ test("going back up a level pans back too, and the stop returns where it left", 
   expect(lifted.every((y, i) => i === 0 || y >= lifted[i - 1] - 1)).toBe(true);
   expect(Math.max(...lifted)).toBeGreaterThan(lifted[0] + 50);
   await expect(page.locator(".line-run")).toHaveCount(0);
-  await expect(page.getByRole("link", { name: "Hobbies" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Engineering & Science" })).toBeVisible();
 });
 
 test("a deep link draws the walked line at any depth, with no animation", async ({ page }) => {
-  await page.goto("/personal/hobbies/engineering-science");
+  await page.goto("/personal/engineering-science");
   await whenReady(page);
-  await expect(page.locator(".line-run")).toHaveCount(2);
+  await expect(page.locator(".line-run")).toHaveCount(1);
   const { runX, center } = await page.evaluate(() => ({
     runX: [...document.querySelectorAll(".line-run")].at(-1)!.getBoundingClientRect().left,
     center: document.querySelector("main .stop-branch")!.getBoundingClientRect().left,
@@ -270,8 +267,8 @@ test("going back to the landing page shows the hero only after the fork has retu
 
 for (const [name, from, go] of [
   ["the fork", "/", "Professional"],
-  ["a subsection", "/personal", "Hobbies"],
-  ["a leaf", "/personal/hobbies/engineering-science", "Digital Logic Design"],
+  ["a subsection", "/personal", "Engineering & Science"],
+  ["a leaf", "/personal/engineering-science", "Digital Logic Design"],
 ] as const) {
   test(`a scroll cannot run ahead while the line moves into ${name}`, async ({ page }) => {
     await page.goto(from);
@@ -311,9 +308,6 @@ test("after a move the stops sprout in order, once the camera has settled", asyn
   await page.goto("/");
   await whenReady(page);
   await page.getByRole("link", { name: "Personal" }).click();
-  await page.waitForSelector('.line-stage[data-settled="true"]');
-  await page.getByRole("link", { name: "Hobbies" }).click();
-  await expect(page.locator("h1")).toHaveText("Hobbies");
   await page.waitForFunction(() => {
     const branch = document.querySelector(".stop-branch");
     return branch !== null && branch.getAnimations().length > 0 && !document.documentElement.dataset.lineReveal;
@@ -325,7 +319,7 @@ test("after a move the stops sprout in order, once the camera has settled", asyn
 });
 
 test("a direct load and a return from a leaf show stops at once", async ({ page }) => {
-  await page.goto("/personal/hobbies/engineering-science");
+  await page.goto("/personal/engineering-science");
   await whenReady(page);
   expect((await stopDelays(page)).flat()).toEqual([]);
   await page.getByRole("link", { name: "Digital Logic Design" }).click();
@@ -368,7 +362,7 @@ test("the line grows smoothly, and each stop sprouts only after its tip has pass
 });
 
 test("spamming Back cannot stall the seam or skip a level", async ({ page }) => {
-  await page.goto("/personal/hobbies/engineering-science/digital-logic-design");
+  await page.goto("/personal/engineering-science/digital-logic-design");
   await whenReady(page);
   const result = await page.evaluate(
     () =>
@@ -397,7 +391,7 @@ test("spamming Back cannot stall the seam or skip a level", async ({ page }) => 
       }),
   );
   console.log("spam", result.swappedTo, Math.round(result.swappedAfter));
-  expect(result.swappedTo).toBe("/personal/hobbies/engineering-science");
+  expect(result.swappedTo).toBe("/personal/engineering-science");
   expect(result.swappedAfter).toBeLessThan(900);
   const closing = result.positions.filter((x) => x > 0);
   expect(closing.every((x, i) => i === 0 || x <= closing[i - 1] + 1)).toBe(true);

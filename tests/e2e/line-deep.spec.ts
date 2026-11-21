@@ -36,26 +36,26 @@ async function walkAndCheck(page: Page, start: string, act: () => Promise<void>,
 }
 
 test("walking from a section into a child section draws a continuous line", async ({ page }) => {
-  await walkAndCheck(page, "/personal/hobbies", () => page.getByRole("link", { name: /Engineering & Science/ }).first().click(), 2);
+  await walkAndCheck(page, "/personal", () => page.getByRole("link", { name: /Engineering & Science/ }).first().click(), 1);
 });
 
 test("walking back up from a child section leaves a continuous line and nothing of the branch", async ({ page }) => {
-  await walkAndCheck(page, "/personal/hobbies/engineering-science", () => page.locator("[data-back] a").click(), 1);
-  await expect(page.locator(".line-levels .line-run")).toHaveCount(1);
+  await walkAndCheck(page, "/personal/engineering-science", () => page.locator("[data-back] a").click(), 0);
+  await expect(page.locator(".line-levels .line-run")).toHaveCount(0);
 });
 
 test("a warm round trip into a child section and back stays continuous", async ({ page }) => {
-  await page.goto("/personal/hobbies");
+  await page.goto("/personal");
   await page.waitForSelector('.line-stage[data-settled="true"]');
   await page.getByRole("link", { name: /Engineering & Science/ }).first().click();
   await page.waitForSelector('.line-stage[data-settled="true"]');
   await expect(page).toHaveURL(/engineering-science$/);
   await watchSeams(page);
   await page.locator("[data-back] a").click();
-  await expect(page).toHaveURL(/hobbies$/);
+  await expect(page).toHaveURL(/\/personal$/);
   await page.waitForSelector('.line-stage[data-settled="true"]');
   await page.waitForTimeout(100);
   const frames = await seams(page);
   expect(Math.max(...frames.flatMap((frame) => frame.gaps))).toBeLessThanOrEqual(1);
-  expect(frames[frames.length - 1].levels).toBe(1);
+  expect(frames[frames.length - 1].levels).toBe(0);
 });

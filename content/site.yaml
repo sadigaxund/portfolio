@@ -20,25 +20,22 @@ children:
     label: Personal
     side: left
     children:
-      - slug: hobbies
-        label: Hobbies
+      - slug: engineering-science
+        label: Engineering & Science
         children:
-          - slug: engineering-science
-            label: Engineering & Science
-            children:
-              - slug: digital-logic-design
-                label: Digital Logic Design
-              - slug: game-design
-                label: Game Design
-          - slug: gym
-            label: Gym
-            draft: true
-          - slug: violin
-            label: Violin
-            draft: true
-          - slug: blacksmithing
-            label: Blacksmithing
-            draft: true
+          - slug: digital-logic-design
+            label: Digital Logic Design
+          - slug: game-design
+            label: Game Design
+      - slug: gym
+        label: Gym
+        draft: true
+      - slug: violin
+        label: Violin
+        draft: true
+      - slug: blacksmithing
+        label: Blacksmithing
+        draft: true
 
   - slug: professional
     label: Professional

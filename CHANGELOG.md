@@ -17,7 +17,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 ### Changed
 
 - Text on section pages sits on plain paper, so the grid no longer shows between letters.
-- Personal holds Hobbies, with Engineering & Science (Digital Logic Design, Game Design).
+- Personal holds Engineering & Science, with Digital Logic Design and Game Design.
 - Images in notes keep their space while loading, so the page no longer jumps during the reveal.
 - Walking into or out of a section inside a section draws one unbroken line, with no gaps or leftover ends.
 - Back and the pager show an arrow and the page's name in place of the words Back to, Previous, and Next.

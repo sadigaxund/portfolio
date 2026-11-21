@@ -6,4 +6,4 @@ Nothing here yet.
 
 ---
 
-::page_back[[Hobbies](../hobbies)]
+::page_back[[Personal](../personal)]

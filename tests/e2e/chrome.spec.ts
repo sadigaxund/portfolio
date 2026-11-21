@@ -57,7 +57,7 @@ test("Back shows an arrow and the parent's name, and keeps that name after a wal
 });
 
 test("a short leaf keeps its foot in the window", async ({ page }) => {
-  await page.goto("/personal/hobbies/engineering-science/digital-logic-design");
+  await page.goto("/personal/engineering-science/digital-logic-design");
   const foot = await page.locator("footer.site-foot").boundingBox();
   const height = page.viewportSize()!.height;
   expect(foot!.y + foot!.height).toBeLessThanOrEqual(height + 1);

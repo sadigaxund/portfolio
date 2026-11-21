@@ -12,18 +12,18 @@ test.describe("a build with drafts hidden", () => {
 
   test("leaves draft pages out and keeps the pages around them", () => {
     execFileSync("npx", ["astro", "build", "--outDir", out], { env: { ...process.env, SITE_DRAFTS: "hide" }, stdio: "pipe" });
-    for (const gone of ["personal/hobbies/gym", "personal/hobbies/violin", "personal/hobbies/blacksmithing", "projects-blog/blog"]) {
+    for (const gone of ["personal/gym", "personal/violin", "personal/blacksmithing", "projects-blog/blog"]) {
       expect(existsSync(join(out, gone, "index.html")), `${gone} is built`).toBe(false);
     }
-    for (const here of ["projects-blog/projects/mandible", "personal/hobbies", "personal/hobbies/engineering-science", "personal/hobbies/engineering-science/digital-logic-design", "personal/hobbies/engineering-science/game-design"]) {
+    for (const here of ["projects-blog/projects/mandible", "personal/engineering-science", "personal/engineering-science/digital-logic-design", "personal/engineering-science/game-design"]) {
       expect(existsSync(join(out, here, "index.html")), `${here} is missing`).toBe(true);
     }
     const landing = readFileSync(join(out, "index.html"), "utf8");
     expect(landing).toContain(`data-option="-1"`);
     expect(landing).toMatch(/\/personal"/);
-    const hobbies = readFileSync(join(out, "personal/hobbies/index.html"), "utf8");
-    expect(hobbies).toContain("/personal/hobbies/engineering-science");
-    expect(hobbies).not.toMatch(/\/personal\/hobbies\/(gym|violin|blacksmithing)/);
+    const hobbies = readFileSync(join(out, "personal/index.html"), "utf8");
+    expect(hobbies).toContain("/personal/engineering-science");
+    expect(hobbies).not.toMatch(/\/personal\/(gym|violin|blacksmithing)/);
     expect(readFileSync(join(out, "projects-blog/index.html"), "utf8")).not.toMatch(/\/blog"/);
     expect(readFileSync(join(out, "projects-blog/projects/aqueduct/index.html"), "utf8")).not.toMatch(/\/projects-blog\/blog/);
   });
