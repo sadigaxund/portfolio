@@ -154,7 +154,7 @@ test("every tree node has its own page", async ({ page }) => {
 });
 
 test("a leaf deep link rests on its branch, and Back climbs one level at a time", async ({ page }) => {
-  await page.goto("/personal/hobbies");
+  await page.goto("/personal/engineering-science");
   await whenReady(page);
   expect(await progress(page)).toBe(1);
   expect(await chosen(page)).toBe("-1");
@@ -167,17 +167,17 @@ test("a leaf deep link rests on its branch, and Back climbs one level at a time"
 });
 
 test("opening a leaf and returning leaves the line still", async ({ page }) => {
-  await page.goto("/personal");
+  await page.goto("/personal/engineering-science");
   await whenReady(page);
   await page.evaluate(() => {
     const win = window as unknown as { started: number };
     win.started = 0;
     document.addEventListener("line:transition-start", () => (win.started += 1));
   });
-  await page.getByRole("link", { name: "Instagram" }).click();
-  await expect(page.locator("h1")).toHaveText("Instagram");
+  await page.getByRole("link", { name: "Digital Logic Design" }).click();
+  await expect(page.locator("h1")).toHaveText("Digital Logic Design");
   await page.goBack();
-  await expect(page.locator("h1")).toHaveText("Personal");
+  await expect(page.locator("h1")).toHaveText("Engineering & Science");
   expect(await page.evaluate(() => (window as unknown as { started: number }).started)).toBe(0);
 });
 

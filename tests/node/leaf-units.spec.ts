@@ -58,6 +58,10 @@ test.describe("makeLocalImageResolver", () => {
   test("maps a relative image beside the note to its built file", () => {
     expect(resolve("images/demo.webp")).toBe("/_astro/demo.abc.webp");
   });
+  test("adds the intrinsic size of a raster image", () => {
+    const sized = makeLocalImageResolver("content/projects/tool.mk.md", images, { "/content/projects/images/demo.webp": { width: 4, height: 3 } });
+    expect(sized("images/demo.webp")).toEqual({ src: "/_astro/demo.abc.webp", width: 4, height: 3 });
+  });
   test("leaves absolute sources and unknown files alone", () => {
     expect(resolve("https://example.com/a.png")).toBeUndefined();
     expect(resolve("images/missing.webp")).toBeUndefined();

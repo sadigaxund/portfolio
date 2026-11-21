@@ -10,19 +10,20 @@ test.describe("a build with drafts hidden", () => {
   const out = mkdtempSync(join(tmpdir(), "site-hide-"));
   test.afterAll(() => rmSync(out, { recursive: true, force: true }));
 
-  test("leaves draft pages out, and keeps every road with an empty section's zero state", () => {
+  test("leaves draft pages out and keeps the pages around them", () => {
     execFileSync("npx", ["astro", "build", "--outDir", out], { env: { ...process.env, SITE_DRAFTS: "hide" }, stdio: "pipe" });
-    for (const gone of ["personal/instagram", "personal/hobbies", "personal/hobbies/placeholder-leaf", "projects-blog/blog"]) {
+    for (const gone of ["personal/gym", "personal/violin", "personal/blacksmithing", "projects-blog/blog"]) {
       expect(existsSync(join(out, gone, "index.html")), `${gone} is built`).toBe(false);
     }
-    expect(existsSync(join(out, "projects-blog/projects/mandible/index.html"))).toBe(true);
+    for (const here of ["projects-blog/projects/mandible", "personal/engineering-science", "personal/engineering-science/digital-logic-design", "personal/engineering-science/game-design"]) {
+      expect(existsSync(join(out, here, "index.html")), `${here} is missing`).toBe(true);
+    }
     const landing = readFileSync(join(out, "index.html"), "utf8");
     expect(landing).toContain(`data-option="-1"`);
-    expect(landing).toContain("Nothing here yet.");
-    expect(landing).not.toMatch(/\/personal\/(instagram|hobbies)/);
-    const personal = readFileSync(join(out, "personal/index.html"), "utf8");
-    expect(personal).toContain("Nothing here yet.");
-    expect(personal).not.toContain(`class="stop"`);
+    expect(landing).toMatch(/\/personal"/);
+    const hobbies = readFileSync(join(out, "personal/index.html"), "utf8");
+    expect(hobbies).toContain("/personal/engineering-science");
+    expect(hobbies).not.toMatch(/\/personal\/(gym|violin|blacksmithing)/);
     expect(readFileSync(join(out, "projects-blog/index.html"), "utf8")).not.toMatch(/\/blog"/);
     expect(readFileSync(join(out, "projects-blog/projects/aqueduct/index.html"), "utf8")).not.toMatch(/\/projects-blog\/blog/);
   });

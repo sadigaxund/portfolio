@@ -20,7 +20,7 @@ export function hideDrafts(tree: TreeSpec): TreeSpec {
   return { ...tree, children: roads };
 }
 
-/** The URL paths, such as `personal/hobbies`, that `hideDrafts` removes. Their notes are skipped by the content check. */
+/** The URL paths, such as `personal/gym`, that `hideDrafts` removes. Their notes are skipped by the content check. */
 export function hiddenRoutes(tree: TreeSpec): string[] {
   const out: string[] = [];
   const walk = (node: NodeSpec, prefix: string) => {

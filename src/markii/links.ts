@@ -30,12 +30,24 @@ export function makeResolveHref(documentKey: string, routes: Readonly<Record<str
 
 const ABSOLUTE = /^([a-z][a-z0-9+.-]*:|\/|#|\?)/i;
 
-/** Resolves a relative image in a local note to its built URL in `images`, keyed like `/content/...`. Absolute sources stay as written. */
-export function makeLocalImageResolver(documentKey: string, images: Readonly<Record<string, string>>): (src: string) => string | undefined {
+export interface ImageSize {
+  width: number;
+  height: number;
+}
+
+/** Resolves a relative image in a local note to its built URL in `images`, keyed like `/content/...`. A path in `sizes` also yields its width and height. Absolute sources stay as written. */
+export function makeLocalImageResolver(
+  documentKey: string,
+  images: Readonly<Record<string, string>>,
+  sizes: Readonly<Record<string, ImageSize>> = {},
+): (src: string) => string | { src: string; width: number; height: number } | undefined {
   const folder = documentKey.slice(0, documentKey.lastIndexOf("/") + 1);
   return (src) => {
     if (ABSOLUTE.test(src)) return undefined;
     const path = collapse(folder + src);
-    return path === undefined ? undefined : images[`/${path}`];
+    if (path === undefined) return undefined;
+    const url = images[`/${path}`];
+    const size = sizes[`/${path}`];
+    return url !== undefined && size !== undefined ? { src: url, ...size } : url;
   };
 }

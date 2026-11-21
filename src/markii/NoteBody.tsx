@@ -1,7 +1,7 @@
 import { SETTINGS } from "./config";
 import { defaultRegistry } from "@markii/react/components";
 import type { Registry } from "@markii/react";
-import { LOCAL_IMAGES } from "./localImages";
+import { LOCAL_IMAGES, LOCAL_IMAGE_SIZES } from "./localImages";
 import { renderNote } from "./render";
 
 export interface NoteProps {
@@ -16,7 +16,7 @@ export interface NoteProps {
 export default function NoteBody({ text, documentKey, routes, registry = defaultRegistry }: NoteProps) {
   return (
     <div className="note" data-mk-root="" data-hide-scripts={SETTINGS.hideScriptBlocks || undefined}>
-      {renderNote(text, documentKey, routes, registry, undefined, LOCAL_IMAGES)}
+      {renderNote(text, documentKey, routes, registry, undefined, LOCAL_IMAGES, LOCAL_IMAGE_SIZES)}
     </div>
   );
 }

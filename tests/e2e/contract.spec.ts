@@ -11,12 +11,12 @@ test("a leaf renders its note on the surface", async ({ page }) => {
 });
 
 test("a placeholder note renders as a note", async ({ page }) => {
-  await page.goto("/personal/instagram");
-  await expect(page.locator("h1")).toHaveText("Instagram");
-  await expect(page.locator(".leaf-surface .note")).toContainText("PLACEHOLDER");
+  await page.goto("/personal/gym");
+  await expect(page.locator("h1")).toHaveText("Gym");
+  await expect(page.locator(".leaf-surface .note")).toContainText("Nothing here yet.");
 });
 
-for (const path of ["/", "/professional", "/personal/hobbies", "/professional/career"]) {
+for (const path of ["/", "/professional", "/personal/engineering-science", "/professional/career"]) {
   test(`long unbroken text in every slot keeps ${path} from scrolling sideways`, async ({ page }) => {
     await page.goto(path);
     const overflow = await page.evaluate(() => {
