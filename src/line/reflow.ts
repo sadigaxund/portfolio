@@ -32,9 +32,12 @@ function measureHero(stage: HTMLElement): boolean {
  * Calls onChange when the measure moved, and returns a cleanup.
  */
 export function mountReflow(stage: HTMLElement, onChange: () => void): () => void {
+  // The labels move a frame after the hero resizes, and a web font can resize it after load.
+  const measureForkSoon = () => requestAnimationFrame(() => measureFork(stage));
   const watcher = new ResizeObserver(() => {
     if (measureHero(stage)) onChange();
     measureFork(stage);
+    measureForkSoon();
   });
   const watch = () => {
     watcher.disconnect();
@@ -48,10 +51,15 @@ export function mountReflow(stage: HTMLElement, onChange: () => void): () => voi
   };
   measureHero(stage);
   measureFork(stage);
+  void document.fonts.ready.then(measureForkSoon);
   watch();
+  // A walk back to the fork measures nothing until the stage is at rest there.
+  const atRest = new MutationObserver(measureForkSoon);
+  atRest.observe(stage, { attributeFilter: ["data-chosen"] });
   document.addEventListener("astro:after-swap", onSwap);
   return () => {
     watcher.disconnect();
+    atRest.disconnect();
     document.removeEventListener("astro:after-swap", onSwap);
   };
 }

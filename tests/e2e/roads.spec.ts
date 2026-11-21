@@ -1,14 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
-import { load } from "js-yaml";
-import { readFileSync } from "node:fs";
+import { siteRoads } from "./site-nodes.mjs";
 
-interface Road {
-  slug: string;
-  side: string;
-  color: { light: string; dark: string };
-}
-
-const roads = (load(readFileSync("content/site.yaml", "utf8")) as { children: Road[] }).children;
+const roads = siteRoads();
 const rgb = (hex: string) => `rgb(${[1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)).join(", ")})`;
 
 const colors = (page: Page) =>
