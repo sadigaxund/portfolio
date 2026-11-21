@@ -17,6 +17,10 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 ### Changed
 
 - Scrolling up or pressing the up arrow at the top of any section page returns to its parent, not only from Professional.
+- Each road has its own line color, like a metro map: Personal green, Professional red, Projects & Blog amber. The color follows you onto the road's pages, its stations, link underlines, and focus rings.
+- Stops are stations: a white dot ringed in the road's color, filled when you point at it. Each section title on a road carries a round badge in its color.
+- Paper is a charcoal neutral in both color schemes, and names and headings use Bricolage Grotesque.
+- The landing name and summary sit above the dot grid, so no dot shows inside a letter.
 - Text on the landing page and section pages sits on plain paper, so the grid no longer shows between letters.
 - Personal holds Engineering & Science, with Digital Logic Design and Game Design.
 - Images in notes keep their space while loading, so the page no longer jumps during the reveal.

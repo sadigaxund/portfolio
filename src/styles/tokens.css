@@ -1,21 +1,25 @@
 /* Color and font tokens. DESIGN.md lists what each one is for. */
 :root {
   --font-sans: "Instrument Sans Variable", "Helvetica Neue", Arial, sans-serif;
-  --font-display: "Geologica Variable", "Helvetica Neue", Arial, sans-serif;
-  --color-bg: #fbfcfd;
-  --color-fg: #12151c;
-  --color-muted: #565d6b;
-  --color-primary: #12151c;
+  --font-display: "Bricolage Grotesque Variable", "Helvetica Neue", Arial, sans-serif;
+  --color-bg: #f6f6f4;
+  --color-fg: #18181a;
+  --color-muted: #5f6064;
+  --color-primary: #18181a;
   --color-primary-fg: var(--color-bg);
-  --color-border: #cfd5de;
-  --color-route: #1d3fd8;
-  --color-code-bg: #f1f3f6;
-  --color-code-fg: #12151c;
-  --color-code-muted: #565d6b;
+  --color-border: #d6d6d1;
+  /* The line and the walked route. A road's pages set both to its color. See route.css. */
+  --color-line: var(--color-primary);
+  --color-route: var(--color-fg);
+  /* A station's fill, white in both schemes like a metro map's. */
+  --color-station: #ffffff;
+  --color-code-bg: #ededea;
+  --color-code-fg: #18181a;
+  --color-code-muted: #5f6064;
   --color-doc-raised: #ffffff;
-  --color-doc-surface: #f1f3f6;
-  --color-doc-surface-strong: #e5e9ef;
-  --color-doc-faint: #6a7280;
+  --color-doc-surface: #efefec;
+  --color-doc-surface-strong: #e3e3df;
+  --color-doc-faint: #6b6b67;
   --color-doc-info: #1d3fd8;
   --color-doc-success: #1f7a4d;
   --color-doc-warning: #9a5b00;
@@ -59,20 +63,19 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #11151d;
-    --color-fg: #eef1f6;
-    --color-muted: #9aa3b2;
-    --color-primary: #eef1f6;
+    --color-bg: #17181b;
+    --color-fg: #f2f0eb;
+    --color-muted: #a3a29c;
+    --color-primary: #f2f0eb;
     --color-primary-fg: var(--color-bg);
-    --color-border: #2d3543;
-    --color-route: #8199ff;
-    --color-code-bg: #171c26;
-    --color-code-fg: #eef1f6;
-    --color-code-muted: #9aa3b2;
-    --color-doc-raised: #181d27;
-    --color-doc-surface: #171c26;
-    --color-doc-surface-strong: #222a37;
-    --color-doc-faint: #7f8898;
+    --color-border: #2e2f34;
+    --color-code-bg: #1e1f23;
+    --color-code-fg: #f2f0eb;
+    --color-code-muted: #a3a29c;
+    --color-doc-raised: #1f2024;
+    --color-doc-surface: #1c1d21;
+    --color-doc-surface-strong: #2a2b30;
+    --color-doc-faint: #8a8984;
     --color-doc-info: #8199ff;
     --color-doc-success: #5cc596;
     --color-doc-warning: #f0b44c;
@@ -105,6 +108,7 @@ a:focus-visible {
 a {
   overflow-wrap: anywhere;
   text-decoration: underline;
+  text-decoration-color: var(--color-route);
   text-underline-offset: 0.2em;
 }
 

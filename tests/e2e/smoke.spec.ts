@@ -120,7 +120,23 @@ for (const path of ["/", "/projects-blog", "/projects-blog/projects"]) {
       );
       const onPaper = (el: HTMLElement | null): boolean =>
         el !== null && (getComputedStyle(el).backgroundColor === paper || (el.tagName !== "MAIN" && onPaper(el.parentElement)));
-      return holders.filter((el) => el.checkVisibility() && !onPaper(el)).map((el) => el.textContent!.trim().slice(0, 40));
+      const style = document.createElement("style");
+      style.textContent = ".line-world::before { pointer-events: auto !important; }";
+      document.head.append(style);
+      // The grid is the world's ::before, so a point the grid covers hits the world itself.
+      const covered = (el: HTMLElement) => {
+        const text = [...el.childNodes].find((n) => n.nodeType === Node.TEXT_NODE && n.textContent!.trim() !== "")!;
+        const range = document.createRange();
+        range.selectNodeContents(text);
+        const box = range.getClientRects()[0];
+        const top = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
+        return top?.classList.contains("line-world") === true;
+      };
+      const result = holders
+        .filter((el) => el.checkVisibility() && (!onPaper(el) || covered(el)))
+        .map((el) => el.textContent!.trim().slice(0, 40));
+      style.remove();
+      return result;
     });
     expect(bare).toEqual([]);
   });

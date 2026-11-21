@@ -7,6 +7,9 @@
 #   label     the name shown on the site.
 #   side      on the root's children only: left, straight, or right.
 #             One road per side for now. Scrolling continues down the straight road.
+#   color     on the root's children only: the road's line color, as light: and dark: #rrggbb values.
+#             It colors the line, stations, focus rings, and link underlines on that road's pages.
+#             Each value keeps 4.5:1 contrast against its scheme's background.
 #   summary   one line, on a section only (a node with children).
 #   preview   one line of at most 90 characters, on a leaf only (a node without children).
 #   children  nodes below this one, in display order.
@@ -19,6 +22,9 @@ children:
   - slug: personal
     label: Personal
     side: left
+    color:
+      light: "#1a7d4f"
+      dark: "#2fa36b"
     children:
       - slug: engineering-science
         label: Engineering & Science
@@ -40,6 +46,9 @@ children:
   - slug: professional
     label: Professional
     side: straight
+    color:
+      light: "#c8372b"
+      dark: "#ef5a4c"
     summary: 3+ years of infrastructure and delivery pipelines behind data platforms.
     children:
       - slug: career
@@ -55,6 +64,9 @@ children:
   - slug: projects-blog
     label: Projects & Blog
     side: right
+    color:
+      light: "#946000"
+      dark: "#f2b032"
     children:
       - slug: projects
         label: Projects

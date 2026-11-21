@@ -1,5 +1,5 @@
 import { asList, asRecord, asString, fail } from "./check";
-import type { NodeSpec, RoadSpec, Side, TreeSpec } from "./tree";
+import type { NodeSpec, RoadColor, RoadSpec, Side, TreeSpec } from "./tree";
 
 const FILE = "content/site.yaml";
 const SLUG = /^[a-z0-9-]+$/;
@@ -7,6 +7,7 @@ const NODE_KEYS = ["slug", "label", "summary", "preview", "stars", "thumb", "chi
 const THUMB = /^(?!\/)(?!.*\.\.)[^\s]+\.(webp|png|jpg)$/;
 const STARS = /^[0-9]+\+?$/;
 const SIDES: readonly Side[] = ["left", "straight", "right"];
+const HEX = /^#[0-9a-f]{6}$/;
 /** Three lines of a stop hold about 100 characters on a 360px phone, so a legal preview is never cut off. */
 const PREVIEW_MAX = 90;
 
@@ -56,11 +57,22 @@ function parseNode(value: unknown, path: string, keys: readonly string[] = NODE_
   return node;
 }
 
+function parseColor(value: unknown, path: string): RoadColor {
+  const record = asRecord(FILE, path, value, ["light", "dark"]);
+  const pick = (scheme: "light" | "dark") => {
+    const color = asString(FILE, `${path}.${scheme}`, record[scheme]);
+    if (!HEX.test(color)) fail(FILE, `${path}.${scheme}`, `must be a lowercase #rrggbb color but is "${color}"`);
+    return color;
+  };
+  return { light: pick("light"), dark: pick("dark") };
+}
+
 function parseRoad(value: unknown, path: string): RoadSpec {
-  const node = parseNode(value, path, [...NODE_KEYS, "side"]);
-  const side = asString(FILE, `${path}.side`, (value as Record<string, unknown>).side);
+  const node = parseNode(value, path, [...NODE_KEYS, "side", "color"]);
+  const record = value as Record<string, unknown>;
+  const side = asString(FILE, `${path}.side`, record.side);
   if (!SIDES.includes(side as Side)) fail(FILE, `${path}.side`, `must be one of ${SIDES.join(", ")} but is "${side}"`);
-  return { ...node, side: side as Side };
+  return { ...node, side: side as Side, color: parseColor(record.color, `${path}.color`) };
 }
 
 /** Turns the parsed YAML into the tree, or throws naming the first bad field. */

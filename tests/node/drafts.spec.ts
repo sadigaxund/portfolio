@@ -2,13 +2,15 @@ import { expect, test } from "@playwright/test";
 import { hiddenRoutes, hideDrafts, hidesDrafts } from "../../src/tree/drafts";
 import { parseTree } from "../../src/tree/schema";
 
+const COLOR = { light: "#1a7d4f", dark: "#2fa36b" };
+
 const tree = parseTree({
   label: "Root",
   children: [
     {
       slug: "a",
       label: "A",
-      side: "left",
+      side: "left", color: COLOR,
       children: [
         { slug: "x", label: "X", draft: true },
         { slug: "g", label: "G", children: [{ slug: "y", label: "Y", draft: true }] },
@@ -17,13 +19,13 @@ const tree = parseTree({
     {
       slug: "b",
       label: "B",
-      side: "straight",
+      side: "straight", color: COLOR,
       children: [
         { slug: "p", label: "P" },
         { slug: "q", label: "Q", draft: true, children: [{ slug: "deep", label: "Deep" }] },
       ],
     },
-    { slug: "c", label: "C", side: "right", children: [{ slug: "r", label: "R" }] },
+    { slug: "c", label: "C", side: "right", color: COLOR, children: [{ slug: "r", label: "R" }] },
   ],
 });
 
@@ -48,6 +50,6 @@ test.describe("drafts", () => {
     expect(hiddenRoutes(tree)).toEqual(["a/x", "a/g", "b/q"]);
   });
   test("rejects a draft that is not a boolean", () => {
-    expect(() => parseTree({ label: "R", children: [{ slug: "a", label: "A", side: "left", draft: "yes" }] })).toThrow("draft must be true or false");
+    expect(() => parseTree({ label: "R", children: [{ slug: "a", label: "A", side: "left", color: COLOR, draft: "yes" }] })).toThrow("draft must be true or false");
   });
 });
