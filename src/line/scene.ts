@@ -1,6 +1,7 @@
 import type { TreeNode } from "../tree/walk";
 import { DIRECTIONS, labelOpacity, retraction, stopCurvePath, branchPath, STUB_RATIO, type Measure } from "./geometry";
 import type { Direction } from "../tree/tree";
+import { nodeAt } from "../tree/walk";
 
 /** One level of the walked line, in world coordinates. */
 export interface Level {
@@ -81,6 +82,8 @@ export function createScene(stage: HTMLElement, probe: HTMLElement, path: TreeNo
     const path = stage.querySelector<SVGPathElement>(`[data-branch="${direction}"]`);
     return path ? [{ direction, path, label: stage.querySelector<HTMLElement>(`[data-option="${direction}"]`) }] : [];
   });
+  // A level leaves its parent at the offset its parent's own page measured, so the next page cannot move it.
+  const links = new Map<TreeNode, number>();
   const parts = new Map<TreeNode, { run: HTMLElement; curve: SVGPathElement; holder: SVGSVGElement }>();
 
   const scene: Scene = {
@@ -93,6 +96,7 @@ export function createScene(stage: HTMLElement, probe: HTMLElement, path: TreeNo
 
     levels() {
       const m = scene.measure();
+      const shown = nodeAt(document.querySelector<HTMLElement>(".stop")?.dataset.stopUrl ?? "")?.parent;
       const out: Level[] = [];
       scene.walked.forEach((node, index) => {
         if (index === 0) {
@@ -103,7 +107,9 @@ export function createScene(stage: HTMLElement, probe: HTMLElement, path: TreeNo
         const parent = out[index - 1];
         const order = node.parent!.children.indexOf(node);
         const side = m.bothSides && order % 2 === 1 ? -1 : 1;
-        const startY = parent.top + m.firstStop + order * m.stopGap;
+        const live = shown === parent.node || !links.has(node);
+        if (live) links.set(node, m.firstStop + order * m.stopGap);
+        const startY = parent.top + links.get(node)!;
         parent.cut = startY - parent.top;
         const own = parts.get(node)!;
         out.push({
