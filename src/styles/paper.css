@@ -26,9 +26,14 @@
 .line-content :is(.role-heading, .role-lead, .role-detail),
 .stop-text :is(.role-item, .role-detail) {
   width: fit-content;
+  max-width: calc(100% + 2 * var(--paper-text-pad));
   padding-inline: var(--paper-text-pad);
   margin-inline: calc(-1 * var(--paper-text-pad));
   background: var(--color-bg);
+}
+
+.line-content .role-lead {
+  max-width: min(var(--measure), calc(100% + 2 * var(--paper-text-pad)));
 }
 
 @media (min-width: 40.01rem) {
