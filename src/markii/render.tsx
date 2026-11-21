@@ -3,7 +3,7 @@ import { parse } from "@markii/core";
 import { renderMarkNode, type Registry } from "@markii/react";
 import type { ValueStore } from "@markii/runtime";
 import { CodeBlock } from "my-you-eye";
-import { makeLocalImageResolver, makeResolveHref } from "./links";
+import { makeLocalImageResolver, makeResolveHref, type ImageSize } from "./links";
 import { segmentNote } from "./segments";
 
 /** Renders a note's blocks with markii, and its detail lines as `role-detail` paragraphs. */
@@ -14,11 +14,12 @@ export function renderNote(
   registry: Registry,
   store?: ValueStore,
   images: Readonly<Record<string, string>> = {},
+  sizes: Readonly<Record<string, ImageSize>> = {},
 ): ReactElement {
   const root = parse(text);
   const options = {
     resolveHref: makeResolveHref(documentKey, routes),
-    resolveImageSrc: makeLocalImageResolver(documentKey, images),
+    resolveImageSrc: makeLocalImageResolver(documentKey, images, sizes),
     renderCode: ({ lang, code }: { lang: string | undefined; code: string }) => <CodeBlock code={code} language={lang} />,
   };
   const render = (children: unknown[]) =>

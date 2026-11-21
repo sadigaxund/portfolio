@@ -177,3 +177,15 @@ test("an update that gets an error status says so and keeps the values", async (
   await expect(page.getByText(/^Could not update\. Showing data from [A-Z][a-z]{2} \d{4}\.$/)).toBeVisible({ timeout: 15000 });
   await expect(page.locator(TOTAL).first()).toHaveText(before ?? "");
 });
+
+test("every image in a note reserves its space with width and height", async ({ page }) => {
+  await page.goto("/projects-blog/projects/mandible");
+  // Pager stills sit in a fixed-aspect box of the page pack, so they cannot shift the page.
+  const images = page.locator("[data-mk-root] img:not(.mk-page_card__still img)");
+  expect(await images.count()).toBeGreaterThan(0);
+  for (const img of await images.all()) {
+    const [w, h] = await Promise.all([img.getAttribute("width"), img.getAttribute("height")]);
+    expect(Number(w), `width of ${await img.getAttribute("src")}`).toBeGreaterThan(0);
+    expect(Number(h), `height of ${await img.getAttribute("src")}`).toBeGreaterThan(0);
+  }
+});
