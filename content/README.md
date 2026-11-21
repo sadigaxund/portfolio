@@ -70,3 +70,12 @@ With two pages, drop the row and keep one `page_next` to the other page. With on
 ## YAML tip
 
 A value that contains a colon followed by a space breaks the file. Wrap such a value in double quotes: `preview: "Rust: a TUI manual"`. The build names the line when this happens.
+
+## Career, Education, Certifications, and Skills
+
+These notes use the local `cv` pack. Wrap each entry in `::::cv_entry{logo=images/logo-<name>.webp}` around its heading, role line, bullets, and `*Stack: ...*` line. Logo tiles are 192px square WebP files in `content/professional/images/`, with the brand's background baked in. Put link chips inside an entry with `:::page_links` around a list of links.
+
+Skills lists tools by layer: `:::cv_layer{name=Process}` around lines such as `::cv_skill[Spark]{level=work used="KDM Force, Aqueduct"}`. `level` is `work`, `project`, or `studied`, and `used` is where the tool was used. A studied tool has no `used`.
+
+A project's head carries a Repository chip: `:::page_links` with one link, inside the `::::center` block under the tagline.
+

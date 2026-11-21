@@ -1,0 +1,89 @@
+/* A logo rail on the left, the entry's Markdown on the right. Only --mk-* tokens. */
+.mk-cv_entry {
+  display: grid;
+  /* The logo keeps its pixel size when text grows, so the text column keeps its room. */
+  grid-template-columns: 48px minmax(0, 1fr);
+  column-gap: 1rem;
+}
+
+.mk-cv_entry__rail {
+  position: relative;
+}
+
+.mk-cv_entry__logo,
+.mk-cv_entry__dot {
+  display: block;
+  box-sizing: border-box;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--mk-border);
+  border-radius: 0.75rem;
+  object-fit: cover;
+}
+
+.mk-cv_entry__dot {
+  background: var(--mk-surface);
+}
+
+/* The rail runs from below the logo through the gap to the next entry. */
+.mk-cv_entry__rail::after {
+  content: "";
+  position: absolute;
+  top: calc(48px + 0.5rem);
+  bottom: calc(-1 * var(--mk-rhythm, 1rem) + 0.5rem);
+  left: calc(50% - 1px);
+  width: 2px;
+  border-radius: 1px;
+  background: var(--mk-accent);
+}
+
+/* The last entry in a run has no rail below it. */
+.mk-cv_entry:not(:has(+ .mk-cv_entry)) .mk-cv_entry__rail::after {
+  content: none;
+}
+
+.mk-cv_entry__body {
+  min-width: 0;
+}
+
+/* The entry owns its inside spacing, so a host's heading margin does not push the text below the logo. */
+.mk-cv_entry .mk-cv_entry__body > * {
+  margin-block: 0;
+}
+
+.mk-cv_entry .mk-cv_entry__body > * + * {
+  margin-top: 0.5rem;
+}
+
+.mk-cv_entry .mk-cv_entry__body > :is(ul, ol) {
+  margin-top: 0.75rem;
+}
+
+/* The heading's first line is centered on the logo, and a word wider than the column breaks. */
+.mk-cv_entry .mk-cv_entry__body > :first-child {
+  padding-top: max(0px, calc((48px - 1lh) / 2));
+  overflow-wrap: anywhere;
+}
+
+/*
+ * The paragraph right after the heading is the role line: who, where, and when. A paragraph
+ * written as one emphasis run, such as a stack line, is a detail line too. Both are muted.
+ */
+.mk-cv_entry .mk-cv_entry__body > :is(h2, h3) + p,
+.mk-cv_entry .mk-cv_entry__body > p:has(> em:only-child) {
+  color: var(--mk-muted);
+  font-size: 0.9375em;
+}
+
+.mk-cv_entry .mk-cv_entry__body > :is(h2, h3) + p {
+  margin-top: 0.125rem;
+}
+
+.mk-cv_entry .mk-cv_entry__body > :is(:is(h2, h3) + p, p:has(> em:only-child)) em {
+  font-style: normal;
+}
+
+/* Entries in a run sit apart, and the rail runs through the space. */
+.mk-cv_entry:has(+ .mk-cv_entry) {
+  padding-bottom: 1.75rem;
+}

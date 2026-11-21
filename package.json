@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "build:pack": "node markii/packs/page/src/build.mjs",
+    "build:pack": "node markii/packs/build.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "lint": "eslint .",

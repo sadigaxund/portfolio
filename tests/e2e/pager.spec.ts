@@ -109,6 +109,6 @@ test.describe("without JavaScript", () => {
     await page.goto("/professional/career");
     await expect(page.locator(".mk-page_back a")).toHaveAttribute("href", "/professional");
     await expect(page.locator(`${NEXT} a`)).toHaveAttribute("href", "/professional/education");
-    await expect(page.locator(`${PREV} a`)).toHaveAttribute("href", "/professional/certifications");
+    await expect(page.locator(`${PREV} a`)).toHaveAttribute("href", "/professional/skills");
   });
 });

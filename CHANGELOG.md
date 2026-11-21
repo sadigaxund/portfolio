@@ -6,6 +6,10 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Added
 
+- Career, Education, and Certifications show each organization's logo, joined into a timeline. Education lists the dual master's degree, the METU exchange semester, and the bachelor's degree with both GPAs, the capstones, and the papers.
+- A Skills page under Professional lists tools by layer of a data platform, from ingest to run. Tap a tool to see where it was used. It also lists spoken languages.
+- Certifications link to the Astronomer blog, the demo video, and the Credly credential.
+- Each project page links its repository with a chip under the tagline.
 - A Previous and a Next card at the end of each project and each Professional page, wrapping from the last page to the first.
 - Each project page opens with its logo, title, and tagline centered, and its stats centered below.
 - The Mandible and Aqueduct demos play on the page as short silent clips, with a still before they start.

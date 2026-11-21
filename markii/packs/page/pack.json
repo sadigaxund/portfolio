@@ -1,6 +1,6 @@
 {
   "name": "page",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "engine": "react",
   "components": {
     "back": {
@@ -30,6 +30,12 @@
           "description": "A still shown on the left half of the card, as a path relative to the note. Decorative, so it has no alt text. Left out, the card is text only."
         }
       ]
+    },
+    "links": {
+      "source": "./src/links.tsx",
+      "description": "A row of link chips, such as Repository and Demo, from the Markdown list of links inside it. Each chip is one link at least 44px tall, and the row wraps.",
+      "kind": "container",
+      "attributes": []
     }
   }
 }

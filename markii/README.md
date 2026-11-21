@@ -20,4 +20,4 @@ A visitor allows each origin once, from the Run button. A run on open never asks
 
 `nav` 1.0.0, from markii-org/markii-packs release v2026.09.12 (commit 986efe8f37ccb0882d14a2ab2cd95acb55d41aad), the prebuilt files from `nav-1.0.0.mkp`.
 
-`page` 1.0.0 is written here. Its source is in `packs/page/src/`, and `npm run build:pack` compiles it into `webview.js` and `webview.css`.
+`page` 1.1.0 and `cv` 1.0.0 are written here. Their sources are in `packs/<name>/src/`, and `npm run build:pack` compiles each into its `webview.js` and `webview.css`.

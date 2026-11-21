@@ -64,6 +64,15 @@
     return /* @__PURE__ */ __markiiJSX.createElement(PageCard, { ...props, direction: "next", label: "Next" });
   }
 
+  // markii-pack-source:src/links.tsx
+  var links_exports = {};
+  __export(links_exports, {
+    Links: () => Links
+  });
+  function Links({ children }) {
+    return /* @__PURE__ */ __markiiJSX.createElement("div", { className: "mk-page_links" }, children);
+  }
+
   // page-pack-entry.js
   function __markiiPick(mod) {
     if (mod && typeof mod["default"] === "function") return mod["default"];
@@ -75,7 +84,8 @@
   var __markiiComponents = {
     "back": __markiiPick(back_exports),
     "prev": __markiiPick(prev_exports),
-    "next": __markiiPick(next_exports)
+    "next": __markiiPick(next_exports),
+    "links": __markiiPick(links_exports)
   };
   if (typeof window !== "undefined" && typeof window.__markiiRegisterPack === "function") {
     __markiiEntries = {};
@@ -85,7 +95,7 @@
       if (typeof __markiiComponents[__markiiLocalName] !== "function") continue;
       __markiiEntries[__markiiLocalName] = { component: __markiiComponents[__markiiLocalName], inline: __markiiInline[__markiiLocalName] === true };
     }
-    window.__markiiRegisterPack('{\n  "name": "page",\n  "version": "1.0.0",\n  "engine": "react",\n  "components": {\n    "back": {\n      "source": "./src/back.tsx",\n      "description": "One quiet line that leads back to the parent page: a left arrow, the muted label \\"Back to\\", and the page name as the link.",\n      "kind": "leaf",\n      "attributes": []\n    },\n    "prev": {\n      "source": "./src/prev.tsx",\n      "description": "A card for the previous page: an optional still, then the label \\"Previous\\" with a left chevron, and the page name as the link. In a card narrower than 34rem the still sits on top. The whole card is the link.",\n      "kind": "container",\n      "attributes": [\n        {\n          "name": "img",\n          "description": "A still shown in the card, as a path relative to the note. Decorative, so it has no alt text. Left out, the card is text only."\n        }\n      ]\n    },\n    "next": {\n      "source": "./src/next.tsx",\n      "description": "A card for the next page: an optional still, then the label \\"Next\\" with a right chevron, the page name as the link, and an optional muted preview line. In a card narrower than 34rem the still sits on top and the text is right-aligned. The whole card is the link.",\n      "kind": "container",\n      "attributes": [\n        {\n          "name": "img",\n          "description": "A still shown on the left half of the card, as a path relative to the note. Decorative, so it has no alt text. Left out, the card is text only."\n        }\n      ]\n    }\n  }\n}\n', __markiiEntries);
+    window.__markiiRegisterPack('{\n  "name": "page",\n  "version": "1.1.0",\n  "engine": "react",\n  "components": {\n    "back": {\n      "source": "./src/back.tsx",\n      "description": "One quiet line that leads back to the parent page: a left arrow, the muted label \\"Back to\\", and the page name as the link.",\n      "kind": "leaf",\n      "attributes": []\n    },\n    "prev": {\n      "source": "./src/prev.tsx",\n      "description": "A card for the previous page: an optional still, then the label \\"Previous\\" with a left chevron, and the page name as the link. In a card narrower than 34rem the still sits on top. The whole card is the link.",\n      "kind": "container",\n      "attributes": [\n        {\n          "name": "img",\n          "description": "A still shown in the card, as a path relative to the note. Decorative, so it has no alt text. Left out, the card is text only."\n        }\n      ]\n    },\n    "next": {\n      "source": "./src/next.tsx",\n      "description": "A card for the next page: an optional still, then the label \\"Next\\" with a right chevron, the page name as the link, and an optional muted preview line. In a card narrower than 34rem the still sits on top and the text is right-aligned. The whole card is the link.",\n      "kind": "container",\n      "attributes": [\n        {\n          "name": "img",\n          "description": "A still shown on the left half of the card, as a path relative to the note. Decorative, so it has no alt text. Left out, the card is text only."\n        }\n      ]\n    },\n    "links": {\n      "source": "./src/links.tsx",\n      "description": "A row of link chips, such as Repository and Demo, from the Markdown list of links inside it. Each chip is one link at least 44px tall, and the row wraps.",\n      "kind": "container",\n      "attributes": []\n    }\n  }\n}\n', __markiiEntries);
   }
   var __markiiEntries;
   var __markiiInline;
