@@ -20,16 +20,15 @@
 }
 
 /*
- * Section-page text sits on plain paper: each block is as wide as its text plus a small pad, and the
- * negative start margin keeps the letters where they were. Start-side stops stay right-aligned.
+ * Section-page text sits on plain paper: each block is as wide as its text, and a spread shadow paints
+ * the paper a small pad beyond it without moving the letters. Start-side stops stay right-aligned.
  */
 .line-content :is(.role-heading, .role-lead, .role-detail),
 .stop-text :is(.role-item, .role-detail) {
   width: fit-content;
   max-width: 100%;
-  padding-inline: var(--paper-text-pad);
-  margin-inline-start: calc(-1 * var(--paper-text-pad));
   background: var(--color-bg);
+  box-shadow: 0 0 0 var(--paper-text-pad) var(--color-bg);
 }
 
 .line-content .role-lead {
@@ -38,6 +37,6 @@
 
 @media (min-width: 40.01rem) {
   .stop[data-side="start"] .stop-text :is(.role-item, .role-detail) {
-    margin-inline: auto calc(-1 * var(--paper-text-pad));
+    margin-inline-start: auto;
   }
 }
