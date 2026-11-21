@@ -1,12 +1,13 @@
 ---
 import { ClientRouter } from "astro:transitions";
-import geologica from "@fontsource-variable/geologica/files/geologica-latin-wght-normal.woff2?url";
+import bricolage from "@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url";
 import instrumentSans from "@fontsource-variable/instrument-sans/files/instrument-sans-latin-wght-normal.woff2?url";
 import "./styles";
 import Hero from "../discovery/Hero.astro";
 import { PROFILE } from "../discovery/profile";
 import LineStage from "../line/LineStage";
 import { summaryOf } from "../sections/previews";
+import { roadColorCss, roadOf } from "../tree/roads";
 import { isLeaf, ROOT, type TreeNode } from "../tree/walk";
 import LeafBody from "../ui/LeafBody.astro";
 import SectionBody from "../ui/SectionBody.astro";
@@ -24,7 +25,7 @@ const canonical = Astro.site ? new URL(node.url, Astro.site).href : undefined;
 ---
 
 <!doctype html>
-<html lang="en" transition:animate="none" data-view={leaf ? "leaf" : "line"}>
+<html lang="en" transition:animate="none" data-view={leaf ? "leaf" : "line"} data-road={roadOf(node)}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -38,8 +39,9 @@ const canonical = Astro.site ? new URL(node.url, Astro.site).href : undefined;
     {canonical && <link rel="canonical" href={canonical} />}
     <meta name="twitter:card" content="summary" />
     <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/favicon.svg`} />
-    <link rel="preload" as="font" type="font/woff2" href={geologica} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={bricolage} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={instrumentSans} crossorigin />
+    <style is:inline set:html={roadColorCss()} />
     <ClientRouter />
   </head>
   <body>

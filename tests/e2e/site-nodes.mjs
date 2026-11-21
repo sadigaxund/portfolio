@@ -25,3 +25,11 @@ export function siteNodes() {
   walk(root.children, "");
   return nodes;
 }
+
+/**
+ * The roads at the fork, with their side and line colors, from content/site.yaml.
+ * @returns {{ slug: string, side: string, color: { light: string, dark: string } }[]}
+ */
+export function siteRoads() {
+  return load(readFileSync("content/site.yaml", "utf8")).children;
+}

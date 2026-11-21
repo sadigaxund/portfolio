@@ -84,14 +84,14 @@
   flex: none;
   width: var(--stop-reach);
   height: var(--stop-drop);
-  border-bottom: var(--line-width) solid var(--color-primary);
-  border-left: var(--line-width) solid var(--color-primary);
+  border-bottom: var(--line-width) solid var(--color-line);
+  border-left: var(--line-width) solid var(--color-line);
   border-bottom-left-radius: var(--stop-drop);
   /* Hides the stroke where it lies on the main line, so the line stays whole and the branch leaves its edge. */
   clip-path: inset(-2rem -2rem -2rem var(--line-width));
 }
 
-/* A leaf ends in an open ring, the same stop the thread inside a leaf uses. */
+/* A leaf ends in a station: a white dot ringed in the road's color, as on a metro map. */
 .stop[data-kind="leaf"] .stop-branch::after {
   content: "";
   position: absolute;
@@ -100,9 +100,9 @@
   box-sizing: border-box;
   width: var(--stop-end);
   height: var(--stop-end);
-  border: var(--line-width) solid var(--color-primary);
+  border: var(--line-width) solid var(--color-line);
   border-radius: 50%;
-  background: var(--color-bg);
+  background: var(--color-station);
 }
 
 /* A subsection's branch bends on down, like the fork's branches, because the line continues into it. */
@@ -113,21 +113,23 @@
   bottom: calc(var(--stop-drop) * -1);
   width: var(--stop-drop);
   height: var(--stop-drop);
-  border-top: var(--line-width) solid var(--color-primary);
-  border-right: var(--line-width) solid var(--color-primary);
+  border-top: var(--line-width) solid var(--color-line);
+  border-right: var(--line-width) solid var(--color-line);
   border-top-right-radius: var(--stop-drop);
 }
 
-/* A subsection also ends in a filled dot, centered where the bend's stroke ends. */
+/* A subsection ends in the same station, centered where the bend's stroke ends. */
 .stop[data-kind="section"] .stop-branch::before {
   content: "";
   position: absolute;
   left: calc(100% + var(--stop-drop) - (var(--line-width) + var(--stop-end)) / 2);
   bottom: calc(var(--stop-drop) * -1 - var(--stop-end) / 2);
+  box-sizing: border-box;
   width: var(--stop-end);
   height: var(--stop-end);
+  border: var(--line-width) solid var(--color-line);
   border-radius: 50%;
-  background: var(--color-primary);
+  background: var(--color-station);
 }
 
 .stop[data-kind="section"] .stop-text {
@@ -145,7 +147,7 @@
 
   .stop[data-side="start"] .stop-branch {
     border-left: 0;
-    border-right: var(--line-width) solid var(--color-primary);
+    border-right: var(--line-width) solid var(--color-line);
     border-bottom-left-radius: 0;
     border-bottom-right-radius: var(--stop-drop);
     clip-path: inset(-2rem var(--line-width) -2rem -2rem);
@@ -160,7 +162,7 @@
     left: auto;
     right: 100%;
     border-right: 0;
-    border-left: var(--line-width) solid var(--color-primary);
+    border-left: var(--line-width) solid var(--color-line);
     border-top-right-radius: 0;
     border-top-left-radius: var(--stop-drop);
   }
@@ -176,15 +178,10 @@
   }
 }
 
-/* Pointing at or focusing a stop draws its branch in the route color, the color it turns once walked. */
-.stop:has(.stop-text a:is(:hover, :focus-visible)) .stop-branch,
-.stop:has(.stop-text a:is(:hover, :focus-visible)) .stop-branch::after {
-  border-color: var(--color-route);
-}
-
+/* Pointing at or focusing a stop fills its station with the road's color. */
 .stop[data-kind="section"]:has(.stop-text a:is(:hover, :focus-visible)) .stop-branch::before,
 .stop[data-kind="leaf"]:has(.stop-text a:is(:hover, :focus-visible)) .stop-branch::after {
-  background: var(--color-route);
+  background: var(--color-line);
 }
 
 @media (prefers-reduced-motion: no-preference) {

@@ -4,7 +4,7 @@ import "../styles/global.css";
 import "../styles/line.css";
 import "../styles/fork.css";
 import "../styles/route.css";
-import "@fontsource-variable/geologica";
+import "@fontsource-variable/bricolage-grotesque";
 import "@fontsource-variable/instrument-sans";
 import "../styles/seam.css";
 import "../styles/stops.css";

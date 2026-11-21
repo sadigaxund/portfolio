@@ -2,17 +2,18 @@
 import { Link } from "my-you-eye";
 import "../layouts/styles";
 import Hero from "../discovery/Hero.astro";
+import { roadColorCss } from "../tree/roads";
 
 // Returning no paths keeps this page out of a production build.
 export function getStaticPaths() {
   return import.meta.env.DEV ? [{ params: { kit: "kit" } }] : [];
 }
 
-const COLORS = ["bg", "fg", "primary", "muted", "border", "route"];
+const COLORS = ["color-bg", "color-fg", "color-primary", "color-muted", "color-border", "color-line", "color-route", "color-station", "road-left", "road-straight", "road-right"];
 const LONG_WORD = "x".repeat(220);
 const SENTENCE =
   "A body sentence that runs on long enough to test the slot, so that wrapping and measure both show on this page, at two hundred characters or a little more than that.";
-const swatch = (name: string) => `background: var(--color-${name}); border: 1px solid var(--color-border); width: 3rem; height: 3rem;`;
+const swatch = (name: string) => `background: var(--${name}); border: 1px solid var(--color-border); width: 3rem; height: 3rem;`;
 ---
 
 <!doctype html>
@@ -22,6 +23,7 @@ const swatch = (name: string) => `background: var(--color-${name}); border: 1px 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
     <title>Kit</title>
+    <style is:inline set:html={roadColorCss()} />
     <style>
       main {
         display: grid;

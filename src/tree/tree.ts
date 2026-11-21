@@ -25,8 +25,15 @@ export interface NodeSpec {
 /** Where a road leaves the fork. Only the root's children carry one. */
 export type Side = "left" | "straight" | "right";
 
+/** A road's line color in each color scheme, as #rrggbb. */
+export interface RoadColor {
+  light: string;
+  dark: string;
+}
+
 export interface RoadSpec extends NodeSpec {
   side: Side;
+  color: RoadColor;
 }
 
 /** The root is the landing page. Its children are the roads at the fork. */

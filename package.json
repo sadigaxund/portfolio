@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@astrojs/react": "^7.1.0",
-    "@fontsource-variable/geologica": "^5.3.0",
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
     "@fontsource-variable/instrument-sans": "^5.3.0",
     "@markii/core": "0.18.1",
     "@markii/host": "0.18.1",
