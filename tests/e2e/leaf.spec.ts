@@ -280,11 +280,13 @@ for (const [name, from, go] of [
     await page.getByRole("link", { name: go }).click();
     await page.waitForTimeout(120);
     // The click may scroll its link into view first, and the hold keeps that position.
-    const held = await page.evaluate(() => scrollY);
+    const held = await page.evaluate(() => ({ y: scrollY, path: location.pathname }));
     await page.addStyleTag({ content: "main { min-height: 300vh !important; }" });
     await page.mouse.wheel(0, 400);
     await page.waitForTimeout(100);
-    expect(await page.evaluate(() => scrollY)).toBe(held);
+    // The wheel moves nothing: the held position stays, or the new page has swapped in at its top.
+    const now = await page.evaluate(() => ({ y: scrollY, path: location.pathname }));
+    expect(now.y).toBe(now.path === held.path ? held.y : 0);
     await page.waitForFunction(
       () =>
         document.querySelector<HTMLElement>(".line-stage")!.dataset.settled === "true" &&
