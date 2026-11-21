@@ -343,7 +343,7 @@ test.describe("without JavaScript", () => {
   });
 });
 
-test.describe("scrolling back along the straight path", () => {
+test.describe("scrolling back to the parent", () => {
   const waitSettled = (page: Page) => page.waitForSelector('.line-stage[data-settled="true"]');
 
   test("wheel up from the top of Professional returns to the landing page", async ({ page }) => {
@@ -386,14 +386,30 @@ test.describe("scrolling back along the straight path", () => {
     await expect(page).toHaveURL(/\/$/);
   });
 
-  test("the paths reached by a choice do not scroll back", async ({ page }) => {
-    await page.goto("/personal");
+  test("wheel up from a side road returns to the landing page", async ({ page }) => {
+    await page.goto("/projects-blog");
+    await whenReady(page);
+    await page.mouse.move(100, 100);
+    await page.mouse.wheel(0, -150);
+    await expect(page).toHaveURL(/\/$/);
+  });
+
+  test("wheel up from a deeper section returns to its parent section", async ({ page }) => {
+    await page.goto("/projects-blog/projects");
+    await whenReady(page);
+    await page.mouse.move(100, 100);
+    await page.mouse.wheel(0, -150);
+    await expect(page).toHaveURL(/\/projects-blog$/);
+  });
+
+  test("a leaf does not scroll back", async ({ page }) => {
+    await page.goto("/professional/career");
     await whenReady(page);
     await page.mouse.move(100, 100);
     await page.mouse.wheel(0, -300);
     await page.keyboard.press("ArrowUp");
     await page.waitForTimeout(200);
-    await expect(page).toHaveURL(/\/personal$/);
+    await expect(page).toHaveURL(/\/professional\/career$/);
   });
 
   test("a wheel during the return cannot send the line forward again", async ({ page }) => {

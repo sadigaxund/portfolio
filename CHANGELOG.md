@@ -16,6 +16,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Changed
 
+- Scrolling up or pressing the up arrow at the top of any section page returns to its parent, not only from Professional.
 - Text on the landing page and section pages sits on plain paper, so the grid no longer shows between letters.
 - Personal holds Engineering & Science, with Digital Logic Design and Game Design.
 - Images in notes keep their space while loading, so the page no longer jumps during the reveal.
