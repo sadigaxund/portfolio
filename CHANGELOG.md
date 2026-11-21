@@ -16,6 +16,7 @@ Changes a visitor to the site would notice. The format follows [Keep a Changelog
 
 ### Changed
 
+- Walking into or out of a section inside a section draws one unbroken line, with no gaps or leftover ends.
 - Back and the pager show an arrow and the page's name in place of the words Back to, Previous, and Next.
 - Mandible's entry on the Projects page leads with its star count.
 - On a phone narrower than 360px, the fork's labels keep each word whole.
