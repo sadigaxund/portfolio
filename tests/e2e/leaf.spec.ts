@@ -279,8 +279,23 @@ for (const [name, from, go] of [
     // The click may scroll its link into view first, and the hold keeps that position.
     const held = await page.evaluate(() => ({ y: scrollY, path: location.pathname }));
     await page.addStyleTag({ content: "main { min-height: 300vh !important; }" });
+    // Added after the hold's own listener, so it sees whether the hold cancelled each wheel.
+    await page.evaluate(() => {
+      const win = window as unknown as { wheels: { prevented: boolean; moving: boolean }[] };
+      win.wheels = [];
+      window.addEventListener("wheel", (event) => {
+        const settled = document.querySelector<HTMLElement>(".line-stage")!.dataset.settled === "true";
+        const seam = [...document.querySelectorAll<HTMLElement>("[data-seam]")].some((part) => getComputedStyle(part).visibility !== "hidden");
+        win.wheels.push({ prevented: event.defaultPrevented, moving: !settled || seam });
+      });
+    });
     await page.mouse.wheel(0, 400);
     await page.waitForTimeout(100);
+    // Every wheel during the move is cancelled, whatever the timing of the page swap.
+    const wheels = await page.evaluate(() => (window as unknown as { wheels: { prevented: boolean; moving: boolean }[] }).wheels);
+    const during = wheels.filter((wheel) => wheel.moving);
+    expect(during.length).toBeGreaterThan(0);
+    expect(during.every((wheel) => wheel.prevented)).toBe(true);
     // The wheel moves nothing: the held position stays, or the new page has swapped in at its top.
     const now = await page.evaluate(() => ({ y: scrollY, path: location.pathname }));
     expect(now.y).toBe(now.path === held.path ? held.y : 0);
