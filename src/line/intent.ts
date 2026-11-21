@@ -1,6 +1,6 @@
 import { navigate } from "astro:transitions/client";
 import type { Direction } from "../tree/tree";
-import { BRANCHES, nodeAt, ROOT } from "../tree/walk";
+import { BRANCHES, isLeaf, nodeAt, ROOT } from "../tree/walk";
 import { scrollHeld } from "./scrollHold";
 
 const WHEEL_TRIGGER_PX = 100;
@@ -18,15 +18,15 @@ function atFork(): boolean {
   return nodeAt(location.pathname) === ROOT;
 }
 
-/** The straight branch is the one path a visitor can scroll into, so it is the one they can scroll back from. */
-function atStraightBranch(): boolean {
+/** On a section page, scrolling up past its top walks to its parent. A leaf owns its own scroll, so it never does. */
+function parentUrl(): string | null {
   const node = nodeAt(location.pathname);
-  return node?.parent === ROOT && node.direction === 0;
+  return node?.parent && !isLeaf(node) ? node.parent.url : null;
 }
 
 /**
  * At the fork, scrolling past the page bottom continues straight on, and arrow keys pick
- * any branch. Scrolling up from the top of the straight branch returns. Both count only in a
+ * any branch. Scrolling up from the top of any section page returns to its parent. Both count only in a
  * gesture that started at that edge, so the momentum of a scroll that reaches it never walks on. Modified keys stay
  * with the browser, because Alt+Left means back. Returns a cleanup.
  */
@@ -59,22 +59,24 @@ export function mountIntent(): () => void {
     }
     const pixels = event.deltaY * (event.deltaMode === WheelEvent.DOM_DELTA_LINE ? WHEEL_LINE_PX : 1);
     const forward = pixels > 0 && startedAtBottom && atFork() && atPageBottom();
-    const back = pixels < 0 && startedAtTop && atStraightBranch();
+    const back = pixels < 0 && startedAtTop && parentUrl() !== null;
     if (scrollHeld() || event.ctrlKey || !(forward || back)) {
       wheelTotal = 0;
       return;
     }
     wheelTotal += Math.abs(pixels);
     if (wheelTotal < WHEEL_TRIGGER_PX) return;
+    const up = parentUrl();
     if (forward) choose(0);
-    else go(ROOT.url);
+    else if (up) go(up);
   };
 
   const onKey = (event: KeyboardEvent) => {
     if (scrollHeld() || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
-    if (event.key === "ArrowUp" && atStraightBranch() && scrollY <= 0) {
+    const up = parentUrl();
+    if (event.key === "ArrowUp" && up && scrollY <= 0) {
       event.preventDefault();
-      go(ROOT.url);
+      go(up);
       return;
     }
     const direction = KEY_DIRECTIONS[event.key];
