@@ -23,18 +23,22 @@ children:
       - slug: hobbies
         label: Hobbies
         children:
-          - slug: placeholder-leaf
-            label: PLACEHOLDER leaf
-            draft: true
-          - slug: placeholder-group
-            label: PLACEHOLDER group
-            draft: true
+          - slug: engineering-science
+            label: Engineering & Science
             children:
-              - slug: placeholder-deep
-                label: PLACEHOLDER deep leaf
-      - slug: instagram
-        label: Instagram
-        draft: true
+              - slug: digital-logic-design
+                label: Digital Logic Design
+              - slug: game-design
+                label: Game Design
+          - slug: gym
+            label: Gym
+            draft: true
+          - slug: violin
+            label: Violin
+            draft: true
+          - slug: blacksmithing
+            label: Blacksmithing
+            draft: true
 
   - slug: professional
     label: Professional

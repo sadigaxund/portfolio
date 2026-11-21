@@ -167,17 +167,17 @@ test("a leaf deep link rests on its branch, and Back climbs one level at a time"
 });
 
 test("opening a leaf and returning leaves the line still", async ({ page }) => {
-  await page.goto("/personal");
+  await page.goto("/personal/hobbies/engineering-science");
   await whenReady(page);
   await page.evaluate(() => {
     const win = window as unknown as { started: number };
     win.started = 0;
     document.addEventListener("line:transition-start", () => (win.started += 1));
   });
-  await page.getByRole("link", { name: "Instagram" }).click();
-  await expect(page.locator("h1")).toHaveText("Instagram");
+  await page.getByRole("link", { name: "Digital Logic Design" }).click();
+  await expect(page.locator("h1")).toHaveText("Digital Logic Design");
   await page.goBack();
-  await expect(page.locator("h1")).toHaveText("Personal");
+  await expect(page.locator("h1")).toHaveText("Engineering & Science");
   expect(await page.evaluate(() => (window as unknown as { started: number }).started)).toBe(0);
 });
 
@@ -448,7 +448,7 @@ test("keyboard focus on a stop outlines its text in the route color", async ({ p
 });
 
 test("a section stop ends in a filled dot that takes the route color on hover, and a leaf keeps its ring", async ({ page }) => {
-  await page.goto("/personal");
+  await page.goto("/personal/hobbies");
   const read = (selector: string) =>
     page.evaluate((sel) => {
       const probe = (token: string) => {

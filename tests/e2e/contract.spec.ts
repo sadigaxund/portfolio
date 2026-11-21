@@ -11,9 +11,9 @@ test("a leaf renders its note on the surface", async ({ page }) => {
 });
 
 test("a placeholder note renders as a note", async ({ page }) => {
-  await page.goto("/personal/instagram");
-  await expect(page.locator("h1")).toHaveText("Instagram");
-  await expect(page.locator(".leaf-surface .note")).toContainText("PLACEHOLDER");
+  await page.goto("/personal/hobbies/gym");
+  await expect(page.locator("h1")).toHaveText("Gym");
+  await expect(page.locator(".leaf-surface .note")).toContainText("Nothing here yet.");
 });
 
 for (const path of ["/", "/professional", "/personal/hobbies", "/professional/career"]) {
