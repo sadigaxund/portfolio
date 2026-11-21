@@ -103,6 +103,29 @@ test("the landing hero answers first, and stays clear of the line", async ({ pag
   }
 });
 
+for (const path of ["/", "/projects-blog", "/projects-blog/projects"]) {
+  test(`every text on ${path} sits on paper, not on the grid`, async ({ page }) => {
+    await page.goto(path);
+    const bare = await page.evaluate(() => {
+      const probe = document.createElement("div");
+      probe.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue("--color-bg");
+      document.body.append(probe);
+      const paper = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      const roots = [...document.querySelectorAll<HTMLElement>("main, .line-option")];
+      const holders = roots.flatMap((root) =>
+        [root, ...root.querySelectorAll<HTMLElement>("*")].filter((el) =>
+          [...el.childNodes].some((n) => n.nodeType === Node.TEXT_NODE && n.textContent!.trim() !== ""),
+        ),
+      );
+      const onPaper = (el: HTMLElement | null): boolean =>
+        el !== null && (getComputedStyle(el).backgroundColor === paper || (el.tagName !== "MAIN" && onPaper(el.parentElement)));
+      return holders.filter((el) => el.checkVisibility() && !onPaper(el)).map((el) => el.textContent!.trim().slice(0, 40));
+    });
+    expect(bare).toEqual([]);
+  });
+}
+
 test("section text sits on plain paper, sized to its words", async ({ page }) => {
   await page.goto("/projects-blog/projects");
   const read = () =>
